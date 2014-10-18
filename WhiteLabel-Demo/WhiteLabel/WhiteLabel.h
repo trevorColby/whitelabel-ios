@@ -23,5 +23,12 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
  */
 - (void)connectWithHost: (NSString*)host withCompletionBlock: (whiteLabelCompletionBlock)block;
 
+/** Joins a new chat
+ @param username username of the user
+ @param block Completion block to be executed once user joins the chat
+ */
+- (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block;
+
+
 
 @end

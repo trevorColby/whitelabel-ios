@@ -9,6 +9,9 @@
 #import "WhiteLabel.h"
 #import "SIOSocket.h"
 
+NSString    *const kAddUser = @"addUser";
+NSString    *const kLogin = @"login";
+
 static WhiteLabel *whiteLabel;
 
 @interface WhiteLabel()
@@ -32,8 +35,22 @@ static WhiteLabel *whiteLabel;
         __weak WhiteLabel *weakSelf = self;
         self.socket.onConnect = ^(){
             weakSelf.isConnected = YES;
-            block(YES, nil, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block(YES, nil, nil);
+            });
         };
+        self.socket.onDisconnect = ^(){
+            weakSelf.isConnected = NO;
+        };
+    }];
+}
+
+- (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
+    [self.socket emit:kAddUser, nil];
+    [self.socket on:kLogin callback:^(id data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(YES, @[data], nil);
+        });
     }];
 }
 
