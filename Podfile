@@ -3,11 +3,4 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'WhiteLabel-Demo' do
-
-end
-
-target 'WhiteLabel-DemoTests' do
-
-end
-
+pod 'SIOSocket', '~> 0.1.0'
