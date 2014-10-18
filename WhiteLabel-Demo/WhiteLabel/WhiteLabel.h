@@ -17,6 +17,8 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
 
 @property (nonatomic, assign) BOOL isConnected;
 
++ (instancetype)sharedInstance;
+
 /** Connects with the specified host
  @param host host to connect with
  @param block Completion block to be executed once connection is completed

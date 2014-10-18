@@ -1,25 +1,77 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6211" systemVersion="14A298i" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" initialViewController="dBI-0U-jjw">
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6204"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
+        <!--Navigation Controller-->
+        <scene sceneID="Azv-ZS-d5y">
             <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModuleProvider="" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="y3c-jy-aDJ"/>
-                        <viewControllerLayoutGuide type="bottom" id="wfy-db-euE"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <navigationController id="dBI-0U-jjw" sceneMemberID="viewController">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="PSY-nb-PHI">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <connections>
+                        <segue destination="ey1-Cv-vwC" kind="relationship" relationship="rootViewController" id="4ts-US-ne8"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="l99-fI-2Aq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="103" y="515"/>
+        </scene>
+        <!--White Label-->
+        <scene sceneID="ojf-ee-UPD">
+            <objects>
+                <viewController id="ey1-Cv-vwC" customClass="JoinChatViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="nVY-fW-QNB"/>
+                        <viewControllerLayoutGuide type="bottom" id="s3F-dU-TCv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="RBP-Uy-SEa">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pick a username" textAlignment="center" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="0MH-yU-fvi">
+                                <rect key="frame" x="16" y="207" width="288" height="48"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="48" id="8qh-eV-deU"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="ey1-Cv-vwC" id="UT0-0n-SCS"/>
+                                </connections>
+                            </textField>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="tNv-eI-2JD">
+                                <rect key="frame" x="16" y="254" width="288" height="1"/>
+                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="1" id="aT1-9O-lmP"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="0MH-yU-fvi" firstAttribute="trailing" secondItem="RBP-Uy-SEa" secondAttribute="trailingMargin" id="9Qg-Mf-0bg"/>
+                            <constraint firstItem="tNv-eI-2JD" firstAttribute="leading" secondItem="RBP-Uy-SEa" secondAttribute="leadingMargin" id="EUp-Gr-MPo"/>
+                            <constraint firstItem="tNv-eI-2JD" firstAttribute="top" secondItem="nVY-fW-QNB" secondAttribute="bottom" constant="190" id="QXA-Ee-Lmj"/>
+                            <constraint firstItem="0MH-yU-fvi" firstAttribute="leading" secondItem="RBP-Uy-SEa" secondAttribute="leadingMargin" id="XBp-YK-uzM"/>
+                            <constraint firstItem="tNv-eI-2JD" firstAttribute="trailing" secondItem="RBP-Uy-SEa" secondAttribute="trailingMargin" id="x2s-46-xWm"/>
+                            <constraint firstItem="0MH-yU-fvi" firstAttribute="top" secondItem="nVY-fW-QNB" secondAttribute="bottom" constant="143" id="xZH-BN-IIE"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="White Label" id="zda-Hz-T0m"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="2Tm-cc-tQ4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="582" y="515"/>
         </scene>
     </scenes>
+    <simulatedMetricsContainer key="defaultSimulatedMetrics">
+        <simulatedStatusBarMetrics key="statusBar"/>
+        <simulatedOrientationMetrics key="orientation"/>
+        <simulatedScreenMetrics key="destination" type="retina4"/>
+    </simulatedMetricsContainer>
 </document>

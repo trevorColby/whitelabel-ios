@@ -22,7 +22,7 @@ static WhiteLabel *whiteLabel;
 
 @implementation WhiteLabel
 
-+ (instancetype)sharedInstane {
++ (instancetype)sharedInstance {
     if (!whiteLabel) {
         whiteLabel = [[WhiteLabel alloc] init];
     }

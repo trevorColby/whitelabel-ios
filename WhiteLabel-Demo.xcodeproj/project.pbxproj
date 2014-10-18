@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		346F429719F24A88000740EB /* WhiteLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 346F429619F24A88000740EB /* WhiteLabel.m */; };
+		346F429D19F26022000740EB /* JoinChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346F429C19F26022000740EB /* JoinChatViewController.m */; };
 		34A315AE19F2426600BFA86D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A315AD19F2426600BFA86D /* main.m */; };
 		34A315B119F2426600BFA86D /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A315B019F2426600BFA86D /* AppDelegate.m */; };
-		34A315B419F2426600BFA86D /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A315B319F2426600BFA86D /* ViewController.m */; };
 		34A315B719F2426600BFA86D /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 34A315B519F2426600BFA86D /* Main.storyboard */; };
 		34A315B919F2426600BFA86D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34A315B819F2426600BFA86D /* Images.xcassets */; };
 		34A315BC19F2426600BFA86D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A315BA19F2426600BFA86D /* LaunchScreen.xib */; };
@@ -33,13 +33,13 @@
 		02FFE52FDE2220F7151D16B7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		346F429519F24A88000740EB /* WhiteLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhiteLabel.h; path = WhiteLabel/WhiteLabel.h; sourceTree = "<group>"; };
 		346F429619F24A88000740EB /* WhiteLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhiteLabel.m; path = WhiteLabel/WhiteLabel.m; sourceTree = "<group>"; };
+		346F429B19F26022000740EB /* JoinChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JoinChatViewController.h; path = Sources/JoinChat/JoinChatViewController.h; sourceTree = "<group>"; };
+		346F429C19F26022000740EB /* JoinChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = JoinChatViewController.m; path = Sources/JoinChat/JoinChatViewController.m; sourceTree = "<group>"; };
 		34A315A819F2426600BFA86D /* WhiteLabel-Demo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "WhiteLabel-Demo.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A315AC19F2426600BFA86D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34A315AD19F2426600BFA86D /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		34A315AF19F2426600BFA86D /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		34A315B019F2426600BFA86D /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		34A315B219F2426600BFA86D /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		34A315B319F2426600BFA86D /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
 		34A315B619F2426600BFA86D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		34A315B819F2426600BFA86D /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		34A315BB19F2426600BFA86D /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -86,6 +86,31 @@
 			name = WhiteLabel;
 			sourceTree = "<group>";
 		};
+		346F429819F25E1E000740EB /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				34A315B519F2426600BFA86D /* Main.storyboard */,
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
+		346F429919F25E2E000740EB /* Sources */ = {
+			isa = PBXGroup;
+			children = (
+				346F429A19F25E69000740EB /* JoinChat */,
+			);
+			name = Sources;
+			sourceTree = "<group>";
+		};
+		346F429A19F25E69000740EB /* JoinChat */ = {
+			isa = PBXGroup;
+			children = (
+				346F429B19F26022000740EB /* JoinChatViewController.h */,
+				346F429C19F26022000740EB /* JoinChatViewController.m */,
+			);
+			name = JoinChat;
+			sourceTree = "<group>";
+		};
 		34A3159F19F2426600BFA86D = {
 			isa = PBXGroup;
 			children = (
@@ -109,12 +134,11 @@
 		34A315AA19F2426600BFA86D /* WhiteLabel-Demo */ = {
 			isa = PBXGroup;
 			children = (
+				346F429919F25E2E000740EB /* Sources */,
+				346F429819F25E1E000740EB /* Resources */,
 				346F429419F24A6A000740EB /* WhiteLabel */,
 				34A315AF19F2426600BFA86D /* AppDelegate.h */,
 				34A315B019F2426600BFA86D /* AppDelegate.m */,
-				34A315B219F2426600BFA86D /* ViewController.h */,
-				34A315B319F2426600BFA86D /* ViewController.m */,
-				34A315B519F2426600BFA86D /* Main.storyboard */,
 				34A315B819F2426600BFA86D /* Images.xcassets */,
 				34A315BA19F2426600BFA86D /* LaunchScreen.xib */,
 				34A315AB19F2426600BFA86D /* Supporting Files */,
@@ -292,8 +316,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				346F429719F24A88000740EB /* WhiteLabel.m in Sources */,
-				34A315B419F2426600BFA86D /* ViewController.m in Sources */,
 				34A315B119F2426600BFA86D /* AppDelegate.m in Sources */,
+				346F429D19F26022000740EB /* JoinChatViewController.m in Sources */,
 				34A315AE19F2426600BFA86D /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
