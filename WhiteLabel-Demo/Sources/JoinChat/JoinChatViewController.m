@@ -14,6 +14,8 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 
 @interface JoinChatViewController ()<UITextFieldDelegate>
 
+@property (nonatomic, weak) IBOutlet UITextField    *usernameTextField;
+
 @end
 
 @implementation JoinChatViewController
@@ -21,11 +23,13 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
-    
+}
+
+- (void)viewDidAppear:(BOOL)animated {
     [[WhiteLabel sharedInstance] connectWithHost:host
                              withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-        
-    }];
+                                 
+                             }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -37,6 +41,7 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
     NSNumber    *userCount = [info valueForKey:@"numUsers"];
     ChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:kChatViewControllerIdentifier];
     chatVC.userCount = userCount;
+    chatVC.username = self.usernameTextField.text;
     [self.navigationController pushViewController:chatVC animated:YES];
 }
 

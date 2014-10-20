@@ -11,11 +11,14 @@
 #import "ChatMessage.h"
 #import "ChatTableViewCell.h"
 
-@interface ChatViewController ()<UITableViewDataSource, UITableViewDelegate>
+@interface ChatViewController ()<UITableViewDataSource,
+UITableViewDelegate,
+UITextFieldDelegate>
 
 @property (nonatomic, strong) NSMutableArray    *chatMessages;
 @property (nonatomic, weak) IBOutlet UITableView    *chatTableView;
 @property (nonatomic, weak) IBOutlet NSLayoutConstraint   *chatMessageViewBottomConstraint;
+@property (nonatomic, weak) IBOutlet UITextField    *sendMessageTextField;
 
 @end
 
@@ -27,6 +30,12 @@
     [self setUpNotificationListeners];
     [self initializeChat];
     [self setKeyboardNotifications];
+    
+    UIBarButtonItem *backButton = [[UIBarButtonItem alloc] initWithTitle:@"Disconnect"
+                                                                   style:UIBarButtonItemStylePlain
+                                                                  target:self
+                                                                  action:@selector(disconnect:)];
+    self.navigationItem.leftBarButtonItem = backButton;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -48,7 +57,12 @@
                                              selector:@selector(userLeftChat:)
                                                  name:userLeftChatNotification
                                                object:nil];
-    
+}
+
+- (void)disconnect: (id)sender {
+    [[WhiteLabel sharedInstance] disconnectChatWithCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+    }];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)initializeChat {
@@ -77,10 +91,37 @@
 
 - (void)userJoinedChat: (NSNotification*)notification {
     
+    NSString    *numUsers = notification.userInfo[@"numUsers"];
+    NSString    *username = notification.userInfo[@"username"];
+    NSString    *content = [NSString stringWithFormat:@"%@ joined. %@ users in chat", username, numUsers];
+    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+                                                                content:content];
+    [self.chatMessages addObject:chatMessage];
+    [self.chatTableView reloadData];
 }
 
 - (void)userLeftChat: (NSNotification*)notification {
-    
+    NSString    *numUsers = notification.userInfo[@"numUsers"];
+    NSString    *username = notification.userInfo[@"username"];
+    NSString    *content = [NSString stringWithFormat:@"%@ left. %@ users in chat", username, numUsers];
+    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+                                                                content:content];
+    [self.chatMessages addObject:chatMessage];
+    [self.chatTableView reloadData];
+}
+
+- (void)sendNewMessage: (NSString*)message {
+    [[WhiteLabel sharedInstance] sendMessage:message
+                         withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+                             if (success) {
+                                 self.sendMessageTextField.text = @"";
+                                 NSString    *content = [NSString stringWithFormat:@"%@ : %@", self.username, message];
+                                 ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+                                                                                             content:content];
+                                 [self.chatMessages addObject:chatMessage];
+                                 [self.chatTableView reloadData];
+                             }
+    }];
 }
 
 #pragma mark Keyboard Notifications
@@ -106,17 +147,6 @@
     self.chatMessageViewBottomConstraint.constant = kbSize.height;
 }
 
-
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
-
 #pragma mark UITableView Datasource
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -137,8 +167,15 @@
         cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageCellIndentifier];
     }
     cell.messageLabel.text = chatMessage.content;
-    [cell.messageLabel sizeToFit];
     return cell;
+}
+
+#pragma mark UITextField Delegate
+-(BOOL)textFieldShouldReturn:(UITextField *)textField {
+    if (textField.text.length) {
+        [self sendNewMessage:textField.text];
+    }
+    return NO;
 }
 
 @end

@@ -41,6 +41,8 @@ static WhiteLabel *whiteLabel;
             weakSelf.isConnected = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf addNewMessageListener];
+                [weakSelf addUserJoinedListener];
+                [weakSelf addUserLeftListener];
                 block(YES, nil, nil);
             });
         };
@@ -59,18 +61,41 @@ static WhiteLabel *whiteLabel;
     }];
 }
 
+- (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block {
+    [self.socket close];
+    block(YES, nil, nil);
+}
+
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
     [self.socket emit:@"newMessage", message, ^() {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            block(YES, nil, nil);
-        });
     }, nil];
+    block(YES, nil, nil);
 }
 
 - (void)addNewMessageListener {
     [self.socket on:@"newMessage" callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
+                                                                object:nil
+                                                              userInfo:data];
+        });
+    }];
+}
+
+- (void)addUserJoinedListener {
+    [self.socket on:@"userJoined" callback:^(id data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
+                                                                object:nil
+                                                              userInfo:data];
+        });
+    }];
+}
+
+- (void)addUserLeftListener {
+    [self.socket on:@"userLeft" callback:^(id data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
                                                                 object:nil
                                                               userInfo:data];
         });

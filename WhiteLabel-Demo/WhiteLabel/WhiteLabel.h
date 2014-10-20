@@ -36,5 +36,7 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block;
 
+- (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block;
+
 
 @end

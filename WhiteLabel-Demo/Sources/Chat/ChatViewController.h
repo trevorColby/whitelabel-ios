@@ -13,5 +13,6 @@
 @interface ChatViewController : UIViewController
 
 @property (nonatomic, strong) NSNumber  *userCount;
+@property (nonatomic, strong) NSString  *username;
 
 @end
