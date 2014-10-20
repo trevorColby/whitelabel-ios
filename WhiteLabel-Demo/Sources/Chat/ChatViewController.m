@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) NSMutableArray    *chatMessages;
 @property (nonatomic, weak) IBOutlet UITableView    *chatTableView;
+@property (nonatomic, weak) IBOutlet NSLayoutConstraint   *chatMessageViewBottomConstraint;
 
 @end
 
@@ -25,6 +26,7 @@
     // Do any additional setup after loading the view.
     [self setUpNotificationListeners];
     [self initializeChat];
+    [self setKeyboardNotifications];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -79,6 +81,29 @@
 
 - (void)userLeftChat: (NSNotification*)notification {
     
+}
+
+#pragma mark Keyboard Notifications
+- (void)setKeyboardNotifications{
+    [[NSNotificationCenter defaultCenter] addObserver:self
+                                             selector:@selector(keyboardWillHide:)
+                                                 name:UIKeyboardWillHideNotification
+                                               object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self
+                                            selector:@selector(keyboardWillShow:)
+                                                name:UIKeyboardWillShowNotification
+                                              object:nil];
+}
+
+- (void)keyboardWillHide: (NSNotification*)notification{
+    self.chatMessageViewBottomConstraint.constant = 0;
+}
+
+- (void)keyboardWillShow: (NSNotification*)notification{
+    
+    NSDictionary *userInfo = [notification userInfo];
+    CGSize kbSize = [[userInfo objectForKey:UIKeyboardFrameBeginUserInfoKey] CGRectValue].size;
+    self.chatMessageViewBottomConstraint.constant = kbSize.height;
 }
 
 
