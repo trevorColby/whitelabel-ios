@@ -12,6 +12,10 @@
 NSString    *const kAddUser = @"addUser";
 NSString    *const kLogin = @"login";
 
+NSString    *const messageReceivedNotification = @"messageReceivedNotification";
+NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
+NSString    *const userLeftChatNotification = @"userLeftChatNotification";
+
 static WhiteLabel *whiteLabel;
 
 @interface WhiteLabel()
@@ -36,6 +40,7 @@ static WhiteLabel *whiteLabel;
         self.socket.onConnect = ^(){
             weakSelf.isConnected = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf addNewMessageListener];
                 block(YES, nil, nil);
             });
         };
@@ -46,10 +51,28 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:kAddUser, nil];
+    [self.socket emit:kAddUser, username, nil];
     [self.socket on:kLogin callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(YES, @[data], nil);
+        });
+    }];
+}
+
+- (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
+    [self.socket emit:@"newMessage", message, ^() {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            block(YES, nil, nil);
+        });
+    }, nil];
+}
+
+- (void)addNewMessageListener {
+    [self.socket on:@"newMessage" callback:^(id data) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
+                                                                object:nil
+                                                              userInfo:data];
         });
     }];
 }

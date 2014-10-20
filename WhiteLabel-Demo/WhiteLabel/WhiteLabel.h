@@ -8,6 +8,9 @@
 
 #import <Foundation/Foundation.h>
 
+extern NSString    *const messageReceivedNotification;
+extern NSString    *const userJoinedChatNotification;
+extern NSString    *const userLeftChatNotification;
 
 typedef void (^whiteLabelCompletionBlock)(BOOL success,
                                           NSArray *result,
@@ -31,6 +34,7 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
  */
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block;
 
+- (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block;
 
 
 @end
