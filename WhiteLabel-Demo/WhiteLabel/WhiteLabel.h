@@ -34,7 +34,15 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
  */
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block;
 
+/** Send a chat message to all users
+ @param message message to be sent
+ @param block Completion block to be executed once message is sent
+ */
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block;
+
+/** Disconnect the session
+ @param block Completion block to be executed once connection is disconnected
+ */
 
 - (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block;
 

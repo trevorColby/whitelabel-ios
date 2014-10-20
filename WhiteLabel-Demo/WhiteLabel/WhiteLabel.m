@@ -9,8 +9,11 @@
 #import "WhiteLabel.h"
 #import "SIOSocket.h"
 
-NSString    *const kAddUser = @"addUser";
-NSString    *const kLogin = @"login";
+NSString    *const kEventAddUser = @"addUser";
+NSString    *const kEventLogin = @"login";
+NSString    *const kEventNewMessage = @"newMessage";
+NSString    *const kEventUserJoined = @"userJoined";
+NSString    *const kEventUserLeft = @"userLeft";
 
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
@@ -53,8 +56,8 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:kAddUser, username, nil];
-    [self.socket on:kLogin callback:^(id data) {
+    [self.socket emit:kEventAddUser, username, nil];
+    [self.socket on:kEventLogin callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             block(YES, @[data], nil);
         });
@@ -67,13 +70,14 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:@"newMessage", message, ^() {
+    [self.socket emit:kEventNewMessage, message, ^() {
     }, nil];
     block(YES, nil, nil);
 }
 
+#pragma mark Socket Event Listeners
 - (void)addNewMessageListener {
-    [self.socket on:@"newMessage" callback:^(id data) {
+    [self.socket on:kEventNewMessage callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
                                                                 object:nil
@@ -83,7 +87,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserJoinedListener {
-    [self.socket on:@"userJoined" callback:^(id data) {
+    [self.socket on:kEventUserJoined callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
                                                                 object:nil
@@ -93,7 +97,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserLeftListener {
-    [self.socket on:@"userLeft" callback:^(id data) {
+    [self.socket on:kEventUserLeft callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
                                                                 object:nil
