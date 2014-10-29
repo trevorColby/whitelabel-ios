@@ -3,4 +3,4 @@
 
 source 'https://github.com/CocoaPods/Specs.git'
 
-pod 'SIOSocket', '~> 0.1.0'
+pod 'SIOSocket', '~> 0.2.0'

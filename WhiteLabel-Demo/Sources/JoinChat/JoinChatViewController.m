@@ -22,14 +22,16 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
+    
     [[WhiteLabel sharedInstance] connectWithHost:host
                              withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
                                  
                              }];
+    // Do any additional setup after loading the view.
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+
 }
 
 - (void)didReceiveMemoryWarning {

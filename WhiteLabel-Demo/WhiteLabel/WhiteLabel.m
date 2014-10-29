@@ -40,7 +40,8 @@ static WhiteLabel *whiteLabel;
     [SIOSocket socketWithHost:host response:^(SIOSocket *socket) {
         self.socket = socket;
         __weak WhiteLabel *weakSelf = self;
-        self.socket.onConnect = ^(){
+        weakSelf.socket.onConnect = ^(){
+            NSLog(@"i'm connected");
             weakSelf.isConnected = YES;
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf addNewMessageListener];
@@ -56,12 +57,15 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:kEventAddUser, username, nil];
     [self.socket on:kEventLogin callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            block(YES, @[data], nil);
+            block(YES, data, nil);
         });
     }];
+    self.socket.onError = ^(NSDictionary* data){
+        NSLog(@"error: %@", data);
+    };
+    [self.socket emit:kEventAddUser args:@[username]];
 }
 
 - (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block {
@@ -70,8 +74,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:kEventNewMessage, message, ^() {
-    }, nil];
+    [self.socket emit:kEventNewMessage args:@[message]];
     block(YES, nil, nil);
 }
 
@@ -81,7 +84,7 @@ static WhiteLabel *whiteLabel;
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
                                                                 object:nil
-                                                              userInfo:data];
+                                                              userInfo:[data firstObject]];
         });
     }];
 }
@@ -91,7 +94,7 @@ static WhiteLabel *whiteLabel;
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
                                                                 object:nil
-                                                              userInfo:data];
+                                                              userInfo:[data firstObject]];
         });
     }];
 }
@@ -101,7 +104,7 @@ static WhiteLabel *whiteLabel;
         dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
                                                                 object:nil
-                                                              userInfo:data];
+                                                              userInfo:[data firstObject]];
         });
     }];
 }
