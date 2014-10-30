@@ -33,95 +33,113 @@ static WhiteLabel *whiteLabel;
 @implementation WhiteLabel
 
 + (instancetype)sharedInstance {
-    if (!whiteLabel) {
-        whiteLabel = [[WhiteLabel alloc] init];
-    }
-    return whiteLabel;
+  if (!whiteLabel) {
+    whiteLabel = [[WhiteLabel alloc] init];
+  }
+  return whiteLabel;
 }
 
 - (void)connectWithHost:(NSString *)host withCompletionBlock:(whiteLabelCompletionBlock)block {
-    [SIOSocket socketWithHost:host response:^(SIOSocket *socket) {
-        self.socket = socket;
-        __weak WhiteLabel *weakSelf = self;
-        weakSelf.socket.onConnect = ^(){
-            NSLog(@"i'm connected");
-            weakSelf.isConnected = YES;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf addNewMessageListener];
-                [weakSelf addUserJoinedListener];
-                [weakSelf addUserLeftListener];
-                block(YES, nil, nil);
-            });
-        };
-        self.socket.onDisconnect = ^(){
-            weakSelf.isConnected = NO;
-        };
-    }];
+  [SIOSocket socketWithHost:host response:^(SIOSocket *socket) {
+    self.socket = socket;
+    __weak WhiteLabel *weakSelf = self;
+    weakSelf.socket.onConnect = ^(){
+      NSLog(@"i'm connected");
+      weakSelf.isConnected = YES;
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf addNewMessageListener];
+        [weakSelf addUserJoinedListener];
+        [weakSelf addUserLeftListener];
+        block(YES, nil, nil);
+      });
+    };
+    self.socket.onDisconnect = ^(){
+      weakSelf.isConnected = NO;
+    };
+  }];
 }
 
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
   
-    [self.socket on:kEventLogin callback:^(id data) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-          WLChat  *chat = [[WLChat alloc] init];
-          chat.title = @"White Label Chat";
-          chat.userCount = [data firstObject][@"numUsers"];
-          WLUser  *user = [[WLUser alloc] init];
-          user.username = username;
-          block(YES, @[chat, user], nil);
-        });
-    }];
+  [self.socket on:kEventLogin callback:^(id data) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      WLChat  *chat = [[WLChat alloc] init];
+      chat.title = @"White Label Chat";
+      chat.userCount = [data firstObject][@"numUsers"];
+      WLUser  *user = [[WLUser alloc] init];
+      user.username = username;
+      block(YES, @[chat, user], nil);
+    });
+  }];
   
-    self.socket.onError = ^(NSDictionary* data){
-        NSLog(@"error: %@", data);
-    };
+  self.socket.onError = ^(NSDictionary* data){
+    NSLog(@"error: %@", data);
+  };
   
-    [self.socket emit:kEventAddUser args:@[username]];
+  [self.socket emit:kEventAddUser args:@[username]];
 }
 
 - (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket close];
-    block(YES, nil, nil);
+  [self.socket close];
+  block(YES, nil, nil);
 }
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
-    [self.socket emit:kEventNewMessage args:@[message]];
-    block(YES, nil, nil);
+  [self.socket emit:kEventNewMessage args:@[message]];
+  block(YES, nil, nil);
 }
 
 #pragma mark Socket Event Listeners
 - (void)addNewMessageListener {
-    [self.socket on:kEventNewMessage callback:^(id data) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-          WLChatMessage *message = [WLChatMessage new];
-          message.messageType = ChatMessageTypeMessageReceived;
-          message.content = [data firstObject][@"message"];
-          message.userName = [data firstObject][@"username"];
-            [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
-                                                                object:nil
-                                                              userInfo:[data firstObject]];
-        });
-    }];
+  
+  [self.socket on:kEventNewMessage callback:^(id data) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+      WLChatMessage *message = [WLChatMessage new];
+      message.messageType = ChatMessageTypeMessage;
+      message.content = [data firstObject][@"message"];
+      message.userName = [data firstObject][@"username"];
+      
+      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+      [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
+                                                          object:nil
+                                                        userInfo:data];
+    });
+  }];
 }
 
 - (void)addUserJoinedListener {
-    [self.socket on:kEventUserJoined callback:^(id data) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
-                                                                object:nil
-                                                              userInfo:[data firstObject]];
-        });
-    }];
+  [self.socket on:kEventUserJoined callback:^(id data) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+      WLChatMessage *message = [WLChatMessage new];
+      message.messageType = ChatMessageTypeInfoUserJoined;
+      message.userName = [data firstObject][@"username"];
+      
+      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+      [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
+                                                          object:nil
+                                                        userInfo:data];
+    });
+  }];
 }
 
 - (void)addUserLeftListener {
-    [self.socket on:kEventUserLeft callback:^(id data) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
-                                                                object:nil
-                                                              userInfo:[data firstObject]];
-        });
-    }];
+  
+  [self.socket on:kEventUserLeft callback:^(id data) {
+    
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+      WLChatMessage *message = [WLChatMessage new];
+      message.messageType = ChatMessageTypeInfoUserLeft;
+      message.userName = [data firstObject][@"username"];
+      
+      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+      [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
+                                                          object:nil
+                                                        userInfo:data];
+    });
+  }];
 }
 
 @end

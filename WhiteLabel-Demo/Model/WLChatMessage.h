@@ -11,8 +11,9 @@
 
 typedef enum {
     ChatMessageTypeInfo = 0,
-    ChatMessageTypeMessageSend,
-    ChatMessageTypeMessageReceived
+    ChatMessageTypeInfoUserJoined,
+    ChatMessageTypeInfoUserLeft,
+    ChatMessageTypeMessage
 }ChatMessageType;
 
 @interface WLChatMessage : NSObject
