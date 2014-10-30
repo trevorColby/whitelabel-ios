@@ -71,10 +71,10 @@
             </objects>
             <point key="canvasLocation" x="582" y="515"/>
         </scene>
-        <!--Chat View Controller-->
+        <!--Custom Chat View Controller-->
         <scene sceneID="cIV-Pp-QW4">
             <objects>
-                <viewController storyboardIdentifier="ChatViewControllerIdentifier" id="gUI-SF-R3Y" customClass="ChatViewController" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CustomChatViewController" id="gUI-SF-R3Y" customClass="CustomChatViewController" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="7ho-Tr-KVT"/>
                         <viewControllerLayoutGuide type="bottom" id="3cY-hn-lid"/>
@@ -108,7 +108,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="messageLabel" destination="ANx-Vh-XfC" id="imP-nL-tjK"/>
+                                            <outlet property="messageLabel" destination="ANx-Vh-XfC" id="aPy-df-QtX"/>
                                         </connections>
                                     </tableViewCell>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatMessageCellIdentifier" rowHeight="28" id="vRO-Ly-jeQ" customClass="ChatTableViewCell">
@@ -135,13 +135,13 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="messageLabel" destination="8pI-Ax-kDH" id="Eeu-Q5-gxt"/>
+                                            <outlet property="messageLabel" destination="8pI-Ax-kDH" id="Bb6-MW-cIj"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
                                 <connections>
-                                    <outlet property="dataSource" destination="gUI-SF-R3Y" id="aoA-Sv-hMy"/>
-                                    <outlet property="delegate" destination="gUI-SF-R3Y" id="Sok-xj-zWb"/>
+                                    <outlet property="dataSource" destination="gUI-SF-R3Y" id="upa-Jo-MRb"/>
+                                    <outlet property="delegate" destination="gUI-SF-R3Y" id="ZfT-md-EvZ"/>
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8PA-EW-jVo">
@@ -153,7 +153,7 @@
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
-                                            <outlet property="delegate" destination="gUI-SF-R3Y" id="Zqa-0D-RyW"/>
+                                            <outlet property="delegate" destination="gUI-SF-R3Y" id="xgo-09-z80"/>
                                         </connections>
                                     </textField>
                                 </subviews>
@@ -180,9 +180,9 @@
                     </view>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
-                        <outlet property="chatMessageViewBottomConstraint" destination="X0B-EL-BSH" id="ldT-PX-dEK"/>
-                        <outlet property="chatTableView" destination="Kgl-Gu-7zC" id="RTm-wO-9Oi"/>
-                        <outlet property="sendMessageTextField" destination="fYE-gx-fhf" id="lO1-l0-0BN"/>
+                        <outlet property="chatMessageViewBottomConstraint" destination="X0B-EL-BSH" id="PRB-II-JcA"/>
+                        <outlet property="chatTableView" destination="Kgl-Gu-7zC" id="pwx-hO-vwk"/>
+                        <outlet property="sendMessageTextField" destination="fYE-gx-fhf" id="KzR-P3-nhE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="KaZ-fp-Npk" userLabel="First Responder" sceneMemberID="firstResponder"/>

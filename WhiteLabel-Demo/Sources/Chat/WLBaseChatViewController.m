@@ -6,23 +6,18 @@
 //  Copyright (c) 2014 Fueled. All rights reserved.
 //
 
-#import "ChatViewController.h"
+#import "WLBaseChatViewController.h"
 #import "WhiteLabel.h"
 #import "WLChatMessage.h"
 #import "ChatTableViewCell.h"
 
-@interface ChatViewController ()<UITableViewDataSource,
+@interface WLBaseChatViewController ()<UITableViewDataSource,
 UITableViewDelegate,
 UITextFieldDelegate>
 
-@property (nonatomic, strong) NSMutableArray    *chatMessages;
-@property (nonatomic, weak) IBOutlet UITableView    *chatTableView;
-@property (nonatomic, weak) IBOutlet NSLayoutConstraint   *chatMessageViewBottomConstraint;
-@property (nonatomic, weak) IBOutlet UITextField    *sendMessageTextField;
-
 @end
 
-@implementation ChatViewController
+@implementation WLBaseChatViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];

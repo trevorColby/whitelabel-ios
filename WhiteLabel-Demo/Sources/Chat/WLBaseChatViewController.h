@@ -10,9 +10,14 @@
 
 #define kChatViewControllerIdentifier @"ChatViewControllerIdentifier"
 
-@interface ChatViewController : UIViewController
+@interface WLBaseChatViewController : UIViewController
 
 @property (nonatomic, strong) NSNumber  *userCount;
 @property (nonatomic, strong) NSString  *username;
+
+@property (nonatomic, strong) NSMutableArray    *chatMessages;
+@property (nonatomic, weak) UITableView    *chatTableView;
+@property (nonatomic, weak)  NSLayoutConstraint   *chatMessageViewBottomConstraint;
+@property (nonatomic, weak)  UITextField    *sendMessageTextField;
 
 @end

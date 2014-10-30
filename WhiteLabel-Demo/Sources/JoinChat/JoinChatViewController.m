@@ -8,7 +8,8 @@
 
 #import "JoinChatViewController.h"
 #import "WhiteLabel.h"
-#import "ChatViewController.h"
+#import "WLBaseChatViewController.h"
+#import "CustomChatViewController.h"
 
 NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 
@@ -41,7 +42,7 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 
 - (void)viewChatWithInfo: (NSDictionary*)info {
     NSNumber    *userCount = [info valueForKey:@"numUsers"];
-    ChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:kChatViewControllerIdentifier];
+    CustomChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([CustomChatViewController class])];
     chatVC.userCount = userCount;
     chatVC.username = self.usernameTextField.text;
     [self.navigationController pushViewController:chatVC animated:YES];
