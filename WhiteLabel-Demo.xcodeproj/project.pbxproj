@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3421D4E91A022F3C002AC793 /* stylesheet.cas in Resources */ = {isa = PBXBuildFile; fileRef = 3421D4E81A022F3C002AC793 /* stylesheet.cas */; };
 		34565DA41A021B9000ABA5F7 /* WLChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 34565DA31A021B9000ABA5F7 /* WLChat.m */; };
 		3464D07819F4FDD500AA44A5 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D07719F4FDD500AA44A5 /* ChatViewController.m */; };
 		3464D07B19F50C7300AA44A5 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D07A19F50C7300AA44A5 /* ChatTableViewCell.m */; };
@@ -35,6 +36,7 @@
 /* Begin PBXFileReference section */
 		009B7DD377B6BC11B669619B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		02FFE52FDE2220F7151D16B7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		3421D4E81A022F3C002AC793 /* stylesheet.cas */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = stylesheet.cas; path = Resources/stylesheet.cas; sourceTree = "<group>"; };
 		34565DA21A021B9000ABA5F7 /* WLChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLChat.h; path = Model/WLChat.h; sourceTree = "<group>"; };
 		34565DA31A021B9000ABA5F7 /* WLChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLChat.m; path = Model/WLChat.m; sourceTree = "<group>"; };
 		3464D07619F4FDD500AA44A5 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = Sources/Chat/ChatViewController.h; sourceTree = "<group>"; };
@@ -89,6 +91,14 @@
 			name = Pods;
 			sourceTree = "<group>";
 		};
+		3421D4E71A0227AE002AC793 /* Style */ = {
+			isa = PBXGroup;
+			children = (
+				3421D4E81A022F3C002AC793 /* stylesheet.cas */,
+			);
+			name = Style;
+			sourceTree = "<group>";
+		};
 		3464D07519F4FD9300AA44A5 /* Chat */ = {
 			isa = PBXGroup;
 			children = (
@@ -123,6 +133,7 @@
 		346F429819F25E1E000740EB /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				3421D4E71A0227AE002AC793 /* Style */,
 				34A315B519F2426600BFA86D /* Main.storyboard */,
 			);
 			name = Resources;
@@ -299,6 +310,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				34A315B719F2426600BFA86D /* Main.storyboard in Resources */,
+				3421D4E91A022F3C002AC793 /* stylesheet.cas in Resources */,
 				34A315BC19F2426600BFA86D /* LaunchScreen.xib in Resources */,
 				34A315B919F2426600BFA86D /* Images.xcassets in Resources */,
 			);
