@@ -4,3 +4,4 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
 pod 'SIOSocket', '~> 0.2.0'
+pod 'Classy', '~> 0.2'

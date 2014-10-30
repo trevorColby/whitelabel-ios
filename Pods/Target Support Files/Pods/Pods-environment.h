@@ -6,6 +6,12 @@
 // project.
 
 
+// Classy
+#define COCOAPODS_POD_AVAILABLE_Classy
+#define COCOAPODS_VERSION_MAJOR_Classy 0
+#define COCOAPODS_VERSION_MINOR_Classy 2
+#define COCOAPODS_VERSION_PATCH_Classy 4
+
 // SIOSocket
 #define COCOAPODS_POD_AVAILABLE_SIOSocket
 #define COCOAPODS_VERSION_MAJOR_SIOSocket 0

@@ -1,10 +1,13 @@
 PODS:
+  - Classy (0.2.4)
   - SIOSocket (0.2.0)
 
 DEPENDENCIES:
+  - Classy (~> 0.2)
   - SIOSocket (~> 0.2.0)
 
 SPEC CHECKSUMS:
+  Classy: 8c8f835d51e20d25e9cce0d864fba5bf1cef6070
   SIOSocket: 40ebc9f014b9fec4ec595212faaf6f19cf29d1f2
 
 COCOAPODS: 0.34.2
