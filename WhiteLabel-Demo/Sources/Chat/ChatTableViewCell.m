@@ -27,4 +27,8 @@
     // Configure the view for the selected state
 }
 
+- (void)setupViews:(NSDictionary *)data {
+  // to be implemented
+}
+
 @end

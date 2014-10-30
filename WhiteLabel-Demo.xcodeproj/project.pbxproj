@@ -21,6 +21,7 @@
 		34A315B919F2426600BFA86D /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 34A315B819F2426600BFA86D /* Images.xcassets */; };
 		34A315BC19F2426600BFA86D /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 34A315BA19F2426600BFA86D /* LaunchScreen.xib */; };
 		34A315C819F2426600BFA86D /* WhiteLabel_DemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A315C719F2426600BFA86D /* WhiteLabel_DemoTests.m */; };
+		3DCEC4D21A025A9D004182CF /* WLBaseChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3DCEC4D11A025A9D004182CF /* WLBaseChatTableViewCell.m */; };
 		AF0C3DA4030EE8741CE30D09 /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 02FFE52FDE2220F7151D16B7 /* libPods.a */; };
 /* End PBXBuildFile section */
 
@@ -63,6 +64,8 @@
 		34A315C119F2426600BFA86D /* WhiteLabel-DemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "WhiteLabel-DemoTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		34A315C619F2426600BFA86D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		34A315C719F2426600BFA86D /* WhiteLabel_DemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = WhiteLabel_DemoTests.m; sourceTree = "<group>"; };
+		3DCEC4D01A025A9D004182CF /* WLBaseChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLBaseChatTableViewCell.h; path = Sources/Chat/Base/WLBaseChatTableViewCell.h; sourceTree = "<group>"; };
+		3DCEC4D11A025A9D004182CF /* WLBaseChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLBaseChatTableViewCell.m; path = Sources/Chat/Base/WLBaseChatTableViewCell.m; sourceTree = "<group>"; };
 		DF0F8F892F018E6F243CE401 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -107,6 +110,8 @@
 			children = (
 				3464D07919F50C7300AA44A5 /* ChatTableViewCell.h */,
 				3464D07A19F50C7300AA44A5 /* ChatTableViewCell.m */,
+				3DCEC4D01A025A9D004182CF /* WLBaseChatTableViewCell.h */,
+				3DCEC4D11A025A9D004182CF /* WLBaseChatTableViewCell.m */,
 				3464D07619F4FDD500AA44A5 /* ChatViewController.h */,
 				3464D07719F4FDD500AA44A5 /* ChatViewController.m */,
 			);
@@ -371,6 +376,7 @@
 				346F429719F24A88000740EB /* WhiteLabel.m in Sources */,
 				34A315B119F2426600BFA86D /* AppDelegate.m in Sources */,
 				3464D07819F4FDD500AA44A5 /* ChatViewController.m in Sources */,
+				3DCEC4D21A025A9D004182CF /* WLBaseChatTableViewCell.m in Sources */,
 				346F429D19F26022000740EB /* JoinChatViewController.m in Sources */,
 				3464D08219F50DAD00AA44A5 /* WLChatMessage.m in Sources */,
 				34A315AE19F2426600BFA86D /* main.m in Sources */,

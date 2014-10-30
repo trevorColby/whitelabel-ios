@@ -7,11 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "WLBaseChatTableViewCell.h"
 
 #define kChatMessageCellIndentifier @"ChatMessageCellIdentifier"
 #define kChatInfoCellIndentifier @"ChatInfoCellIdentifier"
 
-@interface ChatTableViewCell : UITableViewCell
+@interface ChatTableViewCell : WLBaseChatTableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel  *messageLabel;
 
