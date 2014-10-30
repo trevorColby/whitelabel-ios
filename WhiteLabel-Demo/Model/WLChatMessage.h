@@ -13,7 +13,7 @@ typedef enum {
     ChatMessageTypeMessage
 }ChatMessageType;
 
-@interface ChatMessage : NSObject
+@interface WLChatMessage : NSObject
 
 @property (nonatomic, assign) ChatMessageType   messageType;
 @property (nonatomic, strong) NSString  *content;

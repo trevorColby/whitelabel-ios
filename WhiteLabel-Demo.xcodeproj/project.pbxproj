@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		34565DA41A021B9000ABA5F7 /* WLChat.m in Sources */ = {isa = PBXBuildFile; fileRef = 34565DA31A021B9000ABA5F7 /* WLChat.m */; };
 		3464D07819F4FDD500AA44A5 /* ChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D07719F4FDD500AA44A5 /* ChatViewController.m */; };
 		3464D07B19F50C7300AA44A5 /* ChatTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D07A19F50C7300AA44A5 /* ChatTableViewCell.m */; };
-		3464D08219F50DAD00AA44A5 /* ChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D08119F50DAD00AA44A5 /* ChatMessage.m */; };
+		3464D08219F50DAD00AA44A5 /* WLChatMessage.m in Sources */ = {isa = PBXBuildFile; fileRef = 3464D08119F50DAD00AA44A5 /* WLChatMessage.m */; };
 		346F429719F24A88000740EB /* WhiteLabel.m in Sources */ = {isa = PBXBuildFile; fileRef = 346F429619F24A88000740EB /* WhiteLabel.m */; };
 		346F429D19F26022000740EB /* JoinChatViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 346F429C19F26022000740EB /* JoinChatViewController.m */; };
 		34A315AE19F2426600BFA86D /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 34A315AD19F2426600BFA86D /* main.m */; };
@@ -34,12 +35,14 @@
 /* Begin PBXFileReference section */
 		009B7DD377B6BC11B669619B /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		02FFE52FDE2220F7151D16B7 /* libPods.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libPods.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		34565DA21A021B9000ABA5F7 /* WLChat.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLChat.h; path = Model/WLChat.h; sourceTree = "<group>"; };
+		34565DA31A021B9000ABA5F7 /* WLChat.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLChat.m; path = Model/WLChat.m; sourceTree = "<group>"; };
 		3464D07619F4FDD500AA44A5 /* ChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatViewController.h; path = Sources/Chat/ChatViewController.h; sourceTree = "<group>"; };
 		3464D07719F4FDD500AA44A5 /* ChatViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatViewController.m; path = Sources/Chat/ChatViewController.m; sourceTree = "<group>"; };
 		3464D07919F50C7300AA44A5 /* ChatTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatTableViewCell.h; path = Sources/Chat/ChatTableViewCell.h; sourceTree = "<group>"; };
 		3464D07A19F50C7300AA44A5 /* ChatTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatTableViewCell.m; path = Sources/Chat/ChatTableViewCell.m; sourceTree = "<group>"; };
-		3464D08019F50DAD00AA44A5 /* ChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ChatMessage.h; path = Model/ChatMessage.h; sourceTree = "<group>"; };
-		3464D08119F50DAD00AA44A5 /* ChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ChatMessage.m; path = Model/ChatMessage.m; sourceTree = "<group>"; };
+		3464D08019F50DAD00AA44A5 /* WLChatMessage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WLChatMessage.h; path = Model/WLChatMessage.h; sourceTree = "<group>"; };
+		3464D08119F50DAD00AA44A5 /* WLChatMessage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WLChatMessage.m; path = Model/WLChatMessage.m; sourceTree = "<group>"; };
 		346F429519F24A88000740EB /* WhiteLabel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = WhiteLabel.h; path = WhiteLabel/WhiteLabel.h; sourceTree = "<group>"; };
 		346F429619F24A88000740EB /* WhiteLabel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = WhiteLabel.m; path = WhiteLabel/WhiteLabel.m; sourceTree = "<group>"; };
 		346F429B19F26022000740EB /* JoinChatViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = JoinChatViewController.h; path = Sources/JoinChat/JoinChatViewController.h; sourceTree = "<group>"; };
@@ -100,8 +103,10 @@
 		3464D07C19F50CE300AA44A5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				3464D08019F50DAD00AA44A5 /* ChatMessage.h */,
-				3464D08119F50DAD00AA44A5 /* ChatMessage.m */,
+				3464D08019F50DAD00AA44A5 /* WLChatMessage.h */,
+				3464D08119F50DAD00AA44A5 /* WLChatMessage.m */,
+				34565DA21A021B9000ABA5F7 /* WLChat.h */,
+				34565DA31A021B9000ABA5F7 /* WLChat.m */,
 			);
 			name = Model;
 			sourceTree = "<group>";
@@ -350,8 +355,9 @@
 				34A315B119F2426600BFA86D /* AppDelegate.m in Sources */,
 				3464D07819F4FDD500AA44A5 /* ChatViewController.m in Sources */,
 				346F429D19F26022000740EB /* JoinChatViewController.m in Sources */,
-				3464D08219F50DAD00AA44A5 /* ChatMessage.m in Sources */,
+				3464D08219F50DAD00AA44A5 /* WLChatMessage.m in Sources */,
 				34A315AE19F2426600BFA86D /* main.m in Sources */,
+				34565DA41A021B9000ABA5F7 /* WLChat.m in Sources */,
 				3464D07B19F50C7300AA44A5 /* ChatTableViewCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

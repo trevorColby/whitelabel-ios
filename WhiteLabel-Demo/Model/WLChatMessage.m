@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Fueled. All rights reserved.
 //
 
-#import "ChatMessage.h"
+#import "WLChatMessage.h"
 
-@implementation ChatMessage
+@implementation WLChatMessage
 
 - (instancetype)initWithMessageType: (ChatMessageType)messageType content: (NSString*)content {
     self = [super init];

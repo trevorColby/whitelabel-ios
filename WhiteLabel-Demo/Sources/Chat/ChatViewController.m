@@ -8,7 +8,7 @@
 
 #import "ChatViewController.h"
 #import "WhiteLabel.h"
-#import "ChatMessage.h"
+#import "WLChatMessage.h"
 #import "ChatTableViewCell.h"
 
 @interface ChatViewController ()<UITableViewDataSource,
@@ -71,7 +71,7 @@ UITextFieldDelegate>
     self.chatTableView.rowHeight = UITableViewAutomaticDimension;
     
     NSString    *content = [NSString stringWithFormat:@"%@ users in chat", self.userCount];
-    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
                                                                 content:content];
     self.chatMessages = [NSMutableArray arrayWithObject:chatMessage];
     [self.chatTableView reloadData];
@@ -82,7 +82,7 @@ UITextFieldDelegate>
     NSString    *userName = notification.userInfo[@"username"];
     NSString    *message = notification.userInfo[@"message"];
     NSString    *content = [NSString stringWithFormat:@"%@ : %@", userName, message];
-    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
                                                                 content:content];
     [self.chatMessages addObject:chatMessage];
     [self.chatTableView reloadData];
@@ -94,7 +94,7 @@ UITextFieldDelegate>
     NSString    *numUsers = notification.userInfo[@"numUsers"];
     NSString    *username = notification.userInfo[@"username"];
     NSString    *content = [NSString stringWithFormat:@"%@ joined. %@ users in chat", username, numUsers];
-    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
                                                                 content:content];
     [self.chatMessages addObject:chatMessage];
     [self.chatTableView reloadData];
@@ -104,7 +104,7 @@ UITextFieldDelegate>
     NSString    *numUsers = notification.userInfo[@"numUsers"];
     NSString    *username = notification.userInfo[@"username"];
     NSString    *content = [NSString stringWithFormat:@"%@ left. %@ users in chat", username, numUsers];
-    ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
                                                                 content:content];
     [self.chatMessages addObject:chatMessage];
     [self.chatTableView reloadData];
@@ -116,7 +116,7 @@ UITextFieldDelegate>
                              if (success) {
                                  self.sendMessageTextField.text = @"";
                                  NSString    *content = [NSString stringWithFormat:@"%@ : %@", self.username, message];
-                                 ChatMessage *chatMessage = [[ChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+                                 WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
                                                                                              content:content];
                                  [self.chatMessages addObject:chatMessage];
                                  [self.chatTableView reloadData];
@@ -159,7 +159,7 @@ UITextFieldDelegate>
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     ChatTableViewCell   *cell;
-    ChatMessage *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
+    WLChatMessage *chatMessage = [self.chatMessages objectAtIndex:indexPath.row];
     
     if (chatMessage.messageType == ChatMessageTypeInfo) {
         cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
