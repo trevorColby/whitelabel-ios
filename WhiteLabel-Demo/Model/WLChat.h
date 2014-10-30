@@ -18,6 +18,7 @@ typedef enum {
 @property (nonatomic, strong) NSString  *title;
 @property (nonatomic, strong) NSArray   *messages;
 @property (nonatomic, assign) ChatType  chatType;
+@property (nonatomic, strong) NSNumber  *userCount;
 
 - (instancetype)initWithTitle: (NSString*)title chatType: (ChatType)chatType;
 

@@ -8,6 +8,9 @@
 
 #import "WhiteLabel.h"
 #import "SIOSocket.h"
+#import "WLChat.h"
+#import "WLChatMessage.h"
+#import "WLUser.h"
 
 NSString    *const kEventAddUser = @"addUser";
 NSString    *const kEventLogin = @"login";
@@ -57,14 +60,22 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
+  
     [self.socket on:kEventLogin callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            block(YES, data, nil);
+          WLChat  *chat = [[WLChat alloc] init];
+          chat.title = @"White Label Chat";
+          chat.userCount = [data firstObject][@"numUsers"];
+          WLUser  *user = [[WLUser alloc] init];
+          user.username = username;
+          block(YES, @[chat, user], nil);
         });
     }];
+  
     self.socket.onError = ^(NSDictionary* data){
         NSLog(@"error: %@", data);
     };
+  
     [self.socket emit:kEventAddUser args:@[username]];
 }
 
@@ -82,6 +93,10 @@ static WhiteLabel *whiteLabel;
 - (void)addNewMessageListener {
     [self.socket on:kEventNewMessage callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
+          WLChatMessage *message = [WLChatMessage new];
+          message.messageType = ChatMessageTypeMessage;
+          message.content = [data firstObject][@"message"];
+          message.userName = [data firstObject][@"username"];
             [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
                                                                 object:nil
                                                               userInfo:[data firstObject]];

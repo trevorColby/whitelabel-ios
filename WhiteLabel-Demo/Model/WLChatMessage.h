@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "WLUser.h"
 
 typedef enum {
     ChatMessageTypeInfo = 0,
@@ -17,6 +18,8 @@ typedef enum {
 
 @property (nonatomic, assign) ChatMessageType   messageType;
 @property (nonatomic, strong) NSString  *content;
+@property (nonatomic, strong) NSDate  *time;
+@property (nonatomic, strong) NSString  *userName;
 
 - (instancetype)initWithMessageType: (ChatMessageType)messageType content: (NSString*)content;
 

@@ -8,6 +8,13 @@
 
 #import "ChatTableViewCell.h"
 
+@interface ChatTableViewCell ()
+
+@property (nonatomic, weak) IBOutlet UILabel  *userNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel  *timeLabel;
+
+@end
+
 @implementation ChatTableViewCell
 
 - (void)awakeFromNib {
