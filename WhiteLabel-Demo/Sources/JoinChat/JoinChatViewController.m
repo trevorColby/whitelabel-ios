@@ -10,6 +10,8 @@
 #import "WhiteLabel.h"
 #import "WLBaseChatViewController.h"
 #import "CustomChatViewController.h"
+#import "WLChat.h"
+#import "WLUser.h"
 
 NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 
@@ -40,10 +42,8 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
     // Dispose of any resources that can be recreated.
 }
 
-- (void)viewChatWithInfo: (NSDictionary*)info {
-    NSNumber    *userCount = [info valueForKey:@"numUsers"];
+- (void)viewChat:(NSDictionary*)chatInfo {
     CustomChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([CustomChatViewController class])];
-    chatVC.userCount = userCount;
     chatVC.username = self.usernameTextField.text;
     [self.navigationController pushViewController:chatVC animated:YES];
 }
@@ -52,7 +52,13 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
     [[WhiteLabel sharedInstance] joinChatWithUsername:username
                                   withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
         if (success) {
-            [self viewChatWithInfo:[result firstObject]];
+          WLChat  *chat = [result firstObject];
+          WLUser  *user = [result objectAtIndex:1];
+
+          NSMutableDictionary *chatInfo = [NSMutableDictionary dictionary];
+          chatInfo[@"chat"] = chat;
+          chatInfo[@"user"] = user;
+          [self viewChat:chatInfo];
         }
     }];
 }

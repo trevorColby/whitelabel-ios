@@ -31,6 +31,7 @@ UITextFieldDelegate>
                                                                   target:self
                                                                   action:@selector(disconnect:)];
     self.navigationItem.leftBarButtonItem = backButton;
+    [self.sendMessageTextField becomeFirstResponder];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -65,7 +66,7 @@ UITextFieldDelegate>
     self.chatTableView.estimatedRowHeight = 44.0f;
     self.chatTableView.rowHeight = UITableViewAutomaticDimension;
     
-    NSString    *content = [NSString stringWithFormat:@"%@ users in chat", self.userCount];
+    NSString    *content = @"Chat";
     WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
                                                                 content:content];
     self.chatMessages = [NSMutableArray arrayWithObject:chatMessage];
@@ -77,7 +78,7 @@ UITextFieldDelegate>
     NSString    *userName = notification.userInfo[@"username"];
     NSString    *message = notification.userInfo[@"message"];
     NSString    *content = [NSString stringWithFormat:@"%@ : %@", userName, message];
-    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+    WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessageReceived
                                                                 content:content];
     [self.chatMessages addObject:chatMessage];
     [self.chatTableView reloadData];
@@ -111,7 +112,7 @@ UITextFieldDelegate>
                              if (success) {
                                  self.sendMessageTextField.text = @"";
                                  NSString    *content = [NSString stringWithFormat:@"%@ : %@", self.username, message];
-                                 WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+                                 WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessageSend
                                                                                              content:content];
                                  [self.chatMessages addObject:chatMessage];
                                  [self.chatTableView reloadData];
@@ -158,8 +159,10 @@ UITextFieldDelegate>
     
     if (chatMessage.messageType == ChatMessageTypeInfo) {
         cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
-    } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageCellIndentifier];
+    } else if (chatMessage.messageType == ChatMessageTypeMessageSend){
+      cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageSendCellIndentifier];
+    } else if (chatMessage.messageType == ChatMessageTypeMessageReceived){
+      cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageReceiveCellIndentifier];
     }
     cell.messageLabel.text = chatMessage.content;
     return cell;

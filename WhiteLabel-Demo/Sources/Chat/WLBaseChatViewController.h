@@ -12,7 +12,6 @@
 
 @interface WLBaseChatViewController : UIViewController
 
-@property (nonatomic, strong) NSNumber  *userCount;
 @property (nonatomic, strong) NSString  *username;
 
 @property (nonatomic, strong) NSMutableArray    *chatMessages;

@@ -94,7 +94,7 @@ static WhiteLabel *whiteLabel;
     [self.socket on:kEventNewMessage callback:^(id data) {
         dispatch_async(dispatch_get_main_queue(), ^{
           WLChatMessage *message = [WLChatMessage new];
-          message.messageType = ChatMessageTypeMessage;
+          message.messageType = ChatMessageTypeMessageReceived;
           message.content = [data firstObject][@"message"];
           message.userName = [data firstObject][@"username"];
             [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification

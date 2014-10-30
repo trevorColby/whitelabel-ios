@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 #import "WLBaseChatTableViewCell.h"
 
-#define kChatMessageCellIndentifier @"ChatMessageCellIdentifier"
+#define kChatMessageSendCellIndentifier @"ChatMessageSendCellIdentifier"
+#define kChatMessageReceiveCellIndentifier @"ChatMessageReceiveCellIdentifier"
 #define kChatInfoCellIndentifier @"ChatInfoCellIdentifier"
 
 @interface ChatTableViewCell : WLBaseChatTableViewCell
