@@ -146,7 +146,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" red="0.95858511740331487" green="0.95858511740331487" blue="0.95858511740331487" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="Cin-Dj-tQr" firstAttribute="top" secondItem="oB5-w7-uNg" secondAttribute="top" constant="47" id="2UH-PV-l8f"/>
                                                         <constraint firstItem="ZyD-mm-MUP" firstAttribute="top" secondItem="oB5-w7-uNg" secondAttribute="top" constant="5" id="8fo-HS-CO3"/>
@@ -210,7 +210,7 @@
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                     </subviews>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="backgroundColor" red="0.95858511739999996" green="0.95858511739999996" blue="0.95858511739999996" alpha="1" colorSpace="calibratedRGB"/>
                                                     <constraints>
                                                         <constraint firstItem="kgE-Qm-GVA" firstAttribute="top" secondItem="9Pk-ch-L3c" secondAttribute="top" constant="47" id="1g5-gh-6Ip"/>
                                                         <constraint firstItem="jO5-C7-rzP" firstAttribute="height" secondItem="byH-kN-CTT" secondAttribute="height" id="4Gm-Yf-HWU"/>

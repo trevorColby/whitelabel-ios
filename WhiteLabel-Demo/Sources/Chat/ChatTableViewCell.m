@@ -19,8 +19,6 @@
 @implementation ChatTableViewCell
 
 - (void)awakeFromNib {
-  self.containerView.layer.borderWidth = 1.0f;
-  self.containerView.layer.borderColor = [UIColor blackColor].CGColor;
   self.containerView.layer.cornerRadius = 5.0f;
 }
 
