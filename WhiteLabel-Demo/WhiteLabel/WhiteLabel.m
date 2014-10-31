@@ -63,12 +63,18 @@ static WhiteLabel *whiteLabel;
   
   [self.socket on:kEventLogin callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
+      
       WLChat  *chat = [[WLChat alloc] init];
       chat.title = @"White Label Chat";
       chat.userCount = [data firstObject][@"numUsers"];
+      WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+                                                                      content:nil];
+      chat.messages = [NSMutableArray arrayWithObject:chatMessage];
       WLUser  *user = [[WLUser alloc] init];
       user.username = username;
-      block(YES, @[chat, user], nil);
+      NSDictionary  *data = [NSDictionary dictionaryWithObjectsAndKeys:chat, @"chat",
+                             user, @"user", nil];
+      block(YES, @[data], nil);
     });
   }];
   
@@ -109,6 +115,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserJoinedListener {
+  
   [self.socket on:kEventUserJoined callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
       

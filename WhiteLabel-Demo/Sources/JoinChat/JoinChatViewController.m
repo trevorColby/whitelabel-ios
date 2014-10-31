@@ -24,64 +24,59 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 @implementation JoinChatViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-    
-    [[WhiteLabel sharedInstance] connectWithHost:host
-                             withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-                                 
-                             }];
-    // Do any additional setup after loading the view.
+  [super viewDidLoad];
+  
+  [[WhiteLabel sharedInstance] connectWithHost:host
+                           withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+                             
+                           }];
+  // Do any additional setup after loading the view.
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-
+  
 }
 
 - (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+  [super didReceiveMemoryWarning];
+  // Dispose of any resources that can be recreated.
 }
 
 - (void)viewChat:(NSDictionary*)chatInfo {
-    CustomChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([CustomChatViewController class])];
-    chatVC.username = self.usernameTextField.text;
-    [self.navigationController pushViewController:chatVC animated:YES];
+  CustomChatViewController  *chatVC = [self.storyboard instantiateViewControllerWithIdentifier:NSStringFromClass([CustomChatViewController class])];
+  chatVC.username = self.usernameTextField.text;
+  chatVC.chat = chatInfo[@"chat"];
+  [self.navigationController pushViewController:chatVC animated:YES];
 }
 
 - (void)joinChatWithUsername: (NSString*)username {
-    [[WhiteLabel sharedInstance] joinChatWithUsername:username
-                                  withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-        if (success) {
-          WLChat  *chat = [result firstObject];
-          WLUser  *user = [result objectAtIndex:1];
-
-          NSMutableDictionary *chatInfo = [NSMutableDictionary dictionary];
-          chatInfo[@"chat"] = chat;
-          chatInfo[@"user"] = user;
-          [self viewChat:chatInfo];
-        }
-    }];
+  [[WhiteLabel sharedInstance] joinChatWithUsername:username
+                                withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+                                  if (success) {
+                                    [self viewChat:[result firstObject]];
+                                  }
+                                }];
 }
 /*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
+ #pragma mark - Navigation
+ 
+ // In a storyboard-based application, you will often want to do a little preparation before navigation
+ - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+ // Get the new view controller using [segue destinationViewController].
+ // Pass the selected object to the new view controller.
+ }
+ */
 
 #pragma mark UITextFieldDelegate
 - (BOOL)textFieldShouldReturn:(UITextField *)textField{
-    
-    if (textField.text.length) {
-        [self joinChatWithUsername:textField.text];
-        [textField resignFirstResponder];
-        return YES;
-    }
-    
-    return NO;
+  
+  if (textField.text.length) {
+    [self joinChatWithUsername:textField.text];
+    [textField resignFirstResponder];
+    return YES;
+  }
+  
+  return NO;
 }
 
 @end
