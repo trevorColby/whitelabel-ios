@@ -4,7 +4,7 @@ Pod:: Spec.new do |spec|
   spec.version      = '1.0.0'
   spec.summary      = 'An internal library for Fueled. Generic chat library using web-sockets'
   spec.author = {
-    'rhg-fueled' => 'rhg@fueled.co'
+    'mha-fueled' => 'mha@fueled.co'
   }
   spec.license         = { :type => 'Custom', :text => 'Copyright (C) 2013-2014 Fueled. All Rights Reserved.' }
   spec.homepage        = 'https://github.com/Fueled/whiteLabel-ios'
