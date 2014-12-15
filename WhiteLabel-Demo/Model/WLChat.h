@@ -15,10 +15,11 @@ typedef enum {
 
 @interface WLChat : NSObject
 
-@property (nonatomic, strong) NSString  *title;
-@property (nonatomic, strong) NSMutableArray   *messages;
+@property (nonatomic, strong) NSString  *chatId;
+@property (nonatomic, strong) NSString  *chatTitle;
+@property (nonatomic, strong) NSMutableArray   *chatMessages;
 @property (nonatomic, assign) ChatType  chatType;
-@property (nonatomic, strong) NSNumber  *userCount;
+@property (nonatomic, strong) NSNumber  *chatUserCount;
 
 - (instancetype)initWithTitle: (NSString*)title chatType: (ChatType)chatType;
 

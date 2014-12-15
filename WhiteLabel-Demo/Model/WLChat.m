@@ -13,7 +13,7 @@
 - (instancetype)initWithTitle: (NSString*)title chatType: (ChatType)chatType {
   self = [super init];
   if (self) {
-    self.title = title;
+    self.chatTitle = title;
     self.chatType = chatType;
   }
   return self;

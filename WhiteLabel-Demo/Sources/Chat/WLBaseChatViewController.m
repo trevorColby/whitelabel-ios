@@ -74,8 +74,8 @@ UITextFieldDelegate>
 
 - (void)userJoinedChat: (NSNotification*)notification {
   
-  NSInteger userCount = [self.chat.userCount integerValue];
-  self.chat.userCount = [NSNumber numberWithInteger:++userCount];
+  NSInteger userCount = [self.chat.chatUserCount integerValue];
+  self.chat.chatUserCount = [NSNumber numberWithInteger:++userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
   [self reloadTableWithChatMessage:chatMessage];
@@ -83,8 +83,8 @@ UITextFieldDelegate>
 
 - (void)userLeftChat: (NSNotification*)notification {
   
-  NSInteger userCount = [self.chat.userCount integerValue];
-  self.chat.userCount = [NSNumber numberWithInteger:--userCount];
+  NSInteger userCount = [self.chat.chatUserCount integerValue];
+  self.chat.chatUserCount = [NSNumber numberWithInteger:--userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
   [self reloadTableWithChatMessage:chatMessage];
@@ -107,41 +107,12 @@ UITextFieldDelegate>
 }
 
 - (void)reloadTableWithChatMessage:(WLChatMessage *)chatMessage {
-  NSLog(@"just offset before: %f", self.chatTableView.contentOffset.y);
-
-  [self.chat.messages addObject:chatMessage];
-  
-  [self.chatTableView beginUpdates];
+  [self.chat.chatMessages addObject:chatMessage];
   NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+
+  [self.chatTableView beginUpdates];
   [self.chatTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
   [self.chatTableView endUpdates];
-  
-  
-//  [self.chatTableView reloadData];
-  
-//  [self.view layoutIfNeeded];
-  
-//  [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(self.chat.messages.count-1) inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
-//  
-//  NSLog(@"index: %ld", self.chat.messages.count-1);
-  
-////  [self.view layoutIfNeeded];
-//  
-//  CGPoint newOffset = self.chatTableView.contentOffset;
-//  
-//  if ((self.chatTableView.contentSize.height) > self.chatTableView.frame.size.height) {
-//    newOffset.y = self.chatTableView.contentSize.height - self.chatTableView.frame.size.height;
-//  }
-//
-//  NSLog(@"contentSize: %f", self.chatTableView.contentSize.height + self.chatTableView.contentInset.top);
-//  NSLog(@"frame: %@", [NSValue valueWithCGRect:self.chatTableView.frame]);
-//  NSLog(@"offset before: %f", self.chatTableView.contentOffset.y);
-//  
-//  [UIView animateWithDuration:0.5 animations:^{
-//    self.chatTableView.contentOffset = newOffset;
-//  } completion:^(BOOL finished) {
-//    NSLog(@"offset after: %f", self.chatTableView.contentOffset.y);
-//  }];
 }
 
 #pragma mark Keyboard Notifications
@@ -173,26 +144,26 @@ UITextFieldDelegate>
 }
 
 -(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-  return self.chat.messages.count;
+  return self.chat.chatMessages.count;
 }
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   
   WLDefaultChatTableViewCell   *cell;
-  WLChatMessage *chatMessage = [self.chat.messages objectAtIndex:indexPath.row];
+  WLChatMessage *chatMessage = [self.chat.chatMessages objectAtIndex:indexPath.row];
   
   NSString  *displayMessage;
   switch (chatMessage.messageType) {
     case ChatMessageTypeInfo:
-      displayMessage = [NSString stringWithFormat:@"%@ users in chat", self.chat.userCount];
+      displayMessage = [NSString stringWithFormat:@"%@ users in chat", self.chat.chatUserCount];
       cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
       break;
     case ChatMessageTypeInfoUserJoined:
-      displayMessage = [NSString stringWithFormat:@"%@ joined. %@ users in chat", chatMessage.userName, self.chat.userCount];
+      displayMessage = [NSString stringWithFormat:@"%@ joined. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
       cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
       break;
     case ChatMessageTypeInfoUserLeft:
-      displayMessage = [NSString stringWithFormat:@"%@ left. %@ users in chat", chatMessage.userName, self.chat.userCount];
+      displayMessage = [NSString stringWithFormat:@"%@ left. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
       cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
       break;
     case ChatMessageTypeMessage:

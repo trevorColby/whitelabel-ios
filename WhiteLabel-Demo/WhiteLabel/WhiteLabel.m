@@ -17,6 +17,8 @@ NSString    *const kEventLogin = @"login";
 NSString    *const kEventNewMessage = @"newMessage";
 NSString    *const kEventUserJoined = @"userJoined";
 NSString    *const kEventUserLeft = @"userLeft";
+NSString    *const kEventUserStartedTyping = @"userStartedTyping";
+NSString    *const kEventUserStoppedTyping = @"userStoppedTyping";
 
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
@@ -39,8 +41,11 @@ static WhiteLabel *whiteLabel;
   return whiteLabel;
 }
 
-- (void)connectWithHost:(NSString *)host withCompletionBlock:(whiteLabelCompletionBlock)block {
-  [SIOSocket socketWithHost:host response:^(SIOSocket *socket) {
+- (void)connectWithHost:(NSString *)host withAccessToken:(NSString *)accessToken withCompletionBlock:(WhiteLabelCompletionBlock)block {
+  
+  NSString *hostWithAccessToken = [NSString stringWithFormat:@"%@?token=%@", host, accessToken];
+  
+  [SIOSocket socketWithHost:hostWithAccessToken response:^(SIOSocket *socket) {
     self.socket = socket;
     __weak WhiteLabel *weakSelf = self;
     weakSelf.socket.onConnect = ^(){
@@ -49,6 +54,8 @@ static WhiteLabel *whiteLabel;
       [weakSelf addNewMessageListener];
       [weakSelf addUserJoinedListener];
       [weakSelf addUserLeftListener];
+      [weakSelf userStartedTypingListener];
+      [weakSelf userStoppedTypingListener];
 
     };
     self.socket.onDisconnect = ^(){
@@ -57,41 +64,21 @@ static WhiteLabel *whiteLabel;
   }];
 }
 
-- (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block {
-  
-  [self.socket on:kEventLogin callback:^(id data) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-
-      WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
-                                                                      content:nil];
-      
-      WLChat  *chat = [[WLChat alloc] init];
-      chat.title = @"White Label Chat";
-      chat.userCount = [data firstObject][@"numUsers"];
-      chat.messages = [NSMutableArray arrayWithObject:chatMessage];
-      
-      WLUser  *user = [[WLUser alloc] init];
-      user.username = username;
-
-      NSDictionary  *data = [NSDictionary dictionaryWithObjectsAndKeys:chat, @"chat",
-                             user, @"user", nil];
-      block(YES, @[data], nil);
-    });
-  }];
-  
+- (void)joinChatRoom:(NSString *)chatRoomId withCompletionBlock:(WhiteLabelCompletionBlock)block {
   self.socket.onError = ^(NSDictionary* data){
     NSLog(@"error: %@", data);
   };
-  
-  [self.socket emit:kEventAddUser args:@[username]];
+
+  [self.socket emit:kEventAddUser args:@[chatRoomId]];
+  block(YES, nil, nil);
 }
 
-- (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block {
+- (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block {
   [self.socket close];
   block(YES, nil, nil);
 }
 
-- (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block {
+- (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block {
   [self.socket emit:kEventNewMessage args:@[message]];
   block(YES, nil, nil);
 }
@@ -148,6 +135,14 @@ static WhiteLabel *whiteLabel;
                                                         userInfo:data];
     });
   }];
+}
+
+- (void)userStartedTypingListener {
+  [self.socket emit:kEventUserStartedTyping];
+}
+
+- (void)userStoppedTypingListener {
+  [self.socket emit:kEventUserStoppedTyping];
 }
 
 @end

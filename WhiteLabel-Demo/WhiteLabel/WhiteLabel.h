@@ -12,7 +12,7 @@ extern NSString    *const messageReceivedNotification;
 extern NSString    *const userJoinedChatNotification;
 extern NSString    *const userLeftChatNotification;
 
-typedef void (^whiteLabelCompletionBlock)(BOOL success,
+typedef void (^WhiteLabelCompletionBlock)(BOOL success,
                                           NSArray *result,
                                           NSError*error);
 
@@ -26,25 +26,25 @@ typedef void (^whiteLabelCompletionBlock)(BOOL success,
  @param host host to connect with
  @param block Completion block to be executed once connection is completed
  */
-- (void)connectWithHost: (NSString*)host withCompletionBlock: (whiteLabelCompletionBlock)block;
+- (void)connectWithHost: (NSString*)host withAccessToken:(NSString *)accessToken withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 /** Joins a new chat
- @param username username of the user
+ @param userId userIdentifier of the user
  @param block Completion block to be executed once user joins the chat
  */
-- (void)joinChatWithUsername: (NSString*)username withCompletionBlock: (whiteLabelCompletionBlock)block;
+- (void)joinChatRoom: (NSString *)chatRoomId withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 /** Send a chat message to all users
  @param message message to be sent
  @param block Completion block to be executed once message is sent
  */
-- (void)sendMessage: (NSString*)message withCompletionBlock: (whiteLabelCompletionBlock)block;
+- (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 /** Disconnect the session
  @param block Completion block to be executed once connection is disconnected
  */
 
-- (void)disconnectChatWithCompletionBlock: (whiteLabelCompletionBlock)block;
+- (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 
 @end

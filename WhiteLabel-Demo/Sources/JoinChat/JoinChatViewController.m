@@ -13,7 +13,7 @@
 #import "WLChat.h"
 #import "WLUser.h"
 
-NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
+NSString   *const    host =  @"http://chat-white-label.herokuapp.com:3000";
 
 @interface JoinChatViewController ()<UITextFieldDelegate>
 
@@ -26,10 +26,9 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 - (void)viewDidLoad {
   [super viewDidLoad];
   
-  [[WhiteLabel sharedInstance] connectWithHost:host
-                           withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-                             
-                           }];
+  [[WhiteLabel sharedInstance] connectWithHost:host withAccessToken:@"testing" withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+    
+  }];
   // Do any additional setup after loading the view.
 }
 
@@ -50,12 +49,11 @@ NSString   *const    host =  @"http://chat-white-label.herokuapp.com/";
 }
 
 - (void)joinChatWithUsername: (NSString*)username {
-  [[WhiteLabel sharedInstance] joinChatWithUsername:username
-                                withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-                                  if (success) {
-                                    [self viewChat:[result firstObject]];
-                                  }
-                                }];
+  [[WhiteLabel sharedInstance] joinChatRoom:@"chatRoomId" withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+    if (success) {
+      [self viewChat:[result firstObject]];
+    }
+  }];
 }
 /*
  #pragma mark - Navigation

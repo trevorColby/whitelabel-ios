@@ -11,5 +11,6 @@
 @interface WLUser : NSObject
 
 @property (nonatomic, strong) NSString  *username;
+@property (nonatomic, strong) NSString  *userId;
 
 @end
