@@ -6,17 +6,15 @@
 //  Copyright (c) 2014 Fueled. All rights reserved.
 //
 
-#import "ChatTableViewCell.h"
+#import "WLDefaultChatTableViewCell.h"
 
-@interface ChatTableViewCell ()
+@interface WLDefaultChatTableViewCell ()
 
-@property (nonatomic, weak) IBOutlet UILabel  *userNameLabel;
-@property (nonatomic, weak) IBOutlet UILabel  *timeLabel;
 @property (weak, nonatomic) IBOutlet UIView *containerView;
 
 @end
 
-@implementation ChatTableViewCell
+@implementation WLDefaultChatTableViewCell
 
 - (void)awakeFromNib {
   self.containerView.layer.cornerRadius = 5.0f;
@@ -24,7 +22,7 @@
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
   [super setSelected:selected animated:animated];
-    // Configure the view for the selected state
+  // Configure the view for the selected state
 }
 
 - (void)setupViews:(NSDictionary *)data {

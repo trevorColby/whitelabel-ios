@@ -13,8 +13,10 @@
 #define kChatMessageReceiveCellIndentifier @"ChatMessageReceiveCellIdentifier"
 #define kChatInfoCellIndentifier @"ChatInfoCellIdentifier"
 
-@interface ChatTableViewCell : WLBaseChatTableViewCell
+@interface WLDefaultChatTableViewCell : WLBaseChatTableViewCell
 
 @property (nonatomic, weak) IBOutlet UILabel  *messageLabel;
+@property (nonatomic, weak) IBOutlet UILabel  *userNameLabel;
+@property (nonatomic, weak) IBOutlet UILabel  *timeLabel;
 
 @end

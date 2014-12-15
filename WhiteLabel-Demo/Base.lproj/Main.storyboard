@@ -87,7 +87,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="528"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatInfoCellIdentifier" rowHeight="28" id="0I3-KX-BKI" customClass="ChatTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatInfoCellIdentifier" rowHeight="28" id="0I3-KX-BKI" customClass="WLDefaultChatTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="0I3-KX-BKI" id="RNd-Y8-A3d">
@@ -111,7 +111,7 @@
                                             <outlet property="messageLabel" destination="ANx-Vh-XfC" id="aPy-df-QtX"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatMessageReceiveCellIdentifier" rowHeight="104" id="vRO-Ly-jeQ" customClass="ChatTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatMessageReceiveCellIdentifier" rowHeight="104" id="vRO-Ly-jeQ" customClass="WLDefaultChatTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="vRO-Ly-jeQ" id="FVT-GJ-A3K">
@@ -175,7 +175,7 @@
                                             <outlet property="userNameLabel" destination="qKd-WB-BxG" id="6JM-Dx-uzq"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatMessageSendCellIdentifier" rowHeight="104" id="b4O-SN-TZY" customClass="ChatTableViewCell">
+                                    <tableViewCell contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="ChatMessageSendCellIdentifier" rowHeight="104" id="b4O-SN-TZY" customClass="WLDefaultChatTableViewCell">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="b4O-SN-TZY" id="Mps-b9-coQ">

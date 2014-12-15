@@ -9,7 +9,7 @@
 #import "WLBaseChatViewController.h"
 #import "WhiteLabel.h"
 #import "WLChatMessage.h"
-#import "ChatTableViewCell.h"
+#import "WLDefaultChatTableViewCell.h"
 
 @interface WLBaseChatViewController ()<UITableViewDataSource,
 UITableViewDelegate,
@@ -68,8 +68,7 @@ UITextFieldDelegate>
 - (void)newMessageReceived: (NSNotification*)notification {
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
-  [self.chat.messages addObject:chatMessage];
-  [self.chatTableView reloadData];
+  [self reloadTableWithChatMessage:chatMessage];
   
 }
 
@@ -79,9 +78,7 @@ UITextFieldDelegate>
   self.chat.userCount = [NSNumber numberWithInteger:++userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
-  [self.chat.messages addObject:chatMessage];
-  [self.chatTableView reloadData];
-  
+  [self reloadTableWithChatMessage:chatMessage];
 }
 
 - (void)userLeftChat: (NSNotification*)notification {
@@ -90,8 +87,7 @@ UITextFieldDelegate>
   self.chat.userCount = [NSNumber numberWithInteger:--userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
-  [self.chat.messages addObject:chatMessage];
-  [self.chatTableView reloadData];
+  [self reloadTableWithChatMessage:chatMessage];
   
 }
 
@@ -105,10 +101,47 @@ UITextFieldDelegate>
                            WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
                                                                                            content:content];
                            chatMessage.userName = self.username;
-                           [self.chat.messages addObject:chatMessage];
-                           [self.chatTableView reloadData];
+                           [self reloadTableWithChatMessage:chatMessage];
                          }
                        }];
+}
+
+- (void)reloadTableWithChatMessage:(WLChatMessage *)chatMessage {
+  NSLog(@"just offset before: %f", self.chatTableView.contentOffset.y);
+
+  [self.chat.messages addObject:chatMessage];
+  
+  [self.chatTableView beginUpdates];
+  NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
+  [self.chatTableView insertRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
+  [self.chatTableView endUpdates];
+  
+  
+//  [self.chatTableView reloadData];
+  
+//  [self.view layoutIfNeeded];
+  
+//  [self.chatTableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:(self.chat.messages.count-1) inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:YES];
+//  
+//  NSLog(@"index: %ld", self.chat.messages.count-1);
+  
+////  [self.view layoutIfNeeded];
+//  
+//  CGPoint newOffset = self.chatTableView.contentOffset;
+//  
+//  if ((self.chatTableView.contentSize.height) > self.chatTableView.frame.size.height) {
+//    newOffset.y = self.chatTableView.contentSize.height - self.chatTableView.frame.size.height;
+//  }
+//
+//  NSLog(@"contentSize: %f", self.chatTableView.contentSize.height + self.chatTableView.contentInset.top);
+//  NSLog(@"frame: %@", [NSValue valueWithCGRect:self.chatTableView.frame]);
+//  NSLog(@"offset before: %f", self.chatTableView.contentOffset.y);
+//  
+//  [UIView animateWithDuration:0.5 animations:^{
+//    self.chatTableView.contentOffset = newOffset;
+//  } completion:^(BOOL finished) {
+//    NSLog(@"offset after: %f", self.chatTableView.contentOffset.y);
+//  }];
 }
 
 #pragma mark Keyboard Notifications
@@ -145,8 +178,9 @@ UITextFieldDelegate>
 
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   
-  ChatTableViewCell   *cell;
+  WLDefaultChatTableViewCell   *cell;
   WLChatMessage *chatMessage = [self.chat.messages objectAtIndex:indexPath.row];
+  
   NSString  *displayMessage;
   switch (chatMessage.messageType) {
     case ChatMessageTypeInfo:

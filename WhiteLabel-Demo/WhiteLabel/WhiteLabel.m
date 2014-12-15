@@ -46,12 +46,10 @@ static WhiteLabel *whiteLabel;
     weakSelf.socket.onConnect = ^(){
       NSLog(@"i'm connected");
       weakSelf.isConnected = YES;
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf addNewMessageListener];
-        [weakSelf addUserJoinedListener];
-        [weakSelf addUserLeftListener];
-        block(YES, nil, nil);
-      });
+      [weakSelf addNewMessageListener];
+      [weakSelf addUserJoinedListener];
+      [weakSelf addUserLeftListener];
+
     };
     self.socket.onDisconnect = ^(){
       weakSelf.isConnected = NO;
@@ -63,15 +61,18 @@ static WhiteLabel *whiteLabel;
   
   [self.socket on:kEventLogin callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
+
+      WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
+                                                                      content:nil];
       
       WLChat  *chat = [[WLChat alloc] init];
       chat.title = @"White Label Chat";
       chat.userCount = [data firstObject][@"numUsers"];
-      WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeInfo
-                                                                      content:nil];
       chat.messages = [NSMutableArray arrayWithObject:chatMessage];
+      
       WLUser  *user = [[WLUser alloc] init];
       user.username = username;
+
       NSDictionary  *data = [NSDictionary dictionaryWithObjectsAndKeys:chat, @"chat",
                              user, @"user", nil];
       block(YES, @[data], nil);
