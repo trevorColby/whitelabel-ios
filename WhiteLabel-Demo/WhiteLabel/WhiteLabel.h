@@ -58,14 +58,14 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 
 @protocol WhiteLabelDelegate <NSObject>
 
-- (void)whiteLabelUserDidRecieveMessage:(WLChatMessage *)message;
+- (void)whiteLabel:(WhiteLabel *)whiteLabel userDidRecieveMessage:(WLChatMessage *)message;
 
-- (void)whiteLabelUserDidJoinChat:(WLChatMessage *)message;
+- (void)whiteLabel:(WhiteLabel *)whiteLabel userDidJoinChat:(WLChatMessage *)message;
 
-- (void)whiteLabelUserDidLeaveChat:(WLChatMessage *)message;
+- (void)whiteLabel:(WhiteLabel *)whiteLabel userDidLeaveChat:(WLChatMessage *)message;
 
-- (void)whiteLabelUserDidStartTypingChat:(WLChatMessage *)message;
+- (void)whiteLabel:(WhiteLabel *)whiteLabel userDidStartTypingMessage:(WLChatMessage *)message;
 
-- (void)whiteLabelUserDidStopTypingChat:(WLChatMessage *)message;
+- (void)whiteLabel:(WhiteLabel *)whiteLabel userDidStopTypingMessage:(WLChatMessage *)message;
 
 @end

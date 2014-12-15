@@ -104,8 +104,8 @@ static WhiteLabel *whiteLabel;
       message.content = [data firstObject][@"message"];
       message.userName = [data firstObject][@"username"];
       
-      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidRecieveMessage:)]) {
-        [self.delegate whiteLabelUserDidRecieveMessage:message];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
+        [self.delegate whiteLabel:self userDidRecieveMessage:message];
       }
       
     });
@@ -121,8 +121,8 @@ static WhiteLabel *whiteLabel;
       message.messageType = ChatMessageTypeInfoUserJoined;
       message.userName = [data firstObject][@"username"];
       
-      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidJoinChat:)]) {
-        [self.delegate whiteLabelUserDidJoinChat:message];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidJoinChat:)]) {
+        [self.delegate whiteLabel:self userDidJoinChat:message];
       }
 
     });
@@ -139,8 +139,8 @@ static WhiteLabel *whiteLabel;
       message.messageType = ChatMessageTypeInfoUserLeft;
       message.userName = [data firstObject][@"username"];
 
-      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidLeaveChat:)]) {
-        [self.delegate whiteLabelUserDidLeaveChat:message];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidLeaveChat:)]) {
+        [self.delegate whiteLabel:self userDidLeaveChat:message];
       }
     });
   }];
@@ -154,8 +154,8 @@ static WhiteLabel *whiteLabel;
       message.messageType = ChatMessageTypeInfoUserStartedTyping;
       message.userName = [data firstObject][@"username"];
       
-      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidStartTypingChat:)]) {
-        [self.delegate whiteLabelUserDidStartTypingChat:message];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
+        [self.delegate whiteLabel:self userDidStartTypingMessage:message];
       }
     });
   }];
@@ -169,8 +169,8 @@ static WhiteLabel *whiteLabel;
       message.messageType = ChatMessageTypeInfoUserStoppedTyping;
       message.userName = [data firstObject][@"username"];
       
-      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidStopTypingChat:)]) {
-        [self.delegate whiteLabelUserDidStopTypingChat:message];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
+        [self.delegate whiteLabel:self userDidStopTypingMessage:message];
       }
     });
   }];
