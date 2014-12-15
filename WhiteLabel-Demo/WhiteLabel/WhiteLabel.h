@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+@class WLChatMessage;
 
 extern NSString    *const messageReceivedNotification;
 extern NSString    *const userJoinedChatNotification;
@@ -16,9 +17,12 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
                                           NSArray *result,
                                           NSError*error);
 
+@protocol WhiteLabelDelegate;
+
 @interface WhiteLabel : NSObject
 
 @property (nonatomic, assign) BOOL isConnected;
+@property (nonatomic, weak) id<WhiteLabelDelegate> delegate;
 
 + (instancetype)sharedInstance;
 
@@ -46,5 +50,22 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block;
 
+- (void)userStartedTypingWithCompletionBlock: (WhiteLabelCompletionBlock)block;
+
+- (void)userStoppedTypingWithCompletionBlock: (WhiteLabelCompletionBlock)block;
+
+@end
+
+@protocol WhiteLabelDelegate <NSObject>
+
+- (void)whiteLabelUserDidRecieveMessage:(WLChatMessage *)message;
+
+- (void)whiteLabelUserDidJoinChat:(WLChatMessage *)message;
+
+- (void)whiteLabelUserDidLeaveChat:(WLChatMessage *)message;
+
+- (void)whiteLabelUserDidStartTypingChat:(WLChatMessage *)message;
+
+- (void)whiteLabelUserDidStopTypingChat:(WLChatMessage *)message;
 
 @end

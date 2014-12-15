@@ -83,6 +83,16 @@ static WhiteLabel *whiteLabel;
   block(YES, nil, nil);
 }
 
+- (void)userStartedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
+  [self.socket emit:kEventUserStartedTyping];
+  block(YES, nil, nil);
+}
+
+- (void)userStoppedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
+  [self.socket emit:kEventUserStoppedTyping];
+  block(YES, nil, nil);
+}
+
 #pragma mark Socket Event Listeners
 - (void)addNewMessageListener {
   
@@ -94,10 +104,10 @@ static WhiteLabel *whiteLabel;
       message.content = [data firstObject][@"message"];
       message.userName = [data firstObject][@"username"];
       
-      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
-      [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
-                                                          object:nil
-                                                        userInfo:data];
+      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidRecieveMessage:)]) {
+        [self.delegate whiteLabelUserDidRecieveMessage:message];
+      }
+      
     });
   }];
 }
@@ -111,10 +121,10 @@ static WhiteLabel *whiteLabel;
       message.messageType = ChatMessageTypeInfoUserJoined;
       message.userName = [data firstObject][@"username"];
       
-      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
-      [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
-                                                          object:nil
-                                                        userInfo:data];
+      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidJoinChat:)]) {
+        [self.delegate whiteLabelUserDidJoinChat:message];
+      }
+
     });
   }];
 }
@@ -128,21 +138,42 @@ static WhiteLabel *whiteLabel;
       WLChatMessage *message = [WLChatMessage new];
       message.messageType = ChatMessageTypeInfoUserLeft;
       message.userName = [data firstObject][@"username"];
-      
-      NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
-      [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
-                                                          object:nil
-                                                        userInfo:data];
+
+      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidLeaveChat:)]) {
+        [self.delegate whiteLabelUserDidLeaveChat:message];
+      }
     });
   }];
 }
 
 - (void)userStartedTypingListener {
-  [self.socket emit:kEventUserStartedTyping];
+  [self.socket on:kEventUserStartedTyping callback:^(id data) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+      WLChatMessage *message = [WLChatMessage new];
+      message.messageType = ChatMessageTypeInfoUserStartedTyping;
+      message.userName = [data firstObject][@"username"];
+      
+      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidStartTypingChat:)]) {
+        [self.delegate whiteLabelUserDidStartTypingChat:message];
+      }
+    });
+  }];
 }
 
 - (void)userStoppedTypingListener {
-  [self.socket emit:kEventUserStoppedTyping];
+  [self.socket on:kEventUserStoppedTyping callback:^(id data) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      
+      WLChatMessage *message = [WLChatMessage new];
+      message.messageType = ChatMessageTypeInfoUserStoppedTyping;
+      message.userName = [data firstObject][@"username"];
+      
+      if ([self.delegate respondsToSelector:@selector(whiteLabelUserDidStopTypingChat:)]) {
+        [self.delegate whiteLabelUserDidStopTypingChat:message];
+      }
+    });
+  }];
 }
 
 @end
