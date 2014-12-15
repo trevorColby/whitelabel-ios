@@ -13,7 +13,7 @@ Pod:: Spec.new do |spec|
     :tag => '1.0.0'
   }
   spec.ios.deployment_target = '7.0'
-  spec.source_files = 'WhiteLabel-Demo/WhiteLabel/*.{h,m}'
+  spec.source_files = 'WhiteLabel-Demo/WhiteLabel/*.{h,m}','WhiteLabel-Demo/WhiteLabel/Model/*{h,m}'
   spec.dependency 'SIOSocket'
   spec.requires_arc     = true
 end
