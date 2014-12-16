@@ -23,6 +23,8 @@ NSString    *const kEventUserStoppedTyping = @"userStoppedTyping";
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
 NSString    *const userLeftChatNotification = @"userLeftChatNotification";
+NSString    *const userStartedTypingNotification = @"userStartedTypingNotification";
+NSString    *const userStoppedTypingNotification = @"userStoppedTypingNotification";
 
 static WhiteLabel *whiteLabel;
 
@@ -106,6 +108,12 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
         [self.delegate whiteLabel:self userDidRecieveMessage:message];
+
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
+                                                            object:nil
+                                                          userInfo:data];
       }
       
     });
@@ -123,6 +131,12 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidJoinChat:)]) {
         [self.delegate whiteLabel:self userDidJoinChat:message];
+
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
+                                                            object:nil
+                                                          userInfo:data];
       }
 
     });
@@ -141,6 +155,12 @@ static WhiteLabel *whiteLabel;
 
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidLeaveChat:)]) {
         [self.delegate whiteLabel:self userDidLeaveChat:message];
+
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
+                                                            object:nil
+                                                          userInfo:data];
       }
     });
   }];
@@ -156,6 +176,12 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStartTypingMessage:message];
+ 
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:userStartedTypingNotification
+                                                            object:nil
+                                                          userInfo:data];
       }
     });
   }];
@@ -171,6 +197,12 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStopTypingMessage:message];
+
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:userStoppedTypingNotification
+                                                            object:nil
+                                                          userInfo:data];
       }
     });
   }];
