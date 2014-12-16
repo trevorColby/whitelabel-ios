@@ -56,7 +56,7 @@ static WhiteLabel *whiteLabel;
       [weakSelf addUserLeftListener];
       [weakSelf userStartedTypingListener];
       [weakSelf userStoppedTypingListener];
-
+      block(YES, nil, nil);
     };
     self.socket.onDisconnect = ^(){
       weakSelf.isConnected = NO;
