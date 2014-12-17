@@ -67,32 +67,54 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)joinChatRoom:(NSString *)chatRoomId withCompletionBlock:(WhiteLabelCompletionBlock)block {
-  self.socket.onError = ^(NSDictionary* data){
-    NSLog(@"error: %@", data);
-  };
-
   [self.socket emit:kEventAddUser args:@[chatRoomId]];
-  block(YES, nil, nil);
+  [self.socket on:kEventLogin callback:^(NSArray *args) {
+    block(YES, nil, nil);
+  }];
+  self.socket.onError = ^(NSDictionary* data){
+    NSLog(@"join chat room error: %@", data);
+    block(NO, nil, nil);
+  };
 }
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block {
   [self.socket close];
-  block(YES, nil, nil);
+  self.socket.onDisconnect = ^(){
+    block(YES, nil, nil);
+  };
 }
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block {
   [self.socket emit:kEventNewMessage args:@[message]];
-  block(YES, nil, nil);
+  [self.socket on:kEventNewMessage callback:^(NSArray *args) {
+    block(YES, nil, nil);
+  }];
+  self.socket.onError = ^(NSDictionary* data){
+    NSLog(@"send message error: %@", data);
+    block(NO, nil, nil);
+  };
 }
 
 - (void)userStartedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
   [self.socket emit:kEventUserStartedTyping];
-  block(YES, nil, nil);
+  [self.socket on:kEventUserStartedTyping callback:^(NSArray *args) {
+    block(YES, nil, nil);
+  }];
+  self.socket.onError = ^(NSDictionary* data){
+    NSLog(@"user started typing error: %@", data);
+    block(NO, nil, nil);
+  };
 }
 
 - (void)userStoppedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
   [self.socket emit:kEventUserStoppedTyping];
-  block(YES, nil, nil);
+  [self.socket on:kEventUserStoppedTyping callback:^(NSArray *args) {
+    block(YES, nil, nil);
+  }];
+  self.socket.onError = ^(NSDictionary* data){
+    NSLog(@"user stopped typing error: %@", data);
+    block(NO, nil, nil);
+  };
 }
 
 #pragma mark Socket Event Listeners
