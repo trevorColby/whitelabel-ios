@@ -11,6 +11,7 @@
 
 typedef enum {
     ChatMessageTypeInfo = 0,
+    ChatMessageTypeInfoUserLoggedIn,
     ChatMessageTypeInfoUserJoined,
     ChatMessageTypeInfoUserLeft,
     ChatMessageTypeInfoUserStartedTyping,

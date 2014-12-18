@@ -112,7 +112,28 @@ static WhiteLabel *whiteLabel;
 #pragma mark Socket Event Listeners
 - (void)addUserLoggedInListener {
   [self.socket on:kEventLogin callback:^(id data) {
-    self.loginEventBlock(YES, nil, nil);
+    NSArray *responseArray;
+
+    if (data) {
+      NSDictionary *response = data[0];
+      
+      WLChat *chat = [[WLChat alloc] init];
+      chat.chatId = response[@"channel"];
+      chat.chatUserCount = response[@"numUsers"];
+
+      for (NSDictionary *aMessage in response[@"messages"]) {
+        WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
+        chatMessage.messageType = ChatMessageTypeInfoUserLoggedIn;
+        chatMessage.content = aMessage[@"message"];
+        chatMessage.userName = aMessage[@"username"];
+        
+        [chat.chatMessages addObject:chatMessage];
+      }
+
+      responseArray = [NSArray arrayWithObject:chat];
+    }
+    
+    self.loginEventBlock(YES, responseArray, nil);
   }];
 }
 

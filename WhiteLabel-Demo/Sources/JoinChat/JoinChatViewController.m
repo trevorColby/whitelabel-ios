@@ -13,7 +13,7 @@
 #import "WLChat.h"
 #import "WLUser.h"
 
-NSString   *const    host =  @"http://chat-white-label.herokuapp.com:3000";
+NSString   *const    host =  @"http://chat-whitelabel.herokuapp.com/";
 
 @interface JoinChatViewController ()<UITextFieldDelegate>
 
