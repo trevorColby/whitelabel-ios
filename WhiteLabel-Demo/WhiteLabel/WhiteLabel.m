@@ -12,7 +12,7 @@
 #import "WLChatMessage.h"
 #import "WLUser.h"
 
-NSString    *const kEventAddUser = @"addUser";
+NSString    *const kEventAddUser = @"joinChannel";
 NSString    *const kEventLogin = @"login";
 NSString    *const kEventNewMessage = @"newMessage";
 NSString    *const kEventUserJoined = @"userJoined";
@@ -68,7 +68,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)joinChatRoom:(NSString *)chatRoomId withCompletionBlock:(WhiteLabelCompletionBlock)block {
   [self.socket emit:kEventAddUser args:@[chatRoomId]];
-  [self.socket on:kEventLogin callback:^(NSArray *args) {
+  [self.socket on:kEventLogin callback:^(id data) {
     block(YES, nil, nil);
   }];
   self.socket.onError = ^(NSDictionary* data){
