@@ -84,7 +84,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventNewMessage args:@[@{@"message":message}]];
+    [self.socket emit:kEventNewMessage args:@[message]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
