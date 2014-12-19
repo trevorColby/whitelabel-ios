@@ -47,23 +47,28 @@ static WhiteLabel *whiteLabel;
 - (void)connectWithHost:(NSString *)host withAccessToken:(NSString *)accessToken withCompletionBlock:(WhiteLabelCompletionBlock)block {
   
   NSString *hostWithAccessToken = [NSString stringWithFormat:@"%@?token=%@", host, accessToken];
-  
   [SIOSocket socketWithHost:hostWithAccessToken response:^(SIOSocket *socket) {
     self.socket = socket;
+    
     __weak WhiteLabel *weakSelf = self;
+    
     weakSelf.socket.onConnect = ^(){
       weakSelf.isConnected = YES;
-      [weakSelf addNewMessageListener];
-      [weakSelf addUserJoinedListener];
-      [weakSelf addUserLeftListener];
-      [weakSelf userStartedTypingListener];
-      [weakSelf userStoppedTypingListener];
-      [weakSelf addUserLoggedInListener];
-      block(YES, nil, nil);
     };
-    self.socket.onDisconnect = ^(){
+    weakSelf.socket.onDisconnect = ^(){
       weakSelf.isConnected = NO;
     };
+    
+    if (!weakSelf.isConnected) {
+      [self addNewMessageListener];
+      [self addUserJoinedListener];
+      [self addUserLeftListener];
+      [self userStartedTypingListener];
+      [self userStoppedTypingListener];
+      [self addUserLoggedInListener];
+    }
+    
+    block(YES, nil, nil);
   }];
 }
 
@@ -84,7 +89,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventNewMessage args:@[message]];
+    [self.socket emit:kEventNewMessage args:@[@{@"message":message}]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -120,7 +125,8 @@ static WhiteLabel *whiteLabel;
       WLChat *chat = [[WLChat alloc] init];
       chat.chatId = response[@"channel"];
       chat.chatUserCount = response[@"numUsers"];
-
+      chat.chatMessages = [NSMutableArray array];
+      
       for (NSDictionary *aMessage in response[@"messages"]) {
         WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
         chatMessage.messageType = ChatMessageTypeInfoUserLoggedIn;
