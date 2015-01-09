@@ -133,10 +133,11 @@ static WhiteLabel *whiteLabel;
       
       for (NSDictionary *aMessage in response[@"messages"]) {
         WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
-        chatMessage.messageType = ChatMessageTypeInfoUserLoggedIn;
+        chatMessage.messageType = ChatMessageTypeMessage;
         chatMessage.content = aMessage[@"message"];
         chatMessage.userName = aMessage[@"username"];
-        
+        chatMessage.userId = aMessage[@"userProfileID"];
+        chatMessage.userAvatar = aMessage[@"userPhoto"];
         [chat.chatMessages addObject:chatMessage];
       }
       
