@@ -36,13 +36,13 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
  @param userId userIdentifier of the user
  @param block Completion block to be executed once user joins the chat
  */
-- (void)joinChatRoom: (NSString *)chatRoomId withCompletionBlock: (WhiteLabelCompletionBlock)block;
+- (void)joinChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 /** Send a chat message to all users
  @param message message to be sent
  @param block Completion block to be executed once message is sent
  */
-- (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block;
+- (void)sendMessage:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 /** Disconnect the session
  @param block Completion block to be executed once connection is disconnected
@@ -50,9 +50,9 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block;
 
-- (void)userStartedTypingWithCompletionBlock: (WhiteLabelCompletionBlock)block;
+- (void)userStartedTyping:(NSDictionary *)params completionBlock: (WhiteLabelCompletionBlock)block;
 
-- (void)userStoppedTypingWithCompletionBlock: (WhiteLabelCompletionBlock)block;
+- (void)userStoppedTyping:(NSDictionary *)params completionBlock: (WhiteLabelCompletionBlock)block;
 
 @end
 

@@ -72,42 +72,46 @@ static WhiteLabel *whiteLabel;
   }];
 }
 
-- (void)joinChatRoom:(NSString *)chatRoomId withCompletionBlock:(WhiteLabelCompletionBlock)block {
+- (void)joinChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   self.loginEventBlock = block;
-  [self.socket emit:kEventAddUser args:@[@{@"channel":chatRoomId}]];
+  [self.socket emit:kEventAddUser args:@[params]];
   self.socket.onError = ^(NSDictionary* data){
     block(NO, nil, nil);
   };
 }
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block {
+  __weak WhiteLabel *weakSelf = self;
+  
   [self.socket close];
   self.socket.onDisconnect = ^(){
+    
+    weakSelf.isConnected = NO;
     block(YES, nil, nil);
   };
 }
 
-- (void)sendMessage: (NSString*)message withCompletionBlock: (WhiteLabelCompletionBlock)block {
+- (void)sendMessage:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventNewMessage args:@[@{@"message":message}]];
+    [self.socket emit:kEventNewMessage args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
   }
 }
 
-- (void)userStartedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
+- (void)userStartedTyping:(NSDictionary *)params completionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventUserStartedTyping];
+    [self.socket emit:kEventUserStartedTyping args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
   }
 }
 
-- (void)userStoppedTypingWithCompletionBlock:(WhiteLabelCompletionBlock)block {
+- (void)userStoppedTyping:(NSDictionary *)params completionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventUserStoppedTyping];
+    [self.socket emit:kEventUserStoppedTyping args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -118,7 +122,7 @@ static WhiteLabel *whiteLabel;
 - (void)addUserLoggedInListener {
   [self.socket on:kEventLogin callback:^(id data) {
     NSArray *responseArray;
-
+    
     if (data) {
       NSDictionary *response = data[0];
       
@@ -135,7 +139,7 @@ static WhiteLabel *whiteLabel;
         
         [chat.chatMessages addObject:chatMessage];
       }
-
+      
       responseArray = [NSArray arrayWithObject:chat];
     }
     
@@ -144,9 +148,11 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addNewMessageListener {
-  
+  NSLog(@"i am becoming the listener");
   [self.socket on:kEventNewMessage callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
+      
+      NSLog(@"new data new data");
       
       WLChatMessage *message = [WLChatMessage new];
       message.messageType = ChatMessageTypeMessage;
@@ -155,7 +161,7 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
         [self.delegate whiteLabel:self userDidRecieveMessage:message];
-
+        
       } else {
         NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
@@ -178,14 +184,14 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidJoinChat:)]) {
         [self.delegate whiteLabel:self userDidJoinChat:message];
-
+        
       } else {
         NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:userJoinedChatNotification
                                                             object:nil
                                                           userInfo:data];
       }
-
+      
     });
   }];
 }
@@ -199,10 +205,10 @@ static WhiteLabel *whiteLabel;
       WLChatMessage *message = [WLChatMessage new];
       message.messageType = ChatMessageTypeInfoUserLeft;
       message.userName = [data firstObject][@"username"];
-
+      
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidLeaveChat:)]) {
         [self.delegate whiteLabel:self userDidLeaveChat:message];
-
+        
       } else {
         NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:userLeftChatNotification
@@ -223,7 +229,7 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStartTypingMessage:message];
- 
+        
       } else {
         NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:userStartedTypingNotification
@@ -244,7 +250,7 @@ static WhiteLabel *whiteLabel;
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStopTypingMessage:message];
-
+        
       } else {
         NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:userStoppedTypingNotification
