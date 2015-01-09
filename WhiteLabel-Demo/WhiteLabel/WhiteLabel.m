@@ -17,8 +17,8 @@ NSString    *const kEventLogin = @"login";
 NSString    *const kEventNewMessage = @"newMessage";
 NSString    *const kEventUserJoined = @"userJoined";
 NSString    *const kEventUserLeft = @"userLeft";
-NSString    *const kEventUserStartedTyping = @"userStartedTyping";
-NSString    *const kEventUserStoppedTyping = @"userStoppedTyping";
+NSString    *const kEventUserStartedTyping = @"typing";
+NSString    *const kEventUserStoppedTyping = @"stopTyping";
 
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
