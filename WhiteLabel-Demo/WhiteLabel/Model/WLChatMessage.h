@@ -23,7 +23,7 @@ typedef enum {
 
 @property (nonatomic, assign) ChatMessageType   messageType;
 @property (nonatomic, strong) NSString  *content;
-@property (nonatomic, strong) NSDate  *time;
+@property (nonatomic, strong) NSString  *time;
 @property (nonatomic, strong) NSString  *userName;
 @property (nonatomic, strong) NSString  *userId;
 @property (nonatomic, strong) NSString  *userAvatar;
