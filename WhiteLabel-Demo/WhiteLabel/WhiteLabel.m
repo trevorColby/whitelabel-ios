@@ -138,6 +138,7 @@ static WhiteLabel *whiteLabel;
         chatMessage.userName = aMessage[@"username"];
         chatMessage.userId = aMessage[@"userProfileID"];
         chatMessage.userAvatar = aMessage[@"userPhoto"];
+        chatMessage.time = aMessage[@"created"];
         [chat.chatMessages addObject:chatMessage];
       }
       
