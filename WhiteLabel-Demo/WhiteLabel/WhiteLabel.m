@@ -156,16 +156,22 @@ static WhiteLabel *whiteLabel;
       
       NSLog(@"new data new data");
       
-      WLChatMessage *message = [WLChatMessage new];
-      message.messageType = ChatMessageTypeMessage;
-      message.content = [data firstObject][@"message"];
-      message.userName = [data firstObject][@"username"];
+      NSDictionary  *messageData = [data firstObject];
+      
+      WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
+      chatMessage.messageType = ChatMessageTypeMessage;
+      chatMessage.content = messageData[@"message"];
+      chatMessage.userName = messageData[@"username"];
+      chatMessage.userId = messageData[@"userProfileID"];
+      chatMessage.userAvatar = messageData[@"userPhoto"];
+      chatMessage.time = messageData[@"created"];
+      
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
-        [self.delegate whiteLabel:self userDidRecieveMessage:message];
+        [self.delegate whiteLabel:self userDidRecieveMessage:chatMessage];
         
       } else {
-        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:chatMessage forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
                                                             object:nil
                                                           userInfo:data];
