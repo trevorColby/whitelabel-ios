@@ -8,9 +8,9 @@
 
 #import "WhiteLabel.h"
 #import "SIOSocket.h"
-#import "WLChat.h"
-#import "WLChatMessage.h"
-#import "WLUser.h"
+#import "WLChat+Additions.h"
+#import "WLChatMessage+Additions.h"
+#import "WLUser+Additions.h"
 
 NSString    *const kEventAddUser = @"joinChannel";
 NSString    *const kEventLogin = @"login";
@@ -118,13 +118,22 @@ static WhiteLabel *whiteLabel;
   }
 }
 
+- (NSDictionary *)updateResponse:(id)data
+                 chatMessageType:(ChatMessageType)chatMessageType {
+  NSMutableDictionary *response = [NSMutableDictionary dictionaryWithDictionary:data[0]];
+  [response setObject:[NSNumber numberWithInt:ChatMessageTypeMessage] forKey:@"chatType"];
+  return response;
+}
+
 #pragma mark Socket Event Listeners
 - (void)addUserLoggedInListener {
   [self.socket on:kEventLogin callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
-      NSArray *responseArray = [self mapChatResponseToWhiteLabel:data
-                                                     messageType:ChatMessageTypeMessage];
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeMessage];
+
+      NSArray *responseArray = [NSArray arrayWithObject:[[WLChat alloc] initWithDict:response]];
       self.loginEventBlock(YES, responseArray, nil);
     });
   }];
@@ -132,9 +141,12 @@ static WhiteLabel *whiteLabel;
 
 - (void)addNewMessageListener {
   [self.socket on:kEventNewMessage callback:^(id data) {
+
     dispatch_async(dispatch_get_main_queue(), ^{
-      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
-                                                    messageType:ChatMessageTypeMessage];
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeMessage];
+
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
         [self.delegate whiteLabel:self userDidRecieveMessage:message];
         
@@ -153,9 +165,10 @@ static WhiteLabel *whiteLabel;
   [self.socket on:kEventUserJoined callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
-      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
-                                     messageType:ChatMessageTypeInfoUserJoined];
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeInfoUserJoined];
       
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidJoinChat:)]) {
         [self.delegate whiteLabel:self userDidJoinChat:message];
         
@@ -173,9 +186,10 @@ static WhiteLabel *whiteLabel;
   [self.socket on:kEventUserLeft callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
-      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
-                                                    messageType:ChatMessageTypeInfoUserLeft];
-
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeInfoUserLeft];
+      
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidLeaveChat:)]) {
         [self.delegate whiteLabel:self userDidLeaveChat:message];
         
@@ -191,11 +205,12 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStartedTypingListener {
   [self.socket on:kEventUserStartedTyping callback:^(id data) {
+
     dispatch_async(dispatch_get_main_queue(), ^{
-      
-      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
-                                                    messageType:ChatMessageTypeInfoUserStartedTyping];
-      
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeInfoUserStartedTyping];
+            
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStartTypingMessage:message];
         
@@ -211,11 +226,12 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStoppedTypingListener {
   [self.socket on:kEventUserStoppedTyping callback:^(id data) {
-    dispatch_async(dispatch_get_main_queue(), ^{
-      
-      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
-                                                    messageType:ChatMessageTypeInfoUserStoppedTyping];
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeInfoUserStoppedTyping];
+      
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStopTypingMessage:message];
         
@@ -227,50 +243,6 @@ static WhiteLabel *whiteLabel;
       }
     });
   }];
-}
-
-#pragma mark - Helper Methods
-
-- (WLChatMessage *)mapChatMessageToWhiteLabel:(NSDictionary *)aMessage
-                                  messageType:(ChatMessageType)messageType {
-  WLUser *user = [[WLUser alloc] initWithUsername:aMessage[@"username"]
-                                           userId:aMessage[@"userProfileID"]
-                                       userAvatar:aMessage[@"userPhoto"]];
-  
-  WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:messageType
-                                                                  content:aMessage[@"message"]
-                                                                     time:aMessage[@"created"]
-                                                                channelId:aMessage[@"channel"]
-                                                                     user:user];
-  return chatMessage;
-}
-
-- (NSArray *)mapChatMessagesToWhiteLabel:(NSDictionary *)response
-                             messageType:(ChatMessageType)messageType {
-  NSMutableArray *messages = [NSMutableArray array];
-  for (NSDictionary *aMessage in response[@"messages"]) {
-    [messages addObject:[self mapChatMessageToWhiteLabel:aMessage
-                                             messageType:messageType]];
-  }
-  return messages;
-}
-
-- (NSArray *)mapChatResponseToWhiteLabel:(id)data messageType:(ChatMessageType)messageType {
-  NSArray *responseArray;
-  if (data) {
-    NSDictionary *response = data[0];
-    NSArray *messages = [self mapChatMessagesToWhiteLabel:response
-                                              messageType:messageType];
-    
-    WLChat *chat = [[WLChat alloc] initWithChatId:response[@"channel"]
-                                        chatTitle:response[@"title"]
-                                     chatMessages:messages
-                                         chatType:ChatTypeGroup
-                                   chatUsersCount:response[@"numUsers"]];
-    
-    responseArray = [NSArray arrayWithObject:chat];
-  }
-  return responseArray;
 }
 
 @end
