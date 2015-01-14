@@ -10,18 +10,28 @@
 
 @implementation WLChatMessage
 
-- (instancetype)initWithMessageType: (ChatMessageType)messageType content: (NSString*)content {
-    self = [super init];
-    if (self) {
-        self.messageType = messageType;
-        self.content = content;
-    }
-    return self;
+- (instancetype)initWithMessageType:(ChatMessageType)messageType
+                            content:(NSString *)content
+                               time:(NSString *)time
+                          channelId:(NSString *)channelId
+                               user:(WLUser *)user {
+  self = [super init];
+  if (self) {
+    self.messageType = messageType;
+    self.content = content;
+    self.time = time;
+    self.channelId = channelId;
+    self.user = user;
+  }
+  return self;
 }
 
 - (instancetype)init {
-    return [self initWithMessageType:ChatMessageTypeInfo content:nil];
+  return [self initWithMessageType:ChatMessageTypeMessage
+                           content:nil
+                              time:nil
+                         channelId:nil
+                              user:nil];;
 }
-
 
 @end

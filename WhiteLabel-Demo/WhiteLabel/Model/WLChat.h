@@ -17,10 +17,14 @@ typedef enum {
 
 @property (nonatomic, strong) NSString  *chatId;
 @property (nonatomic, strong) NSString  *chatTitle;
-@property (nonatomic, strong) NSMutableArray   *chatMessages;
+@property (nonatomic, strong) NSArray   *chatMessages;
 @property (nonatomic, assign) ChatType  chatType;
-@property (nonatomic, strong) NSNumber  *chatUserCount;
+@property (nonatomic, strong) NSNumber  *chatUsersCount;
 
-- (instancetype)initWithTitle: (NSString*)title chatType: (ChatType)chatType;
+- (instancetype)initWithChatId:(NSString *)chatId
+                     chatTitle:(NSString *)chatTitle
+                  chatMessages:(NSArray *)chatMessages
+                      chatType:(ChatType)chatType
+                chatUsersCount:(NSNumber *)chatUsersCount;
 
 @end

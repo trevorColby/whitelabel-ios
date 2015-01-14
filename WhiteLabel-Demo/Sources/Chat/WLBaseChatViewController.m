@@ -74,8 +74,8 @@ UITextFieldDelegate>
 
 - (void)userJoinedChat: (NSNotification*)notification {
   
-  NSInteger userCount = [self.chat.chatUserCount integerValue];
-  self.chat.chatUserCount = [NSNumber numberWithInteger:++userCount];
+  NSInteger userCount = [self.chat.chatUsersCount integerValue];
+  self.chat.chatUsersCount = [NSNumber numberWithInteger:++userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
   [self reloadTableWithChatMessage:chatMessage];
@@ -83,8 +83,8 @@ UITextFieldDelegate>
 
 - (void)userLeftChat: (NSNotification*)notification {
   
-  NSInteger userCount = [self.chat.chatUserCount integerValue];
-  self.chat.chatUserCount = [NSNumber numberWithInteger:--userCount];
+  NSInteger userCount = [self.chat.chatUsersCount integerValue];
+  self.chat.chatUsersCount = [NSNumber numberWithInteger:--userCount];
   
   WLChatMessage *chatMessage = [notification userInfo][@"data"];
   [self reloadTableWithChatMessage:chatMessage];
@@ -92,22 +92,21 @@ UITextFieldDelegate>
 }
 
 - (void)sendNewMessage: (NSString*)message {
-  
-  [[WhiteLabel sharedInstance] sendMessage:message
-                       withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
-                         if (success) {
-                           self.sendMessageTextField.text = @"";
-                           NSString    *content = message;
-                           WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
-                                                                                           content:content];
-                           chatMessage.userName = self.username;
-                           [self reloadTableWithChatMessage:chatMessage];
-                         }
-                       }];
+//  [[WhiteLabel sharedInstance] sendMessage:message
+//                       withCompletionBlock:^(BOOL success, NSArray *result, NSError *error) {
+//                         if (success) {
+//                           self.sendMessageTextField.text = @"";
+//                           NSString    *content = message;
+//                           WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:ChatMessageTypeMessage
+//                                                                                           content:content];
+//                           chatMessage.userName = self.username;
+//                           [self reloadTableWithChatMessage:chatMessage];
+//                         }
+//                       }];
 }
 
 - (void)reloadTableWithChatMessage:(WLChatMessage *)chatMessage {
-  [self.chat.chatMessages addObject:chatMessage];
+//  [self.chat.chatMessages addObject:chatMessage];
   NSArray *indexPaths = [NSArray arrayWithObject:[NSIndexPath indexPathForRow:0 inSection:0]];
 
   [self.chatTableView beginUpdates];
@@ -150,33 +149,33 @@ UITextFieldDelegate>
 - (UITableViewCell*)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
   
   WLDefaultChatTableViewCell   *cell;
-  WLChatMessage *chatMessage = [self.chat.chatMessages objectAtIndex:indexPath.row];
-  
-  NSString  *displayMessage;
-  switch (chatMessage.messageType) {
-    case ChatMessageTypeInfo:
-      displayMessage = [NSString stringWithFormat:@"%@ users in chat", self.chat.chatUserCount];
-      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
-      break;
-    case ChatMessageTypeInfoUserJoined:
-      displayMessage = [NSString stringWithFormat:@"%@ joined. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
-      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
-      break;
-    case ChatMessageTypeInfoUserLeft:
-      displayMessage = [NSString stringWithFormat:@"%@ left. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
-      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
-      break;
-    case ChatMessageTypeMessage:
-      displayMessage = [NSString stringWithFormat:@"%@: %@", chatMessage.userName, chatMessage.content];
-      if ([chatMessage.userName isEqualToString: self.username]) {
-        cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageSendCellIndentifier];
-      } else {
-        cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageReceiveCellIndentifier];
-      }
-    default:
-      break;
-  }
-  cell.messageLabel.text = displayMessage;
+//  WLChatMessage *chatMessage = [self.chat.chatMessages objectAtIndex:indexPath.row];
+//
+//  NSString  *displayMessage;
+//  switch (chatMessage.messageType) {
+//    case ChatMessageTypeInfo:
+//      displayMessage = [NSString stringWithFormat:@"%@ users in chat", self.chat.chatUsersCount];
+//      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
+//      break;
+//    case ChatMessageTypeInfoUserJoined:
+//      displayMessage = [NSString stringWithFormat:@"%@ joined. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
+//      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
+//      break;
+//    case ChatMessageTypeInfoUserLeft:
+//      displayMessage = [NSString stringWithFormat:@"%@ left. %@ users in chat", chatMessage.userName, self.chat.chatUserCount];
+//      cell = [tableView dequeueReusableCellWithIdentifier:kChatInfoCellIndentifier];
+//      break;
+//    case ChatMessageTypeMessage:
+//      displayMessage = [NSString stringWithFormat:@"%@: %@", chatMessage.userName, chatMessage.content];
+//      if ([chatMessage.userName isEqualToString: self.username]) {
+//        cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageSendCellIndentifier];
+//      } else {
+//        cell = [tableView dequeueReusableCellWithIdentifier:kChatMessageReceiveCellIndentifier];
+//      }
+//    default:
+//      break;
+//  }
+//  cell.messageLabel.text = displayMessage;
   return cell;
 }
 

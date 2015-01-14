@@ -10,4 +10,20 @@
 
 @implementation WLUser
 
+- (instancetype)initWithUsername:(NSString *)username userId:(NSString *)userId userAvatar:(NSString *)userAvatar {
+  self = [super init];
+  if (self) {
+    self.userAvatar = userAvatar;
+    self.userId = userId;
+    self.username = username;
+  }
+  return self;
+}
+
+- (instancetype)init {
+  return [self initWithUsername:nil
+                         userId:nil
+                     userAvatar:nil];
+}
+
 @end

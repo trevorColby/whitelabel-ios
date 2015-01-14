@@ -121,57 +121,25 @@ static WhiteLabel *whiteLabel;
 #pragma mark Socket Event Listeners
 - (void)addUserLoggedInListener {
   [self.socket on:kEventLogin callback:^(id data) {
-    NSArray *responseArray;
-    
-    if (data) {
-      NSDictionary *response = data[0];
-      
-      WLChat *chat = [[WLChat alloc] init];
-      chat.chatId = response[@"channel"];
-      chat.chatUserCount = response[@"numUsers"];
-      chat.chatMessages = [NSMutableArray array];
-      
-      for (NSDictionary *aMessage in response[@"messages"]) {
-        WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
-        chatMessage.messageType = ChatMessageTypeMessage;
-        chatMessage.content = aMessage[@"message"];
-        chatMessage.userName = aMessage[@"username"];
-        chatMessage.userId = aMessage[@"userProfileID"];
-        chatMessage.userAvatar = aMessage[@"userPhoto"];
-        chatMessage.time = aMessage[@"created"];
-        [chat.chatMessages addObject:chatMessage];
-      }
-      
-      responseArray = [NSArray arrayWithObject:chat];
-    }
-    
-    self.loginEventBlock(YES, responseArray, nil);
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+      NSArray *responseArray = [self mapChatResponseToWhiteLabel:data
+                                                     messageType:ChatMessageTypeMessage];
+      self.loginEventBlock(YES, responseArray, nil);
+    });
   }];
 }
 
 - (void)addNewMessageListener {
-  NSLog(@"i am becoming the listener");
   [self.socket on:kEventNewMessage callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
-      
-      NSLog(@"new data new data");
-      
-      NSDictionary  *messageData = [data firstObject];
-      
-      WLChatMessage *chatMessage = [[WLChatMessage alloc] init];
-      chatMessage.messageType = ChatMessageTypeMessage;
-      chatMessage.content = messageData[@"message"];
-      chatMessage.userName = messageData[@"username"];
-      chatMessage.userId = messageData[@"userProfileID"];
-      chatMessage.userAvatar = messageData[@"userPhoto"];
-      chatMessage.time = messageData[@"created"];
-      
-      
+      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
+                                                    messageType:ChatMessageTypeMessage];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
-        [self.delegate whiteLabel:self userDidRecieveMessage:chatMessage];
+        [self.delegate whiteLabel:self userDidRecieveMessage:message];
         
       } else {
-        NSDictionary  *data = [NSDictionary dictionaryWithObject:chatMessage forKey:@"data"];
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
         [[NSNotificationCenter defaultCenter] postNotificationName:messageReceivedNotification
                                                             object:nil
                                                           userInfo:data];
@@ -182,13 +150,11 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserJoinedListener {
-  
   [self.socket on:kEventUserJoined callback:^(id data) {
+
     dispatch_async(dispatch_get_main_queue(), ^{
-      
-      WLChatMessage *message = [WLChatMessage new];
-      message.messageType = ChatMessageTypeInfoUserJoined;
-      message.userName = [data firstObject][@"username"];
+      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
+                                     messageType:ChatMessageTypeInfoUserJoined];
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidJoinChat:)]) {
         [self.delegate whiteLabel:self userDidJoinChat:message];
@@ -199,21 +165,17 @@ static WhiteLabel *whiteLabel;
                                                             object:nil
                                                           userInfo:data];
       }
-      
     });
   }];
 }
 
 - (void)addUserLeftListener {
-  
   [self.socket on:kEventUserLeft callback:^(id data) {
-    
+
     dispatch_async(dispatch_get_main_queue(), ^{
-      
-      WLChatMessage *message = [WLChatMessage new];
-      message.messageType = ChatMessageTypeInfoUserLeft;
-      message.userName = [data firstObject][@"username"];
-      
+      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
+                                                    messageType:ChatMessageTypeInfoUserLeft];
+
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidLeaveChat:)]) {
         [self.delegate whiteLabel:self userDidLeaveChat:message];
         
@@ -231,9 +193,8 @@ static WhiteLabel *whiteLabel;
   [self.socket on:kEventUserStartedTyping callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
       
-      WLChatMessage *message = [WLChatMessage new];
-      message.messageType = ChatMessageTypeInfoUserStartedTyping;
-      message.userName = [data firstObject][@"username"];
+      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
+                                                    messageType:ChatMessageTypeInfoUserStartedTyping];
       
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStartTypingMessage:message];
@@ -252,10 +213,9 @@ static WhiteLabel *whiteLabel;
   [self.socket on:kEventUserStoppedTyping callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
       
-      WLChatMessage *message = [WLChatMessage new];
-      message.messageType = ChatMessageTypeInfoUserStoppedTyping;
-      message.userName = [data firstObject][@"username"];
-      
+      WLChatMessage *message = [self mapChatMessageToWhiteLabel:data[0]
+                                                    messageType:ChatMessageTypeInfoUserStoppedTyping];
+
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStopTypingMessage:message];
         
@@ -267,6 +227,50 @@ static WhiteLabel *whiteLabel;
       }
     });
   }];
+}
+
+#pragma mark - Helper Methods
+
+- (WLChatMessage *)mapChatMessageToWhiteLabel:(NSDictionary *)aMessage
+                                  messageType:(ChatMessageType)messageType {
+  WLUser *user = [[WLUser alloc] initWithUsername:aMessage[@"username"]
+                                           userId:aMessage[@"userProfileID"]
+                                       userAvatar:aMessage[@"userPhoto"]];
+  
+  WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:messageType
+                                                                  content:aMessage[@"message"]
+                                                                     time:aMessage[@"created"]
+                                                                channelId:aMessage[@"channel"]
+                                                                     user:user];
+  return chatMessage;
+}
+
+- (NSArray *)mapChatMessagesToWhiteLabel:(NSDictionary *)response
+                             messageType:(ChatMessageType)messageType {
+  NSMutableArray *messages = [NSMutableArray array];
+  for (NSDictionary *aMessage in response[@"messages"]) {
+    [messages addObject:[self mapChatMessageToWhiteLabel:aMessage
+                                             messageType:messageType]];
+  }
+  return messages;
+}
+
+- (NSArray *)mapChatResponseToWhiteLabel:(id)data messageType:(ChatMessageType)messageType {
+  NSArray *responseArray;
+  if (data) {
+    NSDictionary *response = data[0];
+    NSArray *messages = [self mapChatMessagesToWhiteLabel:response
+                                              messageType:messageType];
+    
+    WLChat *chat = [[WLChat alloc] initWithChatId:response[@"channel"]
+                                        chatTitle:response[@"title"]
+                                     chatMessages:messages
+                                         chatType:ChatTypeGroup
+                                   chatUsersCount:response[@"numUsers"]];
+    
+    responseArray = [NSArray arrayWithObject:chat];
+  }
+  return responseArray;
 }
 
 @end
