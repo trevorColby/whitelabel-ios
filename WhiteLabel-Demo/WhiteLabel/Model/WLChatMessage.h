@@ -21,13 +21,15 @@ typedef enum {
 
 @interface WLChatMessage : NSObject
 
-@property (nonatomic, assign) ChatMessageType   messageType;
+@property (nonatomic, strong) NSString  *uuid;
 @property (nonatomic, strong) NSString  *content;
 @property (nonatomic, strong) NSString  *time;
 @property (nonatomic, strong) NSString  *channelId;
+@property (nonatomic, assign) ChatMessageType   messageType;
 @property (nonatomic, strong) WLUser *user;
 
 - (instancetype)initWithMessageType: (ChatMessageType)messageType
+                               uuid: (NSString*)uuid
                             content: (NSString*)content
                                time: (NSString *)time
                           channelId: (NSString *)channelId

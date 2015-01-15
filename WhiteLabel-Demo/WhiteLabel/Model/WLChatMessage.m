@@ -11,12 +11,14 @@
 @implementation WLChatMessage
 
 - (instancetype)initWithMessageType:(ChatMessageType)messageType
+                               uuid:(NSString *)uuid
                             content:(NSString *)content
                                time:(NSString *)time
                           channelId:(NSString *)channelId
                                user:(WLUser *)user {
   self = [super init];
   if (self) {
+    self.uuid = uuid;
     self.messageType = messageType;
     self.content = content;
     self.time = time;
@@ -28,6 +30,7 @@
 
 - (instancetype)init {
   return [self initWithMessageType:ChatMessageTypeMessage
+                              uuid:nil
                            content:nil
                               time:nil
                          channelId:nil

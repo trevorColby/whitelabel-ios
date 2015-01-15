@@ -12,8 +12,9 @@
 #import "WLChatMessage+Additions.h"
 #import "WLUser+Additions.h"
 
-NSString    *const kEventAddUser = @"joinChannel";
-NSString    *const kEventLogin = @"login";
+NSString    *const kEventAddUser = @"joinRoom";
+NSString    *const kEventLogin = @"joinedRoom";
+NSString    *const kEventLeaveMoot = @"leaveRoom";
 NSString    *const kEventNewMessage = @"newMessage";
 NSString    *const kEventUserJoined = @"userJoined";
 NSString    *const kEventUserLeft = @"userLeft";
@@ -70,6 +71,15 @@ static WhiteLabel *whiteLabel;
     
     block(YES, nil, nil);
   }];
+}
+
+- (void)leaveChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
+  if (self.isConnected) {
+    [self.socket emit:kEventLeaveMoot args:@[params]];
+    block(YES, nil, nil);
+  } else {
+    block(NO, nil, nil);
+  }
 }
 
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {

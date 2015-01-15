@@ -16,9 +16,10 @@
 
   WLUser *user = [[WLUser alloc] initWithDict:response];
   WLChatMessage *chatMessage = [[WLChatMessage alloc] initWithMessageType:chatType.intValue
+                                                                     uuid:response[@"uuid"]
                                                                   content:response[@"message"]
-                                                                     time:response[@"created"]
-                                                                channelId:response[@"channel"]
+                                                                     time:response[@"sent"]
+                                                                channelId:response[@"room"]
                                                                      user:user];
   return chatMessage;
 }

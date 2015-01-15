@@ -38,6 +38,8 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
  */
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
+- (void)leaveChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
+
 /** Send a chat message to all users
  @param message message to be sent
  @param block Completion block to be executed once message is sent

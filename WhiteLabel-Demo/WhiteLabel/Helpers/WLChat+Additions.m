@@ -12,7 +12,7 @@
 @implementation WLChat (Additions)
 
 - (instancetype)initWithDict:(NSDictionary *)response {
-  WLChat *chat = [[WLChat alloc] initWithChatId:response[@"channel"]
+  WLChat *chat = [[WLChat alloc] initWithChatId:response[@"room"]
                                       chatTitle:response[@"title"]
                                    chatMessages:[self messagesFromResponse:response]
                                        chatType:ChatTypeGroup
