@@ -12,7 +12,7 @@
 
 - (instancetype)initWithDict:(NSDictionary *)response {
   WLUser *user = [[WLUser alloc] initWithUsername:response[@"username"]
-                                           userId:response[@"userProfileID"]
+                                           userId:response[@"userProfileId"]
                                        userAvatar:response[@"userPhoto"]];
   return user;
 }
