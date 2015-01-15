@@ -24,6 +24,15 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 @property (nonatomic, assign) BOOL isConnected;
 @property (nonatomic, weak) id<WhiteLabelDelegate> delegate;
 
+@property (nonatomic, strong) NSString *eventAddUser;
+@property (nonatomic, strong) NSString *eventLogin;
+@property (nonatomic, strong) NSString *eventLeaveMoot;
+@property (nonatomic, strong) NSString *eventNewMessage;
+@property (nonatomic, strong) NSString *eventUserJoined;
+@property (nonatomic, strong) NSString *eventUserLeft;
+@property (nonatomic, strong) NSString *eventUserStartedTyping;
+@property (nonatomic, strong) NSString *eventUserStoppedTyping;
+
 + (instancetype)sharedInstance;
 
 /** Connects with the specified host

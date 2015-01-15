@@ -40,9 +40,29 @@ static WhiteLabel *whiteLabel;
 
 + (instancetype)sharedInstance {
   if (!whiteLabel) {
-    whiteLabel = [[WhiteLabel alloc] init];
+    whiteLabel = [[WhiteLabel alloc] initWithDefaultSettings];
   }
   return whiteLabel;
+}
+
+- (instancetype)initWithDefaultSettings {
+  self = [super init];
+  if (self) {
+    _eventAddUser = kEventAddUser;
+    _eventLogin = kEventLogin;
+    _eventLeaveMoot = kEventLeaveMoot;
+    _eventNewMessage = kEventNewMessage;
+    _eventUserJoined = kEventUserJoined;
+    _eventUserLeft = kEventUserLeft;
+    _eventUserStartedTyping = kEventUserStartedTyping;
+    _eventUserStoppedTyping = kEventUserStoppedTyping;    
+  }
+
+  return self;
+}
+
+- (instancetype)init {
+  return [self initWithDefaultSettings];
 }
 
 - (void)connectWithHost:(NSString *)host withAccessToken:(NSString *)accessToken withCompletionBlock:(WhiteLabelCompletionBlock)block {
@@ -75,7 +95,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)leaveChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventLeaveMoot args:@[params]];
+    [self.socket emit:self.eventLeaveMoot args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -84,7 +104,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   self.loginEventBlock = block;
-  [self.socket emit:kEventAddUser args:@[params]];
+  [self.socket emit:self.eventAddUser args:@[params]];
   self.socket.onError = ^(NSDictionary* data){
     block(NO, nil, nil);
   };
@@ -103,7 +123,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)sendMessage:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventNewMessage args:@[params]];
+    [self.socket emit:self.eventNewMessage args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -112,7 +132,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStartedTyping:(NSDictionary *)params completionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventUserStartedTyping args:@[params]];
+    [self.socket emit:self.eventUserStartedTyping args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -121,7 +141,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStoppedTyping:(NSDictionary *)params completionBlock:(WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:kEventUserStoppedTyping args:@[params]];
+    [self.socket emit:self.eventUserStoppedTyping args:@[params]];
     block(YES, nil, nil);
   } else {
     block(NO, nil, nil);
@@ -137,7 +157,7 @@ static WhiteLabel *whiteLabel;
 
 #pragma mark Socket Event Listeners
 - (void)addUserLoggedInListener {
-  [self.socket on:kEventLogin callback:^(id data) {
+  [self.socket on:self.eventLogin callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
@@ -150,7 +170,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addNewMessageListener {
-  [self.socket on:kEventNewMessage callback:^(id data) {
+  [self.socket on:self.eventNewMessage callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
@@ -172,7 +192,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserJoinedListener {
-  [self.socket on:kEventUserJoined callback:^(id data) {
+  [self.socket on:self.eventUserJoined callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
@@ -193,7 +213,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)addUserLeftListener {
-  [self.socket on:kEventUserLeft callback:^(id data) {
+  [self.socket on:self.eventUserLeft callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
@@ -214,7 +234,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)userStartedTypingListener {
-  [self.socket on:kEventUserStartedTyping callback:^(id data) {
+  [self.socket on:self.eventUserStartedTyping callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
@@ -235,7 +255,7 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)userStoppedTypingListener {
-  [self.socket on:kEventUserStoppedTyping callback:^(id data) {
+  [self.socket on:self.eventUserStoppedTyping callback:^(id data) {
 
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
