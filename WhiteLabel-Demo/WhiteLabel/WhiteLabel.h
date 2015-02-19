@@ -32,6 +32,7 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 @property (nonatomic, strong) NSString *eventUserLeft;
 @property (nonatomic, strong) NSString *eventUserStartedTyping;
 @property (nonatomic, strong) NSString *eventUserStoppedTyping;
+@property (nonatomic, strong) NSString *eventError;
 
 + (instancetype)sharedInstance;
 

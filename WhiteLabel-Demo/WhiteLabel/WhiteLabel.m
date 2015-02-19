@@ -20,6 +20,7 @@ NSString    *const kEventUserJoined = @"userJoined";
 NSString    *const kEventUserLeft = @"userLeft";
 NSString    *const kEventUserStartedTyping = @"typing";
 NSString    *const kEventUserStoppedTyping = @"stopTyping";
+NSString    *const kEventError = @"validationError";
 
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
@@ -55,7 +56,8 @@ static WhiteLabel *whiteLabel;
     _eventUserJoined = kEventUserJoined;
     _eventUserLeft = kEventUserLeft;
     _eventUserStartedTyping = kEventUserStartedTyping;
-    _eventUserStoppedTyping = kEventUserStoppedTyping;    
+    _eventUserStoppedTyping = kEventUserStoppedTyping;
+    _eventError = kEventError;
   }
 
   return self;
@@ -76,8 +78,15 @@ static WhiteLabel *whiteLabel;
     weakSelf.socket.onConnect = ^(){
       weakSelf.isConnected = YES;
     };
+    
     weakSelf.socket.onDisconnect = ^(){
       weakSelf.isConnected = NO;
+    };
+  
+    weakSelf.socket.onError = ^(NSDictionary* dictionary){
+      if (self.loginEventBlock) {
+        self.loginEventBlock(NO, @[dictionary], nil);
+      }
     };
     
     if (!weakSelf.isConnected) {
@@ -105,9 +114,6 @@ static WhiteLabel *whiteLabel;
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {
   self.loginEventBlock = block;
   [self.socket emit:self.eventAddUser args:@[params]];
-  self.socket.onError = ^(NSDictionary* data){
-    block(NO, nil, nil);
-  };
 }
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block {
@@ -162,9 +168,9 @@ static WhiteLabel *whiteLabel;
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeMessage];
-
       NSArray *responseArray = [NSArray arrayWithObject:[[WLChat alloc] initWithDict:response]];
       self.loginEventBlock(YES, responseArray, nil);
+      self.loginEventBlock = nil;
     });
   }];
 }
@@ -257,6 +263,28 @@ static WhiteLabel *whiteLabel;
 - (void)userStoppedTypingListener {
   [self.socket on:self.eventUserStoppedTyping callback:^(id data) {
 
+    dispatch_async(dispatch_get_main_queue(), ^{
+      NSDictionary *response = [self updateResponse:data
+                                    chatMessageType:ChatMessageTypeInfoUserStoppedTyping];
+      
+      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
+      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
+        [self.delegate whiteLabel:self userDidStopTypingMessage:message];
+        
+      } else {
+        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
+        [[NSNotificationCenter defaultCenter] postNotificationName:userStoppedTypingNotification
+                                                            object:nil
+                                                          userInfo:data];
+      }
+    });
+  }];
+}
+
+- (void)errorReceivedListener {
+  
+  [self.socket on:self.eventError callback:^(id data) {
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeInfoUserStoppedTyping];
