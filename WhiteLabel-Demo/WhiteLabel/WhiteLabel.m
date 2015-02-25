@@ -27,6 +27,7 @@ NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
 NSString    *const userLeftChatNotification = @"userLeftChatNotification";
 NSString    *const userStartedTypingNotification = @"userStartedTypingNotification";
 NSString    *const userStoppedTypingNotification = @"userStoppedTypingNotification";
+NSString    *const validationErrorReceivedNotification = @"validationErrorReceivedNotification";
 
 static WhiteLabel *whiteLabel;
 
@@ -59,7 +60,7 @@ static WhiteLabel *whiteLabel;
     _eventUserStoppedTyping = kEventUserStoppedTyping;
     _eventError = kEventError;
   }
-
+  
   return self;
 }
 
@@ -73,29 +74,30 @@ static WhiteLabel *whiteLabel;
   [SIOSocket socketWithHost:hostWithAccessToken response:^(SIOSocket *socket) {
     self.socket = socket;
     
-    __weak WhiteLabel *weakSelf = self;
+    __weak WhiteLabel *wealSelf = self;
     
-    weakSelf.socket.onConnect = ^(){
-      weakSelf.isConnected = YES;
+    self.socket.onConnect = ^(){
+      wealSelf.isConnected = YES;
     };
     
-    weakSelf.socket.onDisconnect = ^(){
-      weakSelf.isConnected = NO;
+    self.socket.onDisconnect = ^(){
+      wealSelf.isConnected = NO;
     };
-  
-    weakSelf.socket.onError = ^(NSDictionary* dictionary){
-      if (self.loginEventBlock) {
-        self.loginEventBlock(NO, @[dictionary], nil);
+    
+    self.socket.onError = ^(NSDictionary* dictionary){
+      if (wealSelf.loginEventBlock) {
+        wealSelf.loginEventBlock(NO, @[dictionary], nil);
       }
     };
     
-    if (!weakSelf.isConnected) {
+    if (!self.isConnected) {
       [self addNewMessageListener];
       [self addUserJoinedListener];
       [self addUserLeftListener];
       [self userStartedTypingListener];
       [self userStoppedTypingListener];
       [self addUserLoggedInListener];
+      [self errorReceivedListener];
     }
     
     block(YES, nil, nil);
@@ -117,12 +119,9 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)disconnectChatWithCompletionBlock: (WhiteLabelCompletionBlock)block {
-  __weak WhiteLabel *weakSelf = self;
-  
+  self.isConnected = NO;
   [self.socket close];
   self.socket.onDisconnect = ^(){
-    
-    weakSelf.isConnected = NO;
     block(YES, nil, nil);
   };
 }
@@ -164,7 +163,7 @@ static WhiteLabel *whiteLabel;
 #pragma mark Socket Event Listeners
 - (void)addUserLoggedInListener {
   [self.socket on:self.eventLogin callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeMessage];
@@ -177,11 +176,11 @@ static WhiteLabel *whiteLabel;
 
 - (void)addNewMessageListener {
   [self.socket on:self.eventNewMessage callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeMessage];
-
+      
       WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidRecieveMessage:)]) {
         [self.delegate whiteLabel:self userDidRecieveMessage:message];
@@ -199,7 +198,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)addUserJoinedListener {
   [self.socket on:self.eventUserJoined callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeInfoUserJoined];
@@ -220,7 +219,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)addUserLeftListener {
   [self.socket on:self.eventUserLeft callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeInfoUserLeft];
@@ -241,11 +240,11 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStartedTypingListener {
   [self.socket on:self.eventUserStartedTyping callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeInfoUserStartedTyping];
-            
+      
       WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
       if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStartTypingMessage:)]) {
         [self.delegate whiteLabel:self userDidStartTypingMessage:message];
@@ -262,7 +261,7 @@ static WhiteLabel *whiteLabel;
 
 - (void)userStoppedTypingListener {
   [self.socket on:self.eventUserStoppedTyping callback:^(id data) {
-
+    
     dispatch_async(dispatch_get_main_queue(), ^{
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeInfoUserStoppedTyping];
@@ -282,22 +281,13 @@ static WhiteLabel *whiteLabel;
 }
 
 - (void)errorReceivedListener {
-  
   [self.socket on:self.eventError callback:^(id data) {
-    
     dispatch_async(dispatch_get_main_queue(), ^{
-      NSDictionary *response = [self updateResponse:data
-                                    chatMessageType:ChatMessageTypeInfoUserStoppedTyping];
-      
-      WLChatMessage *message = [[WLChatMessage alloc] initWithDict:response];
-      if ([self.delegate respondsToSelector:@selector(whiteLabel:userDidStopTypingMessage:)]) {
-        [self.delegate whiteLabel:self userDidStopTypingMessage:message];
-        
-      } else {
-        NSDictionary  *data = [NSDictionary dictionaryWithObject:message forKey:@"data"];
-        [[NSNotificationCenter defaultCenter] postNotificationName:userStoppedTypingNotification
-                                                            object:nil
-                                                          userInfo:data];
+      if (self.loginEventBlock) {
+        NSString *errorString = [[data objectForKey:@"details"] valueForKey:@"message"];
+        NSDictionary  *errorInfo = [NSDictionary dictionaryWithObject:errorString forKey:NSLocalizedDescriptionKey];
+        NSError *error = [NSError errorWithDomain:@"White Label" code:401 userInfo:errorInfo];
+        self.loginEventBlock(NO, nil, error);
       }
     });
   }];
