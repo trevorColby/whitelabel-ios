@@ -284,10 +284,11 @@ static WhiteLabel *whiteLabel;
   [self.socket on:self.eventError callback:^(id data) {
     dispatch_async(dispatch_get_main_queue(), ^{
       if (self.loginEventBlock) {
-        NSString *errorString = [[data objectForKey:@"details"] valueForKey:@"message"];
+        NSString *errorString = [[[data firstObject] objectForKey:@"details"] valueForKey:@"message"];
         NSDictionary  *errorInfo = [NSDictionary dictionaryWithObject:errorString forKey:NSLocalizedDescriptionKey];
         NSError *error = [NSError errorWithDomain:@"White Label" code:401 userInfo:errorInfo];
         self.loginEventBlock(NO, nil, error);
+        self.loginEventBlock = nil;
       }
     });
   }];
