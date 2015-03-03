@@ -168,7 +168,9 @@ static WhiteLabel *whiteLabel;
       NSDictionary *response = [self updateResponse:data
                                     chatMessageType:ChatMessageTypeMessage];
       NSArray *responseArray = [NSArray arrayWithObject:[[WLChat alloc] initWithDict:response]];
-      self.loginEventBlock(YES, responseArray, nil);
+      if (self.loginEventBlock) {
+        self.loginEventBlock(YES, responseArray, nil);
+      }
       self.loginEventBlock = nil;
     });
   }];
