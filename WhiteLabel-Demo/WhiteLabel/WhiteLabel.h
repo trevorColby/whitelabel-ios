@@ -80,4 +80,7 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 
 - (void)whiteLabel:(WhiteLabel *)whiteLabel userDidStopTypingMessage:(WLChatMessage *)message;
 
+- (void)whiteLabelConnectionStatusChanged: (WhiteLabel*)whiteLabel;
+
+
 @end

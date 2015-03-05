@@ -82,6 +82,9 @@ static WhiteLabel *whiteLabel;
     
     self.socket.onDisconnect = ^(){
       wealSelf.isConnected = NO;
+      if ([wealSelf.delegate respondsToSelector:@selector(whiteLabelConnectionStatusChanged:)]) {
+        [wealSelf.delegate whiteLabelConnectionStatusChanged:wealSelf];
+      }
     };
     
     self.socket.onError = ^(NSDictionary* dictionary){
