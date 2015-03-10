@@ -131,9 +131,9 @@ static WhiteLabel *whiteLabel;
   };
 }
 
-- (void)joinBatchRooms: (NSDictionary*)params withCompletionBlock: (WhiteLabelCompletionBlock)block {
+- (void)joinBatchRooms: (NSArray*)params withCompletionBlock: (WhiteLabelCompletionBlock)block {
   if (self.isConnected) {
-    [self.socket emit:self.eventJoinBatchRoom args:@[params]];
+    [self.socket emit:self.eventJoinBatchRoom args:params];
   }
   if (block) {
     block(self.isConnected, nil, nil);

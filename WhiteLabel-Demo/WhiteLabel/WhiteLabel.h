@@ -49,7 +49,7 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
  */
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
-- (void)joinBatchRooms: (NSDictionary*)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
+- (void)joinBatchRooms: (NSArray*)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 - (void)leaveChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
