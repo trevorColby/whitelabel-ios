@@ -21,6 +21,7 @@ NSString    *const kEventUserLeft = @"userLeft";
 NSString    *const kEventUserStartedTyping = @"typing";
 NSString    *const kEventUserStoppedTyping = @"stopTyping";
 NSString    *const kEventError = @"validationError";
+NSString    *const KEventJoinBatchRooms = @"batchJoinRoom";
 
 NSString    *const messageReceivedNotification = @"messageReceivedNotification";
 NSString    *const userJoinedChatNotification = @"userJoinedChatNotification";
@@ -58,6 +59,7 @@ static WhiteLabel *whiteLabel;
     _eventUserLeft = kEventUserLeft;
     _eventUserStartedTyping = kEventUserStartedTyping;
     _eventUserStoppedTyping = kEventUserStoppedTyping;
+    _eventJoinBatchRoom = KEventJoinBatchRooms;
     _eventError = kEventError;
   }
   
@@ -127,6 +129,15 @@ static WhiteLabel *whiteLabel;
   self.socket.onDisconnect = ^(){
     block(YES, nil, nil);
   };
+}
+
+- (void)joinBatchRooms: (NSDictionary*)params withCompletionBlock: (WhiteLabelCompletionBlock)block {
+  if (self.isConnected) {
+    [self.socket emit:self.eventJoinBatchRoom args:@[params]];
+  }
+  if (block) {
+    block(self.isConnected, nil, nil);
+  }
 }
 
 - (void)sendMessage:(NSDictionary *)params withCompletionBlock:(WhiteLabelCompletionBlock)block {

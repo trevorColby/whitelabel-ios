@@ -33,6 +33,7 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
 @property (nonatomic, strong) NSString *eventUserStartedTyping;
 @property (nonatomic, strong) NSString *eventUserStoppedTyping;
 @property (nonatomic, strong) NSString *eventError;
+@property (nonatomic, strong) NSString *eventJoinBatchRoom;
 
 + (instancetype)sharedInstance;
 
@@ -47,6 +48,8 @@ typedef void (^WhiteLabelCompletionBlock)(BOOL success,
  @param block Completion block to be executed once user joins the chat
  */
 - (void)joinChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
+
+- (void)joinBatchRooms: (NSDictionary*)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
 - (void)leaveChatRoom:(NSDictionary *)params withCompletionBlock: (WhiteLabelCompletionBlock)block;
 
