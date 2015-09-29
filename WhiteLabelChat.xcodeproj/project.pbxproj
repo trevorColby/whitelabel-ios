@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		F46021E91BBB3445002B027E /* User+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021E81BBB3445002B027E /* User+Mapping.swift */; settings = {ASSET_TAGS = (); }; };
+		F46021EB1BBB3826002B027E /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021EA1BBB3826002B027E /* ChatController.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFD911BBB129400CDA868 /* WhiteLabelChat.h in Headers */ = {isa = PBXBuildFile; fileRef = F46DFD901BBB129400CDA868 /* WhiteLabelChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F46DFD981BBB129400CDA868 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFD8D1BBB129400CDA868 /* WhiteLabelChat.framework */; settings = {ASSET_TAGS = (); }; };
 		F46DFD9D1BBB129400CDA868 /* WhiteLabelChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFD9C1BBB129400CDA868 /* WhiteLabelChatTests.swift */; };
@@ -31,6 +32,7 @@
 
 /* Begin PBXFileReference section */
 		F46021E81BBB3445002B027E /* User+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Mapping.swift"; sourceTree = "<group>"; };
+		F46021EA1BBB3826002B027E /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
 		F46DFD8D1BBB129400CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFD901BBB129400CDA868 /* WhiteLabelChat.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WhiteLabelChat.h; sourceTree = "<group>"; };
 		F46DFD921BBB129400CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				F46DFDE01BBB16D500CDA868 /* Configuration.swift */,
 				F4BC166D1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift */,
 				F4BC166F1BBB1AE000B4AB72 /* Errors.swift */,
+				F46021EA1BBB3826002B027E /* ChatController.swift */,
 			);
 			path = WhiteLabelChat;
 			sourceTree = "<group>";
@@ -226,6 +229,7 @@
 			files = (
 				F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */,
 				F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */,
+				F46021EB1BBB3826002B027E /* ChatController.swift in Sources */,
 				F4BC166E1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift in Sources */,
 				F46021E91BBB3445002B027E /* User+Mapping.swift in Sources */,
 				F46DFDDD1BBB161600CDA868 /* User.swift in Sources */,

@@ -24,7 +24,7 @@ class WhiteLabelHTTPClient {
 	
 	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		guard let baseURL = Configuration.defaultBaseURL else {
-			fatalError("baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
+			fatalError("WhiteLabelHTTPClient.sendRequest(): baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
 		}
 		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL, completionHandler: completionHandler)
 	}

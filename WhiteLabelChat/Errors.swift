@@ -12,4 +12,6 @@ enum ErrorCode: ErrorType {
 	case InvalidResponseReceived
 	case RequestFailed
 	case IncompleteJSON
+	case NotConnected
+	case ImpossibleToConnectToServer
 }

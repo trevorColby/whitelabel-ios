@@ -19,7 +19,7 @@ public extension User {
 	}
 	
 	private class func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
-		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up" : "auth/", parameters: ["username": username, "password": password]) { (data, error) -> () in
+		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up/" : "auth/", parameters: ["username": username, "password": password]) { (data, error) -> () in
 			if let error = error {
 				completionHandler?(user: nil, error: error)
 				return

@@ -15,9 +15,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
 		Configuration.defaultBaseURL = NSURL(string: "http://localhost:3000/")
-			
-		User.loginWithUsername("test1", password: "fueled") { (user, error) in
-			print("\(user?.isAuthenticated)")
+		
+		let chatController = ChatController()
+		User.registerWithUsername("test1", password: "fueled") { (user, error) in
+			User.loginWithUsername("test1", password: "fueled") { (user, error) in
+				if let user = user {
+					print(user)
+					chatController.connectWithUser(user) { (error) -> () in
+						print(error)
+					}
+				}
+			}
 		}
 		
 		return true
