@@ -10,4 +10,5 @@ import UIKit
 
 public class Configuration: NSObject {
 	public static var defaultBaseURL: NSURL?
+	public static var defaultTimeout = 30
 }

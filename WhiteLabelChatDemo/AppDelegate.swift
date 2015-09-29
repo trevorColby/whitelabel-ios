@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 				if let user = user {
 					print(user)
 					chatController.connectWithUser(user) { (error) -> () in
-						print(error)
+						try! chatController.joinRoom(roomKey:  "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C", userPhoto: "asd") { (error) -> () in
+							print(error)
+						}
 					}
 				}
 			}

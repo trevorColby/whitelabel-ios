@@ -14,4 +14,6 @@ enum ErrorCode: ErrorType {
 	case IncompleteJSON
 	case NotConnected
 	case ImpossibleToConnectToServer
+	case Disconnected
+	case ValidationError(message: String)
 }
