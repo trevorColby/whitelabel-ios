@@ -82,11 +82,11 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	public func joinRoom(roomKey roomKey: String, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
 		let socket = try self.getSocket()
 		let user = try self.getConnectedUser()
 		var parameters = [
-			"room": roomKey,
+			"room": roomUUID.UUIDString,
 			"username": user.username,
 		]
 		if let userPhoto = userPhoto {
