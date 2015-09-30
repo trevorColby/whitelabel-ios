@@ -9,12 +9,13 @@
 import UIKit
 
 public class User: NSObject {
-	init(userID: String, username: String) {
+	init(userID: String?, username: String) {
 		self.userID = userID
 		self.username = username
 	}
 	
-	public var userID: String
-	public var username: String
+	public let userID: String?
+	public let username: String
+	public var userPhoto: NSURL?
 	var authToken: String?
 }

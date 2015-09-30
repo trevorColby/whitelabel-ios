@@ -8,7 +8,7 @@
 
 import UIKit
 
-typealias JSON = [String: AnyObject]
+public typealias JSON = [String: AnyObject]
 
 typealias WhiteLabelHTTPClientCompletionHandler = (data: JSON?, error: ErrorType?) -> ()
 

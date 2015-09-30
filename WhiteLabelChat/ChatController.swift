@@ -84,7 +84,7 @@ public class ChatController: NSObject {
 		return socketInternal
 	}
 	
-	public typealias CompletionHandlerType = (error: ErrorType?) -> ()
+	public typealias CompletionHandlerType = (data: [AnyObject]?, error: ErrorType?) -> ()
 	typealias HandlersType = [String: CompletionHandlerType]
 	private var handlers: HandlersType = [:]
 	private lazy var handlersLock = NSLock()
@@ -166,7 +166,7 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
+	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
 		var parameters = [
 			"room": roomUUID.UUIDString,
@@ -175,10 +175,24 @@ public class ChatController: NSObject {
 		if let userPhoto = userPhoto {
 			parameters["userPhoto"] = userPhoto
 		}
-		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true, completionHandler: completionHandler)
+		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
+			do {
+				if let error = error {
+					throw error
+				}
+				
+				guard let json = data?.first as? JSON else {
+					throw ErrorCode.InvalidResponseReceived
+				}
+				
+				completionHandler?(room: try Room.mapFromJSON(json), error: nil)
+			} catch {
+				completionHandler?(room: nil, error: error)
+			}
+		}
 	}
 	
-	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
+	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
 		var parameters = [
 			"message": message,
@@ -188,7 +202,18 @@ public class ChatController: NSObject {
 		if let userPhoto = userPhoto {
 			parameters["userPhoto"] = userPhoto
 		}
-		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true, completionHandler: completionHandler)
+		
+		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
+			do {
+				if let error = error {
+					throw error
+				}
+				
+				completionHandler?(message: Message(messageID: nil, roomID: roomUUID, sender: user, dateSent: NSDate()), error: nil)
+			} catch {
+				completionHandler?(message: nil, error: error)
+			}
+		}
 	}
 	
 	private func emitAndListenForEvent(emitEvent emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {
@@ -203,10 +228,10 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	private func listenForEvent(event: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: (error: ErrorType?) -> ()) throws {
+	private func listenForEvent(event: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: CompletionHandlerType) throws {
 		if event == nil && validationErrorObject == nil {
 			dispatch_async(dispatch_get_main_queue()) {
-				completionHandler(error: nil)
+				completionHandler(data: nil, error: nil)
 			}
 			return
 		}
@@ -232,7 +257,7 @@ public class ChatController: NSObject {
 					
 					let details = response?["details"] as? [[String: AnyObject]]
 					let message = details?.first?["message"] as? String
-					handler(error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
+					handler(data: nil, error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
 				}
 				socketHandlerManager.off("validationError", handlerUUID: uuid)
 				if let event = event {
@@ -246,7 +271,7 @@ public class ChatController: NSObject {
 				self.lockHandlers {
 					self.handlers.removeValueForKey(uuid.UUIDString)
 				}
-				handler(error: nil)
+				handler(data: data, error: nil)
 			}
 			
 			if validationErrorObject != nil {
@@ -271,7 +296,7 @@ public class ChatController: NSObject {
 	
 	private func cleanupHandlers() {
 		for (_, handler) in self.handlers {
-			handler(error: ErrorCode.Disconnected)
+			handler(data: nil, error: ErrorCode.Disconnected)
 		}
 		self.handlers.removeAll()
 		if let socket = try? self.getSocket() {

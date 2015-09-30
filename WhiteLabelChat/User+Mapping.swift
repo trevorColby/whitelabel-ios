@@ -8,22 +8,27 @@
 
 import Foundation
 
-extension User {
-	class func mapFromJSON(json: JSON) throws -> User {
-		guard let id = json["id"] as? String, let username = json["username"] as? String else {
+public extension User {
+	public class func mapFromJSON(json: JSON) throws -> User {
+		guard let username = json["username"] as? String else {
 			throw ErrorCode.IncompleteJSON
 		}
 		
-		let user = User(userID: id, username: username)
+		let user = User(userID: json["id"] as? String, username: username)
 		user.authToken = json["token"] as? String
+		if let userPhoto = json["userPhoto"] as? String {
+			user.userPhoto = NSURL(string: userPhoto)
+		}
 		return user
 	}
 	
-	func toJSON() -> JSON {
+	public func toJSON() -> JSON {
 		var result = [
-			"id": self.userID,
 			"username": self.username,
 		]
+		if let id = self.userID {
+			result["id"] = id
+		}
 		if let authToken = self.authToken {
 			result["token"] = authToken
 		}
