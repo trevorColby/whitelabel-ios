@@ -7,15 +7,34 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; };
+		F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
+		F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
 		F46DFDCA1BBB153800CDA868 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* ViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
 		F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCE1BBB153800CDA868 /* Assets.xcassets */; };
 		F46DFDD21BBB153800CDA868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */; };
-		F46DFDDA1BBB155E00CDA868 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		F41C67B31BBC641F00CF6A04 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */,
+				F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
+		F41C67B61BBC648B00CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F46DFDC91BBB153800CDA868 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -23,7 +42,7 @@
 		F46DFDCE1BBB153800CDA868 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F46DFDD11BBB153800CDA868 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F46DFDD31BBB153800CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WhiteLabelChat.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/WhiteLabelChat-gupczhmzllknxjfvcdgufiuijxrc/Build/Products/Debug-iphoneos/WhiteLabelChat.framework"; sourceTree = "<group>"; };
+		F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,7 +50,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46DFDDA1BBB155E00CDA868 /* WhiteLabelChat.framework in Frameworks */,
+				F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */,
+				F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +91,7 @@
 		F46DFDDB1BBB156E00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F41C67B61BBC648B00CF6A04 /* SocketIO.framework */,
 				F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */,
 			);
 			name = Frameworks;
@@ -86,6 +107,7 @@
 				F46DFDC01BBB153800CDA868 /* Sources */,
 				F46DFDC11BBB153800CDA868 /* Frameworks */,
 				F46DFDC21BBB153800CDA868 /* Resources */,
+				F41C67B31BBC641F00CF6A04 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -209,7 +231,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
@@ -248,7 +270,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";

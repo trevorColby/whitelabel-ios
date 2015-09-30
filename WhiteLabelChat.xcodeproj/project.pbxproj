@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F41C67B51BBC647300CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B41BBC647300CF6A04 /* SocketIO.framework */; };
 		F46021E91BBB3445002B027E /* User+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021E81BBB3445002B027E /* User+Mapping.swift */; settings = {ASSET_TAGS = (); }; };
 		F46021EB1BBB3826002B027E /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021EA1BBB3826002B027E /* ChatController.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFD911BBB129400CDA868 /* WhiteLabelChat.h in Headers */ = {isa = PBXBuildFile; fileRef = F46DFD901BBB129400CDA868 /* WhiteLabelChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		F46DFD981BBB129400CDA868 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFD8D1BBB129400CDA868 /* WhiteLabelChat.framework */; settings = {ASSET_TAGS = (); }; };
 		F46DFD9D1BBB129400CDA868 /* WhiteLabelChatTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFD9C1BBB129400CDA868 /* WhiteLabelChatTests.swift */; };
-		F46DFDB71BBB133400CDA868 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDB61BBB133400CDA868 /* SocketIO.framework */; };
 		F46DFDDD1BBB161600CDA868 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDDC1BBB161600CDA868 /* User.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFDDF1BBB162C00CDA868 /* User+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDDE1BBB162C00CDA868 /* User+Login.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDE01BBB16D500CDA868 /* Configuration.swift */; settings = {ASSET_TAGS = (); }; };
@@ -31,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F41C67B41BBC647300CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIO.framework; path = "Carthage/Checkouts/socket.io-client-swift/build/Debug-iphoneos/SocketIO.framework"; sourceTree = "<group>"; };
 		F46021E81BBB3445002B027E /* User+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Mapping.swift"; sourceTree = "<group>"; };
 		F46021EA1BBB3826002B027E /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
 		F46DFD8D1BBB129400CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -39,7 +40,6 @@
 		F46DFD971BBB129400CDA868 /* WhiteLabelChatTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WhiteLabelChatTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFD9C1BBB129400CDA868 /* WhiteLabelChatTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhiteLabelChatTests.swift; sourceTree = "<group>"; };
 		F46DFD9E1BBB129400CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		F46DFDB61BBB133400CDA868 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SocketIO.framework; path = "Carthage/Checkouts/socket.io-client-swift/build/Debug-iphoneos/SocketIO.framework"; sourceTree = "<group>"; };
 		F46DFDDC1BBB161600CDA868 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		F46DFDDE1BBB162C00CDA868 /* User+Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Login.swift"; sourceTree = "<group>"; };
 		F46DFDE01BBB16D500CDA868 /* Configuration.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Configuration.swift; sourceTree = "<group>"; };
@@ -52,7 +52,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46DFDB71BBB133400CDA868 /* SocketIO.framework in Frameworks */,
+				F41C67B51BBC647300CF6A04 /* SocketIO.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -114,7 +114,7 @@
 		F46DFDB81BBB133A00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				F46DFDB61BBB133400CDA868 /* SocketIO.framework */,
+				F41C67B41BBC647300CF6A04 /* SocketIO.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -353,6 +353,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Checkouts/socket.io-client-swift/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = WhiteLabelChat/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
@@ -371,6 +375,10 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Checkouts/socket.io-client-swift/build/Debug-iphoneos",
+				);
 				INFOPLIST_FILE = WhiteLabelChat/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
