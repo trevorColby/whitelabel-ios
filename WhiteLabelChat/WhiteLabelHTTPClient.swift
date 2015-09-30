@@ -70,7 +70,7 @@ class WhiteLabelHTTPClient {
 				
 				completionHandler?(data: json, error: nil)
 			} else {
-				completionHandler?(data: nil, error: ErrorCode.RequestFailed)
+				completionHandler?(data: nil, error: nil/*ErrorCode.RequestFailed*/)
 			}
 		}
 		dataTask.resume()

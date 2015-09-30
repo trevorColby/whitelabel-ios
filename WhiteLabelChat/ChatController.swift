@@ -9,6 +9,69 @@
 import UIKit
 import SocketIO
 
+private class SocketUniqueHandlerManager {
+	private let socket: SocketIOClient
+	
+	private lazy var handlersLock = NSLock()
+	typealias CompletionHandlerType = (uuid: NSUUID, data: [AnyObject]) -> Void
+	typealias HandlersType = [String: CompletionHandlerType]
+	typealias EventHandlersType = [String: HandlersType]
+	private var handlers: EventHandlersType = [:]
+	
+	init(socket: SocketIOClient) {
+		self.socket = socket
+	}
+	
+	func on(event: String, handlerUUID: NSUUID = NSUUID(), completion: CompletionHandlerType) -> NSUUID {
+		if var handlers = self.handlersForEvent(event) {
+			handlers[handlerUUID.UUIDString] = completion
+			
+			self.lockHandlers {
+				self.handlers[event] = handlers
+			}
+		} else {
+			self.lockHandlers {
+				self.handlers[event] = [handlerUUID.UUIDString: completion]
+			}
+			
+			self.socket.on(event) { (data, ack) in
+				if let handlers = self.handlersForEvent(event) {
+					for (_, handler) in handlers {
+						handler(uuid: handlerUUID, data: data)
+					}
+				}
+			}
+		}
+		return handlerUUID
+	}
+	
+	func off(event: String, handlerUUID: NSUUID) {
+		if var handlers = self.handlersForEvent(event) {
+			handlers.removeValueForKey(handlerUUID.UUIDString)
+			
+			self.lockHandlers {
+				self.handlers[event] = handlers
+			}
+			
+			if handlers.isEmpty {
+				self.socket.off(event)
+			}
+		}
+	}
+	
+	private func lockHandlers<T>(action: () -> T) -> T {
+		self.handlersLock.lock()
+		defer { self.handlersLock.unlock() }
+		return action()
+	}
+	
+	private func handlersForEvent(event: String) -> HandlersType? {
+		return self.lockHandlers {
+			return self.handlers[event]
+		}
+	}
+}
+
 public class ChatController: NSObject {
 	private var socketInternal: SocketIOClient?
 	private func getSocket() throws -> SocketIOClient {
@@ -21,8 +84,16 @@ public class ChatController: NSObject {
 		return socketInternal
 	}
 	
-	private var handlers: [String: (ErrorType?) -> ()] = [:]
+	private var handlers: [String: (error: ErrorType?) -> ()] = [:]
 	private lazy var handlersLock = NSLock()
+	
+	private var socketHandlerManager: SocketUniqueHandlerManager?
+	private func getSocketHandlerManager() throws -> SocketUniqueHandlerManager {
+		guard let socketHandlerManager = self.socketHandlerManager else {
+			throw ErrorCode.NotConnected
+		}
+		return socketHandlerManager
+	}
 	
 	let chatServerURL: NSURL
 	private(set) var connectedUser: User?
@@ -70,10 +141,12 @@ public class ChatController: NSObject {
 			print(event)
 		}
 		
+		self.socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
 		self.socketInternal = socket
 	}
 	
 	public func disconnect() {
+		self.socketHandlerManager = nil
 		self.connectedUser = nil
 		if let socket = try? self.getSocket() {
 			socket.disconnect()
@@ -114,19 +187,19 @@ public class ChatController: NSObject {
 			return
 		}
 		
-		let socket = try self.getSocket()
-		let uuid = NSUUID().UUIDString
+		let socketHandlerManager = try getSocketHandlerManager()
+		let uuid = NSUUID()
 		try self.lockHandlers {
-			self.handlers[uuid] = completionHandler
+			self.handlers[uuid.UUIDString] = completionHandler
 		}
 		
 		if listenForValidationError {
-			socket.on("validationError") { (data, ack) -> Void in
+			socketHandlerManager.on("validationError", handlerUUID: uuid) { (handlerUUID, data) in
 				do {
 					if let handler = try self.handlerForUUID(uuid) {
 						do {
 							try self.lockHandlers {
-								self.handlers.removeValueForKey(uuid)
+								self.handlers.removeValueForKey(uuid.UUIDString)
 							}
 							let response = data.first as? [String: AnyObject]
 							let details = response?["details"] as? [[String: AnyObject]]
@@ -136,6 +209,10 @@ public class ChatController: NSObject {
 							handler(error)
 						}
 					}
+					socketHandlerManager.off("validationError", handlerUUID: uuid)
+					if let event = event {
+						socketHandlerManager.off(event, handlerUUID: uuid)
+					}
 				} catch {
 					fatalError("Couldn't lock handlers: \(error)")
 				}
@@ -143,18 +220,23 @@ public class ChatController: NSObject {
 		}
 		
 		if let event = event {
-			socket.on(event) { (data, ack) -> Void in
+			socketHandlerManager.on(event) { (handlerUUID, data) in
 				do {
 					if let handler = try self.handlerForUUID(uuid) {
 						do {
 							try self.lockHandlers {
-								self.handlers.removeValueForKey(uuid)
+								self.handlers.removeValueForKey(uuid.UUIDString)
 							}
 							handler(nil)
 						} catch {
 							handler(error)
 						}
 					}
+					
+					if listenForValidationError {
+						socketHandlerManager.off("validationError", handlerUUID: uuid)
+					}
+					socketHandlerManager.off(event, handlerUUID: handlerUUID)
 				} catch {
 					fatalError("Couldn't lock handlers: \(error)")
 				}
@@ -164,7 +246,7 @@ public class ChatController: NSObject {
 	
 	private func cleanupHandlers() {
 		for (_, handler) in self.handlers {
-			handler(ErrorCode.Disconnected)
+			handler(error: ErrorCode.Disconnected)
 		}
 		self.handlers.removeAll()
 		if let socket = try? self.getSocket() {
@@ -178,9 +260,9 @@ public class ChatController: NSObject {
 		return try action()
 	}
 	
-	private func handlerForUUID(uuid: String) throws -> ((ErrorType?) -> ())? {
+	private func handlerForUUID(uuid: NSUUID) throws -> ((ErrorType?) -> ())? {
 		return try self.lockHandlers {
-			return self.handlers[uuid]
+			return self.handlers[uuid.UUIDString]
 		}
 	}
 }
