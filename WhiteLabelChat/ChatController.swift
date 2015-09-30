@@ -167,7 +167,6 @@ public class ChatController: NSObject {
 	}
 	
 	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
-		let socket = try self.getSocket()
 		let user = try self.getConnectedUser()
 		var parameters = [
 			"room": roomUUID.UUIDString,
@@ -176,14 +175,10 @@ public class ChatController: NSObject {
 		if let userPhoto = userPhoto {
 			parameters["userPhoto"] = userPhoto
 		}
-		socket.emit("joinRoom", parameters)
-		if let completionHandler = completionHandler {
-			try self.listenForEvent("joinedRoom", validationErrorObject: parameters, completionHandler: completionHandler)
-		}
+		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true, completionHandler: completionHandler)
 	}
 	
 	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
-		let socket = try self.getSocket()
 		let user = try self.getConnectedUser()
 		var parameters = [
 			"message": message,
@@ -193,17 +188,18 @@ public class ChatController: NSObject {
 		if let userPhoto = userPhoto {
 			parameters["userPhoto"] = userPhoto
 		}
-		socket.emit("newMessage", parameters)
-		if let completionHandler = completionHandler {
-			try self.listenForEvent(validationErrorObject: parameters, completionHandler: completionHandler)
-		}
+		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true, completionHandler: completionHandler)
 	}
 	
-	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: CompletionHandlerType? = nil) throws {
+	private func emitAndListenForEvent(emitEvent emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {
 		let socket = try self.getSocket()
-		socket.emit(emitEvent)
+		if let parameters = parameters {
+			socket.emit(emitEvent, parameters)
+		} else {
+			socket.emit(emitEvent)
+		}
 		if let completionHandler = completionHandler {
-			try self.listenForEvent(listenEvent, validationErrorObject: validationErrorObject, completionHandler: completionHandler)
+			try self.listenForEvent(listenEvent, validationErrorObject: listenForValidationError ? parameters : nil, completionHandler: completionHandler)
 		}
 	}
 	
