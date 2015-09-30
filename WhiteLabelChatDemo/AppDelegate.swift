@@ -14,7 +14,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		Configuration.defaultBaseURL = NSURL(string: "http://localhost:3000/")
+		Configuration.defaultBaseURL = NSURL(string: "https://stephane.pagekite.me/")
 		
 		let chatController = ChatController()
 		User.registerWithUsername("test1", password: "fueled") { (user, error) in
@@ -23,7 +23,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 					print(user)
 					chatController.connectWithUser(user) { (error) -> () in
 						try! chatController.joinRoom(roomUUID: NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!, userPhoto: "asd") { (error) -> () in
-							print(error)
+							print("Join room: \(error)")
+							try! chatController.sendMessage("lol", roomUUID: NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!, userPhoto: "asd") { (error) -> () in
+								print("Send message: \(error)")
+							}
 						}
 					}
 				}

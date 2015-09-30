@@ -171,6 +171,23 @@ public class ChatController: NSObject {
 		}
 	}
 	
+	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let socket = try self.getSocket()
+		let user = try self.getConnectedUser()
+		var parameters = [
+			"message": message,
+			"room": roomUUID.UUIDString,
+			"username": user.username,
+		]
+		if let userPhoto = userPhoto {
+			parameters["userPhoto"] = userPhoto
+		}
+		socket.emit("newMessage", parameters)
+		if let completionHandler = completionHandler {
+			try self.listenForEvent(validationErrorObject: parameters, completionHandler: completionHandler)
+		}
+	}
+	
 	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
 		let socket = try self.getSocket()
 		socket.emit(emitEvent)
@@ -179,7 +196,7 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	private func listenForEvent(event: String?, validationErrorObject: [String: NSObject]? = nil, completionHandler: (error: ErrorType?) -> ()) throws {
+	private func listenForEvent(event: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: (error: ErrorType?) -> ()) throws {
 		if event == nil && validationErrorObject == nil {
 			dispatch_async(dispatch_get_main_queue()) {
 				completionHandler(error: nil)
@@ -225,27 +242,38 @@ public class ChatController: NSObject {
 			}
 		}
 		
+		let eventHandler: (data: [AnyObject]?) -> () = { (data) in
+			do {
+				if let handler = try self.handlerForUUID(uuid) {
+					do {
+						try self.lockHandlers {
+							self.handlers.removeValueForKey(uuid.UUIDString)
+						}
+						handler(nil)
+					} catch {
+						handler(error)
+					}
+				}
+				
+				if validationErrorObject != nil {
+					socketHandlerManager.off("validationError", handlerUUID: uuid)
+				}
+				if let event = event {
+					socketHandlerManager.off(event, handlerUUID: uuid)
+				}
+			} catch {
+				fatalError("Couldn't lock handlers: \(error)")
+			}
+		}
+		
 		if let event = event {
 			socketHandlerManager.on(event) { (handlerUUID, data) in
-				do {
-					if let handler = try self.handlerForUUID(uuid) {
-						do {
-							try self.lockHandlers {
-								self.handlers.removeValueForKey(uuid.UUIDString)
-							}
-							handler(nil)
-						} catch {
-							handler(error)
-						}
-					}
-					
-					if validationErrorObject != nil {
-						socketHandlerManager.off("validationError", handlerUUID: uuid)
-					}
-					socketHandlerManager.off(event, handlerUUID: handlerUUID)
-				} catch {
-					fatalError("Couldn't lock handlers: \(error)")
-				}
+				eventHandler(data: data)
+			}
+		} else {
+			let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
+			dispatch_after(delayTime, dispatch_get_main_queue()) {
+				eventHandler(data: nil)
 			}
 		}
 	}
