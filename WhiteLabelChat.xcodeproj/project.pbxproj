@@ -12,6 +12,7 @@
 		F41C67BC1BBC6D2C00CF6A04 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41C67BB1BBC6D2C00CF6A04 /* Message.swift */; settings = {ASSET_TAGS = (); }; };
 		F41C67BE1BBC6D9E00CF6A04 /* Room+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41C67BD1BBC6D9E00CF6A04 /* Room+Mapping.swift */; settings = {ASSET_TAGS = (); }; };
 		F41C67C01BBC6E7500CF6A04 /* Message+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41C67BF1BBC6E7500CF6A04 /* Message+Mapping.swift */; settings = {ASSET_TAGS = (); }; };
+		F41C67C21BBC7AC900CF6A04 /* SocketUniqueHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F41C67C11BBC7AC900CF6A04 /* SocketUniqueHandlerManager.swift */; settings = {ASSET_TAGS = (); }; };
 		F46021E91BBB3445002B027E /* User+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021E81BBB3445002B027E /* User+Mapping.swift */; settings = {ASSET_TAGS = (); }; };
 		F46021EB1BBB3826002B027E /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46021EA1BBB3826002B027E /* ChatController.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFD911BBB129400CDA868 /* WhiteLabelChat.h in Headers */ = {isa = PBXBuildFile; fileRef = F46DFD901BBB129400CDA868 /* WhiteLabelChat.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -40,6 +41,7 @@
 		F41C67BB1BBC6D2C00CF6A04 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		F41C67BD1BBC6D9E00CF6A04 /* Room+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+Mapping.swift"; sourceTree = "<group>"; };
 		F41C67BF1BBC6E7500CF6A04 /* Message+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+Mapping.swift"; sourceTree = "<group>"; };
+		F41C67C11BBC7AC900CF6A04 /* SocketUniqueHandlerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketUniqueHandlerManager.swift; sourceTree = "<group>"; };
 		F46021E81BBB3445002B027E /* User+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Mapping.swift"; sourceTree = "<group>"; };
 		F46021EA1BBB3826002B027E /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
 		F46DFD8D1BBB129400CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -110,6 +112,7 @@
 				F4BC166D1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift */,
 				F4BC166F1BBB1AE000B4AB72 /* Errors.swift */,
 				F46021EA1BBB3826002B027E /* ChatController.swift */,
+				F41C67C11BBC7AC900CF6A04 /* SocketUniqueHandlerManager.swift */,
 			);
 			path = WhiteLabelChat;
 			sourceTree = "<group>";
@@ -239,6 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F41C67C21BBC7AC900CF6A04 /* SocketUniqueHandlerManager.swift in Sources */,
 				F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */,
 				F41C67BC1BBC6D2C00CF6A04 /* Message.swift in Sources */,
 				F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */,
