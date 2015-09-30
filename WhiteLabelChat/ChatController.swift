@@ -21,7 +21,7 @@ public class ChatController: NSObject {
 		return socketInternal
 	}
 	
-	public typealias CompletionHandlerType = (data: [AnyObject]?, error: ErrorType?) -> ()
+	private typealias CompletionHandlerType = (data: [AnyObject]?, error: ErrorType?) -> ()
 	private typealias HandlersType = [String: CompletionHandlerType]
 	private var handlers: HandlersType = [:]
 	private lazy var handlersLock = NSLock()
@@ -136,6 +136,20 @@ extension ChatController {
 		}
 	}
 	
+	public func leaveRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let user = try self.getConnectedUser()
+		var parameters = [
+			"room": roomUUID.UUIDString,
+			"username": user.username,
+		]
+		if let userPhoto = userPhoto {
+			parameters["userPhoto"] = userPhoto
+		}
+		try self.emitAndListenForEvent(emitEvent: "leaveRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
+			completionHandler?(error: error)
+		}
+	}
+	
 	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
 		var parameters = [
@@ -157,6 +171,34 @@ extension ChatController {
 			} catch {
 				completionHandler?(message: nil, error: error)
 			}
+		}
+	}
+	
+	public func sendStartTypingIndicator(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let user = try self.getConnectedUser()
+		var parameters = [
+			"room": roomUUID.UUIDString,
+			"username": user.username,
+		]
+		if let userPhoto = userPhoto {
+			parameters["userPhoto"] = userPhoto
+		}
+		try self.emitAndListenForEvent(emitEvent: "typing", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
+			completionHandler?(error: error)
+		}
+	}
+	
+	public func sendStopTypingIndicator(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let user = try self.getConnectedUser()
+		var parameters = [
+			"room": roomUUID.UUIDString,
+			"username": user.username,
+		]
+		if let userPhoto = userPhoto {
+			parameters["userPhoto"] = userPhoto
+		}
+		try self.emitAndListenForEvent(emitEvent: "stopTyping", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
+			completionHandler?(error: error)
 		}
 	}
 }
