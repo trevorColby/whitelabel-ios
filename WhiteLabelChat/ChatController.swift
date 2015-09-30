@@ -167,20 +167,20 @@ public class ChatController: NSObject {
 		}
 		socket.emit("joinRoom", parameters)
 		if let completionHandler = completionHandler {
-			try self.listenForEvent("joinedRoom", completionHandler: completionHandler)
+			try self.listenForEvent("joinedRoom", validationErrorObject: parameters, completionHandler: completionHandler)
 		}
 	}
 	
-	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
 		let socket = try self.getSocket()
 		socket.emit(emitEvent)
 		if let completionHandler = completionHandler {
-			try self.listenForEvent(listenEvent, listenForValidationError: listenForValidationError, completionHandler: completionHandler)
+			try self.listenForEvent(listenEvent, validationErrorObject: validationErrorObject, completionHandler: completionHandler)
 		}
 	}
 	
-	private func listenForEvent(event: String?, listenForValidationError: Bool = true, completionHandler: (error: ErrorType?) -> ()) throws {
-		if event == nil || !listenForValidationError {
+	private func listenForEvent(event: String?, validationErrorObject: [String: NSObject]? = nil, completionHandler: (error: ErrorType?) -> ()) throws {
+		if event == nil || validationErrorObject == nil {
 			dispatch_async(dispatch_get_main_queue()) {
 				completionHandler(error: nil)
 			}
@@ -193,15 +193,21 @@ public class ChatController: NSObject {
 			self.handlers[uuid.UUIDString] = completionHandler
 		}
 		
-		if listenForValidationError {
+		if let validationErrorObject = validationErrorObject {
 			socketHandlerManager.on("validationError", handlerUUID: uuid) { (handlerUUID, data) in
 				do {
 					if let handler = try self.handlerForUUID(uuid) {
 						do {
+							let response = data.first as? [String: AnyObject]
+							
+							if let object = response?["_object"] as? [String: NSObject] where validationErrorObject != object {
+								return
+							}
+							
 							try self.lockHandlers {
 								self.handlers.removeValueForKey(uuid.UUIDString)
 							}
-							let response = data.first as? [String: AnyObject]
+							
 							let details = response?["details"] as? [[String: AnyObject]]
 							let message = details?.first?["message"] as? String
 							handler(ErrorCode.ValidationError(message: message ?? "Unknown error"))
@@ -233,7 +239,7 @@ public class ChatController: NSObject {
 						}
 					}
 					
-					if listenForValidationError {
+					if validationErrorObject != nil {
 						socketHandlerManager.off("validationError", handlerUUID: uuid)
 					}
 					socketHandlerManager.off(event, handlerUUID: handlerUUID)
