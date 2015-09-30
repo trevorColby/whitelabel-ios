@@ -110,15 +110,8 @@ extension ChatController {
 
 // MARK: Public API
 extension ChatController {
-	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
-		let user = try self.getConnectedUser()
-		var parameters = [
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-		]
-		if let userPhoto = userPhoto {
-			parameters["userPhoto"] = userPhoto
-		}
+	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
+		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 			do {
 				if let error = error {
@@ -136,31 +129,17 @@ extension ChatController {
 		}
 	}
 	
-	public func leaveRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
-		let user = try self.getConnectedUser()
-		var parameters = [
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-		]
-		if let userPhoto = userPhoto {
-			parameters["userPhoto"] = userPhoto
-		}
+	public func leaveRoom(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "leaveRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 			completionHandler?(error: error)
 		}
 	}
 	
-	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
+	public func sendMessage(message: String, roomUUID: NSUUID, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
-		var parameters = [
-			"message": message,
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-		]
-		if let userPhoto = userPhoto {
-			parameters["userPhoto"] = userPhoto
-		}
-		
+		var parameters = try self.parametersForRoom(roomUUID: roomUUID)
+		parameters["message"] = message
 		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 			do {
 				if let error = error {
@@ -174,29 +153,15 @@ extension ChatController {
 		}
 	}
 	
-	public func sendStartTypingIndicator(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
-		let user = try self.getConnectedUser()
-		var parameters = [
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-		]
-		if let userPhoto = userPhoto {
-			parameters["userPhoto"] = userPhoto
-		}
+	public func sendStartTypingIndicator(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "typing", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 			completionHandler?(error: error)
 		}
 	}
 	
-	public func sendStopTypingIndicator(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
-		let user = try self.getConnectedUser()
-		var parameters = [
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-		]
-		if let userPhoto = userPhoto {
-			parameters["userPhoto"] = userPhoto
-		}
+	public func sendStopTypingIndicator(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "stopTyping", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 			completionHandler?(error: error)
 		}
@@ -204,6 +169,21 @@ extension ChatController {
 }
 
 // MARK: --- Private methods
+// MARK: Utility methods
+extension ChatController {
+	private func parametersForRoom(roomUUID roomUUID: NSUUID) throws -> [String: NSObject] {
+		let user = try self.getConnectedUser()
+		guard let userPhoto = user.userPhoto else {
+			throw ErrorCode.RequiresUserPhoto
+		}
+		return [
+			"room": roomUUID.UUIDString,
+			"username": user.username,
+			"userPhoto": userPhoto.absoluteString,
+		]
+	}
+}
+
 // MARK: Emit/Listen helpers
 extension ChatController {
 	private func emitAndListenForEvent(emitEvent emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {

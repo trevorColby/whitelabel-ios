@@ -32,6 +32,9 @@ public extension User {
 		if let authToken = self.authToken {
 			result["token"] = authToken
 		}
+		if let userPhoto = self.userPhoto {
+			result["userPhoto"] = userPhoto.absoluteString
+		}
 		return result
 	}
 }

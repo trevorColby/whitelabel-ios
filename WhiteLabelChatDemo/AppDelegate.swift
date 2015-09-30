@@ -62,10 +62,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 			User.loginWithUsername(username, password: "fueled") { (user, error) in
 				print("login: \(user) \(error)")
 				if let user = user {
+					user.userPhoto = NSURL(string: "http://lorempixel.com/800/600/cats/1/")
 					chatController.connectWithUser(user) { (error) -> () in
-						try! chatController.joinRoom(roomUUID: roomUUID, userPhoto: "asd") { (room, error) -> () in
+						try! chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
 							print("Join room: \(room) \(error)")
-							try! chatController.sendMessage("lol", roomUUID: roomUUID, userPhoto: "asd") { (message, error) -> () in
+							try! chatController.sendMessage("lol", roomUUID: roomUUID) { (message, error) -> () in
 								print("Send message: \(message) \(error)")
 							}
 						}

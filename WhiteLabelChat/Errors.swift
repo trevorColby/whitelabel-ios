@@ -15,5 +15,6 @@ enum ErrorCode: ErrorType {
 	case NotConnected
 	case ImpossibleToConnectToServer
 	case Disconnected
+	case RequiresUserPhoto
 	case ValidationError(message: String)
 }
