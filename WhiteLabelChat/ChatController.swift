@@ -59,10 +59,10 @@ private class SocketUniqueHandlerManager {
 		}
 	}
 	
-	private func lockHandlers<T>(action: () -> T) -> T {
+	private func lockHandlers<T>(action: () throws -> T) rethrows -> T {
 		self.handlersLock.lock()
 		defer { self.handlersLock.unlock() }
-		return action()
+		return try action()
 	}
 	
 	private func handlersForEvent(event: String) -> HandlersType? {
@@ -84,7 +84,9 @@ public class ChatController: NSObject {
 		return socketInternal
 	}
 	
-	private var handlers: [String: (error: ErrorType?) -> ()] = [:]
+	public typealias CompletionHandlerType = (error: ErrorType?) -> ()
+	typealias HandlersType = [String: CompletionHandlerType]
+	private var handlers: HandlersType = [:]
 	private lazy var handlersLock = NSLock()
 	
 	private var socketHandlerManager: SocketUniqueHandlerManager?
@@ -164,7 +166,7 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func joinRoom(roomUUID roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
 		let socket = try self.getSocket()
 		let user = try self.getConnectedUser()
 		var parameters = [
@@ -180,7 +182,7 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func sendMessage(message: String, roomUUID: NSUUID, userPhoto: String? = nil, completionHandler: CompletionHandlerType? = nil) throws {
 		let socket = try self.getSocket()
 		let user = try self.getConnectedUser()
 		var parameters = [
@@ -197,7 +199,7 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	private func emitAndListenForEvent(emitEvent emitEvent: String, listenEvent: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: CompletionHandlerType? = nil) throws {
 		let socket = try self.getSocket()
 		socket.emit(emitEvent)
 		if let completionHandler = completionHandler {
@@ -215,63 +217,47 @@ public class ChatController: NSObject {
 		
 		let socketHandlerManager = try getSocketHandlerManager()
 		let uuid = NSUUID()
-		try self.lockHandlers {
+		self.lockHandlers {
 			self.handlers[uuid.UUIDString] = completionHandler
 		}
 		
 		if let validationErrorObject = validationErrorObject {
 			socketHandlerManager.on("validationError", handlerUUID: uuid) { (handlerUUID, data) in
-				do {
-					if let handler = try self.handlerForUUID(uuid) {
-						do {
-							let response = data.first as? [String: AnyObject]
-							
-							if let object = response?["_object"] as? [String: NSObject] where validationErrorObject != object {
-								return
-							}
-							
-							try self.lockHandlers {
-								self.handlers.removeValueForKey(uuid.UUIDString)
-							}
-							
-							let details = response?["details"] as? [[String: AnyObject]]
-							let message = details?.first?["message"] as? String
-							handler(ErrorCode.ValidationError(message: message ?? "Unknown error"))
-						} catch {
-							handler(error)
-						}
+				if let handler = self.handlerForUUID(uuid) {
+					let response = data.first as? [String: AnyObject]
+					
+					if let object = response?["_object"] as? [String: NSObject] where validationErrorObject != object {
+						return
 					}
-					socketHandlerManager.off("validationError", handlerUUID: uuid)
-					if let event = event {
-						socketHandlerManager.off(event, handlerUUID: uuid)
+					
+					self.lockHandlers {
+						self.handlers.removeValueForKey(uuid.UUIDString)
 					}
-				} catch {
-					fatalError("Couldn't lock handlers: \(error)")
+					
+					let details = response?["details"] as? [[String: AnyObject]]
+					let message = details?.first?["message"] as? String
+					handler(error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
+				}
+				socketHandlerManager.off("validationError", handlerUUID: uuid)
+				if let event = event {
+					socketHandlerManager.off(event, handlerUUID: uuid)
 				}
 			}
 		}
 		
 		let eventHandler: (data: [AnyObject]?) -> () = { (data) in
-			do {
-				if let handler = try self.handlerForUUID(uuid) {
-					do {
-						try self.lockHandlers {
-							self.handlers.removeValueForKey(uuid.UUIDString)
-						}
-						handler(nil)
-					} catch {
-						handler(error)
-					}
+			if let handler = self.handlerForUUID(uuid) {
+				self.lockHandlers {
+					self.handlers.removeValueForKey(uuid.UUIDString)
 				}
-				
-				if validationErrorObject != nil {
-					socketHandlerManager.off("validationError", handlerUUID: uuid)
-				}
-				if let event = event {
-					socketHandlerManager.off(event, handlerUUID: uuid)
-				}
-			} catch {
-				fatalError("Couldn't lock handlers: \(error)")
+				handler(error: nil)
+			}
+			
+			if validationErrorObject != nil {
+				socketHandlerManager.off("validationError", handlerUUID: uuid)
+			}
+			if let event = event {
+				socketHandlerManager.off(event, handlerUUID: uuid)
 			}
 		}
 		
@@ -297,14 +283,14 @@ public class ChatController: NSObject {
 		}
 	}
 	
-	private func lockHandlers<T>(action: () throws -> T) throws -> T {
+	private func lockHandlers<T>(action: () throws -> T) rethrows -> T {
 		self.handlersLock.lock()
 		defer { self.handlersLock.unlock() }
 		return try action()
 	}
 	
-	private func handlerForUUID(uuid: NSUUID) throws -> ((ErrorType?) -> ())? {
-		return try self.lockHandlers {
+	private func handlerForUUID(uuid: NSUUID) -> CompletionHandlerType? {
+		return self.lockHandlers {
 			return self.handlers[uuid.UUIDString]
 		}
 	}
