@@ -180,7 +180,7 @@ public class ChatController: NSObject {
 	}
 	
 	private func listenForEvent(event: String?, validationErrorObject: [String: NSObject]? = nil, completionHandler: (error: ErrorType?) -> ()) throws {
-		if event == nil || validationErrorObject == nil {
+		if event == nil && validationErrorObject == nil {
 			dispatch_async(dispatch_get_main_queue()) {
 				completionHandler(error: nil)
 			}
