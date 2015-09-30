@@ -9,12 +9,12 @@
 import Foundation
 
 public class Room: NSObject {
-	init(roomID: NSUUID, numberOfUsers: Int) {
+	init(roomID: NSUUID, numberOfUsers: Int?) {
 		self.roomID = roomID
 		self.numberOfUsers = numberOfUsers
 	}
 	
 	public var roomID: NSUUID
-	internal(set) public var numberOfUsers: Int
+	internal(set) public var numberOfUsers: Int?
 	internal(set) public var messages: [Message] = []
 }

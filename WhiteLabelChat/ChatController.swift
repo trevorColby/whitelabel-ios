@@ -9,6 +9,18 @@
 import UIKit
 import SocketIO
 
+public let ChatControllerUserJoinedRoomNotification = "ChatControllerUserJoinedRoomNotification"
+public let ChatControllerUserLeftRoomNotification = "ChatControllerUserLeftRoomNotification"
+
+public let ChatControllerUserTypingNotification = "ChatControllerUserTypingNotification"
+public let ChatControllerUserStoppedTypingNotification = "ChatControllerUserStoppedTypingNotification"
+
+public let ChatControllerReceivedNewMessageNotification = "ChatControllerReceivedNewMessageNotification"
+
+public let ChatControllerUserNotificationKey = "ChatControllerUserNotificationKey"
+public let ChatControllerRoomNotificationKey = "ChatControllerRoomNotificationKey"
+public let ChatControllerMessageNotificationKey = "ChatControllerMessageNotificationKey"
+
 public class ChatController: NSObject {
 	private var socketInternal: SocketIOClient?
 	private func getSocket() throws -> SocketIOClient {
@@ -89,6 +101,8 @@ extension ChatController {
 			self.cleanupHandlers()
 		}
 		
+		self.handleNotificationEvents()
+		
 		socket.onAny { event in
 			print(event)
 		}
@@ -146,7 +160,9 @@ extension ChatController {
 					throw error
 				}
 				
-				completionHandler?(message: Message(messageID: nil, roomID: roomUUID, sender: user, dateSent: NSDate()), error: nil)
+				let message = Message(messageID: nil, roomID: roomUUID, sender: user, dateSent: NSDate())
+				self.sendReceivedNewMessageNotification(message)
+				completionHandler?(message: message, error: nil)
 			} catch {
 				completionHandler?(message: nil, error: error)
 			}
@@ -181,6 +197,100 @@ extension ChatController {
 			"username": user.username,
 			"userPhoto": userPhoto.absoluteString,
 		]
+	}
+}
+
+// MARK: Notification helpers
+extension ChatController {
+	private func handleNotificationEvents() {
+		if let socket = self.socketInternal {
+			socket.on("userJoined") { (data, ack) -> Void in
+				guard let json = data.first as? JSON else {
+					return
+				}
+				
+				if let user = try? User.mapFromJSON(json), let room = try? Room.mapFromJSON(json) {
+					self.sendUserJoinedRoomNotification(user, room: room)
+				}
+			}
+			
+			socket.on("userLeft") { (data, ack) -> Void in
+				guard let json = data.first as? JSON else {
+					return
+				}
+				
+				if let user = try? User.mapFromJSON(json), let room = try? Room.mapFromJSON(json) {
+					self.sendUserLeftRoomNotification(user, room: room)
+				}
+			}
+			
+			socket.on("typing") { (data, ack) -> Void in
+				guard let json = data.first as? JSON else {
+					return
+				}
+				
+				if let user = try? User.mapFromJSON(json) {
+					self.sendUserTypingNotification(user)
+				}
+			}
+			
+			socket.on("stopTyping") { (data, ack) -> Void in
+				guard let json = data.first as? JSON else {
+					return
+				}
+				
+				if let user = try? User.mapFromJSON(json) {
+					self.sendUserStoppedTypingNotification(user)
+				}
+			}
+			
+			socket.on("newMessage") { (data, ack) -> Void in
+				guard let json = data.first as? JSON else {
+					return
+				}
+				
+				if let message = try? Message.mapFromJSON(json) {
+					self.sendReceivedNewMessageNotification(message)
+				}
+			}
+		}
+	}
+	
+	private func sendUserJoinedRoomNotification(user: User, room: Room) {
+		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserJoinedRoomNotification, object: self, userInfo:
+			[
+				ChatControllerUserNotificationKey: user,
+				ChatControllerRoomNotificationKey: room,
+			])
+	}
+	
+	private func sendUserLeftRoomNotification(user: User, room: Room) {
+		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserLeftRoomNotification, object: self, userInfo:
+			[
+				ChatControllerUserNotificationKey: user,
+				ChatControllerRoomNotificationKey: room,
+			])
+	}
+	
+	private func sendUserTypingNotification(user: User) {
+		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserTypingNotification, object: self, userInfo:
+			[
+				ChatControllerUserNotificationKey: user,
+			])
+	}
+	
+	private func sendUserStoppedTypingNotification(user: User) {
+		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserStoppedTypingNotification, object: self, userInfo:
+			[
+				ChatControllerUserNotificationKey: user,
+			])
+	}
+	
+	private func sendReceivedNewMessageNotification(message: Message) {
+		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerReceivedNewMessageNotification, object: self, userInfo:
+			[
+				ChatControllerMessageNotificationKey: message,
+			])
 	}
 }
 

@@ -10,11 +10,11 @@ import Foundation
 
 public extension Room {
 	public class func mapFromJSON(json: JSON) throws -> Room {
-		guard let id = json["room"] as? String, let uuid = NSUUID(UUIDString: id), let numberOfUsers = json["numUsers"] as? Int else {
+		guard let id = json["room"] as? String, let uuid = NSUUID(UUIDString: id) else {
 			throw ErrorCode.IncompleteJSON
 		}
 		
-		let room = Room(roomID: uuid, numberOfUsers: numberOfUsers)
+		let room = Room(roomID: uuid, numberOfUsers: json["numUsers"] as? Int)
 		if let messagesJSON = json["messages"] as? [JSON] {
 			var messages: [Message] = []
 			for messageJSON in messagesJSON {
