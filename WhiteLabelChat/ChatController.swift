@@ -95,7 +95,8 @@ public class ChatController: NSObject {
 		return socketHandlerManager
 	}
 	
-	let chatServerURL: NSURL
+	let host: String
+	let port: NSNumber?
 	private(set) var connectedUser: User?
 	
 	private func getConnectedUser() throws -> User {
@@ -113,7 +114,11 @@ public class ChatController: NSObject {
 	}
 	
 	public init(chatServerURL: NSURL) {
-		self.chatServerURL = chatServerURL
+		guard let host = chatServerURL.host else {
+			fatalError("ChatController(): chatServerURL '\(chatServerURL)' doesn't have a host")
+		}
+		self.host = host
+		self.port = chatServerURL.port
 	}
 	
 	public func connectWithUser(user: User, timeout: Int = Configuration.defaultTimeout, completionHandler: ((error: ErrorType?) -> ())?) {
@@ -121,7 +126,11 @@ public class ChatController: NSObject {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
 		
-		let socket = SocketIOClient(socketURL: "localhost:3000", opts: ["connectParams": ["token": authToken]])
+		var socketURL = self.host
+		if let port = self.port {
+			socketURL += ":\(port)"
+		}
+		let socket = SocketIOClient(socketURL: socketURL, opts: ["connectParams": ["token": authToken]])
 		
 		socket.on("connect") { data, ack in
 			self.connectedUser = user
