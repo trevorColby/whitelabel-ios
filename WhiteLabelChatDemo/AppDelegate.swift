@@ -51,29 +51,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 	var window: UIWindow?
 
 	func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-		Configuration.defaultBaseURL = NSURL(string: "http://172.16.29.225:3000/")
-		
-		let roomUUID = NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!
-		let username: String = UIDevice.modelName.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
-		
-		let chatController = ChatController()
-		User.registerWithUsername(username, password: "fueled") { (user, error) in
-			print("register: \(user) \(error)")
-			User.loginWithUsername(username, password: "fueled") { (user, error) in
-				print("login: \(user) \(error)")
-				if let user = user {
-					user.userPhoto = NSURL(string: "http://lorempixel.com/800/600/cats/1/")
-					chatController.connectWithUser(user) { (error) -> () in
-						try! chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
-							print("Join room: \(room) \(error)")
-							try! chatController.sendMessage("lol", roomUUID: roomUUID) { (message, error) -> () in
-								print("Send message: \(message) \(error)")
-							}
-						}
-					}
-				}
-			}
-		}
+		Configuration.defaultBaseURL = NSURL(string: "http://172.16.31.249:3000/")
 		
 		return true
 	}

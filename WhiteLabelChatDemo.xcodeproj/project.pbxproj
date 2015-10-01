@@ -12,7 +12,7 @@
 		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
 		F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
-		F46DFDCA1BBB153800CDA868 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* ViewController.swift */; };
+		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
 		F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCE1BBB153800CDA868 /* Assets.xcassets */; };
 		F46DFDD21BBB153800CDA868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */; };
@@ -37,7 +37,7 @@
 		F41C67B61BBC648B00CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		F46DFDC91BBB153800CDA868 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpLoginViewController.swift; sourceTree = "<group>"; };
 		F46DFDCC1BBB153800CDA868 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F46DFDCE1BBB153800CDA868 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		F46DFDD11BBB153800CDA868 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -79,7 +79,7 @@
 			isa = PBXGroup;
 			children = (
 				F46DFDC71BBB153800CDA868 /* AppDelegate.swift */,
-				F46DFDC91BBB153800CDA868 /* ViewController.swift */,
+				F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */,
 				F46DFDCB1BBB153800CDA868 /* Main.storyboard */,
 				F46DFDCE1BBB153800CDA868 /* Assets.xcassets */,
 				F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */,
@@ -168,7 +168,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46DFDCA1BBB153800CDA868 /* ViewController.swift in Sources */,
+				F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */,
 				F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
