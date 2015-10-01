@@ -11,12 +11,13 @@ import Foundation
 public extension Message {
 	public class func mapFromJSON(var json: JSON) throws -> Message {
 		guard let id = json["uuid"] as? String, let uuid = NSUUID(UUIDString: id),
+			let content = json["message"] as? String,
 			let roomID = json["room"] as? String, let roomUUID = NSUUID(UUIDString: roomID),
 			let _ = json["sent"] as? String else {
 			throw ErrorCode.IncompleteJSON
 		}
 		let sender = try User.mapFromJSON(json)
 		
-		return Message(messageID: uuid, roomID: roomUUID, sender: sender, dateSent: NSDate())
+		return Message(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: NSDate())
 	}
 }

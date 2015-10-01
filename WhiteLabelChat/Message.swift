@@ -7,14 +7,16 @@
 //
 
 public class Message: NSObject {
-	init(messageID: NSUUID?, roomID: NSUUID, sender: User, dateSent: NSDate) {
+	init(messageID: NSUUID?, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) {
 		self.messageID = messageID
+		self.content = content
 		self.roomID = roomID
 		self.sender = sender
 		self.dateSent = dateSent
 	}
 	
 	public let messageID: NSUUID?
+	public let content: String
 	public let sender: User
 	public let roomID: NSUUID
 	public let dateSent: NSDate

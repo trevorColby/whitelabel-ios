@@ -160,9 +160,11 @@ extension ChatController {
 					throw error
 				}
 				
-				let message = Message(messageID: nil, roomID: roomUUID, sender: user, dateSent: NSDate())
-				self.sendReceivedNewMessageNotification(message)
+				let message = Message(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
 				completionHandler?(message: message, error: nil)
+				dispatch_async(dispatch_get_main_queue()) {
+					self.sendReceivedNewMessageNotification(message)
+				}
 			} catch {
 				completionHandler?(message: nil, error: error)
 			}
