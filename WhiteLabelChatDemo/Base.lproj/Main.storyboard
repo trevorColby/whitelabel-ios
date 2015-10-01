@@ -222,13 +222,13 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Chat View" id="AoA-dq-z5H">
-                        <barButtonItem key="leftBarButtonItem" style="plain" id="tWk-mY-LAi">
+                        <barButtonItem key="leftBarButtonItem" id="tWk-mY-LAi">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="n8x-sf-3Wf">
                                 <rect key="frame" x="20" y="7" width="133" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </button>
                         </barButtonItem>
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="Kad-Ad-sVp">
+                        <barButtonItem key="rightBarButtonItem" id="Kad-Ad-sVp">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8kF-1O-hEi">
                                 <rect key="frame" x="530" y="7" width="50" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

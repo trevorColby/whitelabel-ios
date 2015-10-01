@@ -18,6 +18,20 @@
 		F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
 		F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501E21BBDC3EA00D5115D /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */; };
+		F43501E31BBDC3EA00D5115D /* EthanolTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */; };
+		F43501E41BBDC3EA00D5115D /* EthanolUIComponents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */; };
+		F43501E51BBDC3EA00D5115D /* EthanolUIExtensions.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DE1BBDC3EA00D5115D /* EthanolUIExtensions.framework */; };
+		F43501E61BBDC3EA00D5115D /* EthanolUtilities.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */; };
+		F43501E71BBDC3EA00D5115D /* EthanolValidationFormatting.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */; };
+		F43501E81BBDC3EA00D5115D /* NSInvocationHelpers.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */; };
+		F43501E91BBDC3F200D5115D /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501EA1BBDC3F200D5115D /* EthanolTools.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501EB1BBDC3F200D5115D /* EthanolUIComponents.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501EC1BBDC3F200D5115D /* EthanolUIExtensions.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DE1BBDC3EA00D5115D /* EthanolUIExtensions.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501ED1BBDC3F200D5115D /* EthanolUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
 		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
@@ -32,6 +46,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F43501E91BBDC3F200D5115D /* CocoaLumberjack.framework in Embed Frameworks */,
+				F43501EA1BBDC3F200D5115D /* EthanolTools.framework in Embed Frameworks */,
+				F43501EB1BBDC3F200D5115D /* EthanolUIComponents.framework in Embed Frameworks */,
+				F43501EC1BBDC3F200D5115D /* EthanolUIExtensions.framework in Embed Frameworks */,
+				F43501ED1BBDC3F200D5115D /* EthanolUtilities.framework in Embed Frameworks */,
+				F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */,
+				F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */,
 				F417BD001BBD91480061CF7C /* KeychainAccess.framework in Embed Frameworks */,
 				F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */,
 				F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */,
@@ -49,6 +70,13 @@
 		F417BD031BBD92D70061CF7C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		F417BD061BBD93BA0061CF7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F41C67B61BBC648B00CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolUIComponents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501DE1BBDC3EA00D5115D /* EthanolUIExtensions.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolUIExtensions.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolValidationFormatting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NSInvocationHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpLoginViewController.swift; sourceTree = "<group>"; };
@@ -64,6 +92,13 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F43501E21BBDC3EA00D5115D /* CocoaLumberjack.framework in Frameworks */,
+				F43501E31BBDC3EA00D5115D /* EthanolTools.framework in Frameworks */,
+				F43501E41BBDC3EA00D5115D /* EthanolUIComponents.framework in Frameworks */,
+				F43501E51BBDC3EA00D5115D /* EthanolUIExtensions.framework in Frameworks */,
+				F43501E61BBDC3EA00D5115D /* EthanolUtilities.framework in Frameworks */,
+				F43501E71BBDC3EA00D5115D /* EthanolValidationFormatting.framework in Frameworks */,
+				F43501E81BBDC3EA00D5115D /* NSInvocationHelpers.framework in Frameworks */,
 				F417BCFF1BBD91440061CF7C /* KeychainAccess.framework in Frameworks */,
 				F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */,
 				F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */,
@@ -111,6 +146,13 @@
 		F46DFDDB1BBB156E00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */,
+				F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */,
+				F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */,
+				F43501DE1BBDC3EA00D5115D /* EthanolUIExtensions.framework */,
+				F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */,
+				F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */,
+				F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */,
 				F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */,
 				F41C67B61BBC648B00CF6A04 /* SocketIO.framework */,
 				F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */,
@@ -145,6 +187,7 @@
 		F46DFDBC1BBB153800CDA868 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Fueled;
 				TargetAttributes = {

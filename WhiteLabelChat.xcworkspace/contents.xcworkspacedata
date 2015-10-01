@@ -13,4 +13,25 @@
    <FileRef
       location = "group:Carthage/Checkouts/KeychainAccess/Lib/KeychainAccess.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-ui-components/EthanolUIComponents.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-ui-extensions/EthanolUIExtensions.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-tools/EthanolTools.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-utilities/EthanolUtilities.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-validation-formatting/EthanolValidationFormatting.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/NSInvocation-Helpers/NSInvocationHelpers.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/CocoaLumberjack/Lumberjack.xcodeproj">
+   </FileRef>
 </Workspace>
