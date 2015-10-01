@@ -16,12 +16,12 @@ class UserHelper {
 	
 	private class var cachedUser: User? {
 		get {
-		if let data = KeychainManager.sharedManager[CachedUserKey] {
-		if let json = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? JSON {
-		return (try? User.mapFromJSON(json)) ?? nil
-		}
-		}
-		return nil
+			if let data = KeychainManager.sharedManager[CachedUserKey] {
+				if let json = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? JSON {
+					return (try? User.mapFromJSON(json)) ?? nil
+				}
+			}
+			return nil
 		}
 		set(newValue) {
 			if let user = newValue {
@@ -34,7 +34,6 @@ class UserHelper {
 		}
 	}
 	
-	// This is always nil on application startup. In order to login, any of the public loginXxxx method must be called (Login is instantaneous when internet is unreachable)
 	class var currentUser: User? {
 		get {
 			if let cachedUser = cachedUser {
@@ -46,5 +45,10 @@ class UserHelper {
 	
 	class func persistUser(user: User) {
 		cachedUser = user
+	}
+	
+	class func logoutUser() {
+		cachedUser = nil
+		currentUserInstance = nil
 	}
 }

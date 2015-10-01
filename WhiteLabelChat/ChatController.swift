@@ -145,7 +145,7 @@ extension ChatController {
 	
 	public func leaveRoom(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
-		try self.emitAndListenForEvent(emitEvent: "leaveRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
+		try self.emitAndListenForEvent(emitEvent: "leaveRoom", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 			completionHandler?(error: error)
 		}
 	}
@@ -339,7 +339,9 @@ extension ChatController {
 					
 					let details = response?["details"] as? [[String: AnyObject]]
 					let message = details?.first?["message"] as? String
-					handler(data: nil, error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
+					dispatch_async(dispatch_get_main_queue()) {
+						handler(data: nil, error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
+					}
 				}
 				socketHandlerManager.off("validationError", handlerUUID: uuid)
 				if let event = event {
@@ -353,7 +355,9 @@ extension ChatController {
 				self.lockHandlers {
 					self.handlers.removeValueForKey(uuid.UUIDString)
 				}
-				handler(data: data, error: nil)
+				dispatch_async(dispatch_get_main_queue()) {
+					handler(data: data, error: nil)
+				}
 			}
 			
 			if validationErrorObject != nil {
@@ -380,8 +384,10 @@ extension ChatController {
 // MARK: Completion Handler helpers
 extension ChatController {
 	private func cleanupHandlers() {
-		for (_, handler) in self.handlers {
-			handler(data: nil, error: ErrorCode.Disconnected)
+		dispatch_async(dispatch_get_main_queue()) {
+			for (_, handler) in self.handlers {
+				handler(data: nil, error: ErrorCode.Disconnected)
+			}
 		}
 		self.handlers.removeAll()
 		if let socket = try? self.getSocket() {

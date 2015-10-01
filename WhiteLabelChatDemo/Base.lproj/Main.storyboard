@@ -132,7 +132,7 @@
             </objects>
             <point key="canvasLocation" x="1415" y="527"/>
         </scene>
-        <!--Chat View Controller-->
+        <!--Chat View-->
         <scene sceneID="Q1t-i8-3r1">
             <objects>
                 <viewController id="6jQ-BI-adz" customClass="ChatViewController" customModule="WhiteLabelChatDemo" customModuleProvider="target" sceneMemberID="viewController">
@@ -149,7 +149,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="ChatMessageTableViewCellReuseIdentifier" rowHeight="100" id="WPc-fE-O5u" customClass="ChatMessageTableViewCell" customModule="WhiteLabelChatDemo" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="600" height="100"/>
+                                        <rect key="frame" x="0.0" y="92" width="600" height="100"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="WPc-fE-O5u" id="fAu-5n-jga">
                                             <rect key="frame" x="0.0" y="0.0" width="600" height="99"/>
@@ -221,6 +221,25 @@
                             <constraint firstAttribute="trailing" secondItem="UMm-e3-Q3x" secondAttribute="trailing" id="zqw-QO-L6h"/>
                         </constraints>
                     </view>
+                    <navigationItem key="navigationItem" title="Chat View" id="AoA-dq-z5H">
+                        <barButtonItem key="leftBarButtonItem" style="plain" id="tWk-mY-LAi">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="n8x-sf-3Wf">
+                                <rect key="frame" x="20" y="7" width="133" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </button>
+                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" style="plain" id="Kad-Ad-sVp">
+                            <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="8kF-1O-hEi">
+                                <rect key="frame" x="530" y="7" width="50" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Logout"/>
+                                <connections>
+                                    <action selector="logoutButtonTapped:" destination="6jQ-BI-adz" eventType="touchUpInside" id="U2t-nP-XlR"/>
+                                </connections>
+                            </button>
+                        </barButtonItem>
+                    </navigationItem>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="messageTextField" destination="HRJ-38-00f" id="NIi-GP-hWV"/>
                         <outlet property="messageTextFieldBottomConstraint" destination="847-5B-gzD" id="MuY-he-25I"/>
@@ -251,6 +270,6 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="6eI-aq-he8"/>
+        <segue reference="nft-19-KWp"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -87,6 +87,22 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 		}
 	}
 	
+	@IBAction func logoutButtonTapped(sender: AnyObject) {
+		let disconnectAction: () -> () = {
+			self.chatController.disconnect()
+			UserHelper.logoutUser()
+			self.navigationController?.popViewControllerAnimated(true)
+		}
+		
+		do {
+			try self.chatController.leaveRoom(roomUUID: self.RoomUUID) { (error) in
+				disconnectAction()
+			}
+		} catch {
+			disconnectAction()
+		}
+	}
+	
 	private func reloadMessages() {
 		self.tableView.reloadData()
 	}

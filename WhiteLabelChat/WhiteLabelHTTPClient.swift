@@ -30,6 +30,12 @@ class WhiteLabelHTTPClient {
 	}
 	
 	func sendRequest(method: HTTPMethod, var path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+		let mainThreadCompletionHandler: WhiteLabelHTTPClientCompletionHandler = { (data, error) in
+			dispatch_async(dispatch_get_main_queue()) {
+				completionHandler?(data: data, error: error)
+			}
+		}
+		
 		if let parameters = parameters as? [String: String] where method == .GET {
 			path += "?" + parameters.map { (key, value) in "\(key)=\(value)" }.joinWithSeparator("&")
 		}
@@ -41,19 +47,19 @@ class WhiteLabelHTTPClient {
 			do {
 				request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(parameters, options: NSJSONWritingOptions(rawValue: 0))
 			} catch {
-				completionHandler?(data: nil, error: error)
+				mainThreadCompletionHandler(data: nil, error: error)
 				return
 			}
-		}
+	}
 		
 		let dataTask = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
 			if error != nil {
-				completionHandler?(data: nil, error: error)
+				mainThreadCompletionHandler(data: nil, error: error)
 				return
 			}
 			
 			guard let response = response as? NSHTTPURLResponse else {
-				completionHandler?(data: nil, error: ErrorCode.InvalidResponseReceived)
+				mainThreadCompletionHandler(data: nil, error: ErrorCode.InvalidResponseReceived)
 				return
 			}
 			
@@ -63,14 +69,14 @@ class WhiteLabelHTTPClient {
 					do {
 						json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0)) as? JSON
 					} catch {
-						completionHandler?(data: nil, error: error)
+						mainThreadCompletionHandler(data: nil, error: error)
 						return
 					}
 				}
 				
-				completionHandler?(data: json, error: nil)
+				mainThreadCompletionHandler(data: json, error: nil)
 			} else {
-				completionHandler?(data: nil, error: nil/*ErrorCode.RequestFailed*/)
+				mainThreadCompletionHandler(data: nil, error: ErrorCode.RequestFailed)
 			}
 		}
 		dataTask.resume()
