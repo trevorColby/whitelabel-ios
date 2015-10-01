@@ -8,6 +8,7 @@
 
 import UIKit
 import WhiteLabelChat
+import SlackTextViewController
 
 private let UIAnimationOptionsFromCurve = {(curve: UIViewAnimationCurve) -> UIViewAnimationOptions in
 	switch (curve) {
@@ -22,7 +23,7 @@ private let UIAnimationOptionsFromCurve = {(curve: UIViewAnimationCurve) -> UIVi
 	}
 }
 
-class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+class ChatViewController: SLKTextViewController {
 	private let ShowSignUpLoginViewControllerSegue = "ShowSignUpLoginViewControllerSegue"
 	private let ChatMessageTableViewCellReuseIdentifier = "ChatMessageTableViewCellReuseIdentifier"
 	private let RoomUUID = NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!
@@ -31,16 +32,12 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 	private let chatController = ChatController()
 	private var room: Room?
 	
-	@IBOutlet var tableView: UITableView!
-	@IBOutlet var messageTextField: UITextField!
-	@IBOutlet var messageTextFieldBottomConstraint: NSLayoutConstraint!
-	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerReceivedNewMessageNotificationHandler:", name: ChatControllerReceivedNewMessageNotification, object: self.chatController)
+		self.tableView.registerNib(UINib(nibName: "ChatMessageTableViewCell", bundle: nil), forCellReuseIdentifier: ChatMessageTableViewCellReuseIdentifier)
 		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "keyboardWillChangeFrameNotificationHandler:", name: UIKeyboardWillChangeFrameNotification, object: nil)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerReceivedNewMessageNotificationHandler:", name: ChatControllerReceivedNewMessageNotification, object: self.chatController)
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -78,10 +75,18 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 		}
 	}
 	
-	@IBAction func sendMessageButtonTapped(sender: AnyObject) {
+	override class func tableViewStyleForCoder(decoder: NSCoder!) -> UITableViewStyle {
+		return .Plain
+	}
+	
+	override func didPressRightButton(sender: AnyObject!) {
 		if let room = self.room {
+			self.textView.refreshFirstResponder()
+			
 			do {
-				try self.chatController.sendMessage(self.messageTextField.text ?? "", roomUUID: room.roomID)
+				try self.chatController.sendMessage(self.textView.text ?? "", roomUUID: room.roomID)
+				
+				super.didPressRightButton(sender)
 			} catch {
 				print("Couldn't send message: \(error)")
 			}
@@ -108,11 +113,11 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 		self.tableView.reloadData()
 	}
 	
-	func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		return self.room?.messages.count ?? 0
 	}
 	
-	func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier(ChatMessageTableViewCellReuseIdentifier, forIndexPath: indexPath) as! ChatMessageTableViewCell
 		if let room = room {
 			cell.usernameLabel.text = room.messages[indexPath.row].sender.username
@@ -121,17 +126,16 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 		return cell
 	}
 	
-	func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return 30.0 + CGFloat((self.room?.messages[indexPath.row].content ?? "").characters.count) / 300.0 * 30.0
+	override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
+		cell.transform = self.tableView.transform
 	}
 	
-	func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
 		return UITableViewAutomaticDimension
 	}
 	
-	func textFieldShouldReturn(textField: UITextField) -> Bool {
-		textField.resignFirstResponder()
-		return true
+	override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+		return 30.0 + CGFloat(((self.room?.messages[indexPath.row].content ?? "").characters.count + 99) / 100 * 30)
 	}
 	
 	func chatControllerReceivedNewMessageNotificationHandler(notification: NSNotification) {
@@ -141,19 +145,6 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 				self.tableView.beginUpdates()
 				self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
 				self.tableView.endUpdates()
-		}
-	}
-	
-	func keyboardWillChangeFrameNotificationHandler(notification: NSNotification) {
-		if let endFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.CGRectValue(),
-			let duration = notification.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? NSTimeInterval,
-			let curveRawValue = notification.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? Int,
-			let curve = UIViewAnimationCurve(rawValue: curveRawValue)
-		{
-			self.messageTextFieldBottomConstraint.constant = UIScreen.mainScreen().bounds.size.height - endFrame.origin.y
-			UIView.animateWithDuration(duration, delay: 0.0, options: UIAnimationOptionsFromCurve(curve), animations: { () -> Void in
-				self.view.layoutIfNeeded()
-			}, completion: nil)
 		}
 	}
 }

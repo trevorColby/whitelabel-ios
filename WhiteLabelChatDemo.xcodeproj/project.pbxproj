@@ -33,6 +33,9 @@
 		F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */; settings = {ASSET_TAGS = (); }; };
+		F44AC2321BBDE10E003127CD /* SlackTextViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */; };
+		F44AC2331BBDE115003127CD /* SlackTextViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F44AC2351BBDE521003127CD /* ChatMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
 		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
@@ -47,6 +50,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F44AC2331BBDE115003127CD /* SlackTextViewController.framework in Embed Frameworks */,
 				F43501E91BBDC3F200D5115D /* CocoaLumberjack.framework in Embed Frameworks */,
 				F43501EA1BBDC3F200D5115D /* EthanolTools.framework in Embed Frameworks */,
 				F43501EB1BBDC3F200D5115D /* EthanolUIComponents.framework in Embed Frameworks */,
@@ -79,6 +83,8 @@
 		F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolValidationFormatting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NSInvocationHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewRootViewControllerSegue.swift; sourceTree = "<group>"; };
+		F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SlackTextViewController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = ChatMessageTableViewCell.xib; sourceTree = "<group>"; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpLoginViewController.swift; sourceTree = "<group>"; };
@@ -94,6 +100,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F44AC2321BBDE10E003127CD /* SlackTextViewController.framework in Frameworks */,
 				F43501E21BBDC3EA00D5115D /* CocoaLumberjack.framework in Frameworks */,
 				F43501E31BBDC3EA00D5115D /* EthanolTools.framework in Frameworks */,
 				F43501E41BBDC3EA00D5115D /* EthanolUIComponents.framework in Frameworks */,
@@ -137,6 +144,7 @@
 				F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */,
 				F417BD031BBD92D70061CF7C /* ChatViewController.swift */,
 				F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */,
+				F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */,
 				F46DFDCB1BBB153800CDA868 /* Main.storyboard */,
 				F46DFDCE1BBB153800CDA868 /* Assets.xcassets */,
 				F46DFDD31BBB153800CDA868 /* Info.plist */,
@@ -149,6 +157,7 @@
 		F46DFDDB1BBB156E00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */,
 				F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */,
 				F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */,
 				F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */,
@@ -223,6 +232,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F417BD071BBD93BA0061CF7C /* LaunchScreen.storyboard in Resources */,
+				F44AC2351BBDE521003127CD /* ChatMessageTableViewCell.xib in Resources */,
 				F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */,
 				F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */,
 			);
