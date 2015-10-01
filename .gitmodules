@@ -1,3 +1,9 @@
 [submodule "Carthage/Checkouts/socket.io-client-swift"]
 	path = Carthage/Checkouts/socket.io-client-swift
 	url = https://github.com/socketio/socket.io-client-swift.git
+[submodule "Carthage/Checkouts/UICKeyChainStore"]
+	path = Carthage/Checkouts/UICKeyChainStore
+	url = https://github.com/kishikawakatsumi/UICKeyChainStore.git
+[submodule "Carthage/Checkouts/KeychainAccess"]
+	path = Carthage/Checkouts/KeychainAccess
+	url = https://github.com/kishikawakatsumi/KeychainAccess.git

@@ -10,4 +10,7 @@
    <FileRef
       location = "group:Carthage/Checkouts/socket.io-client-swift/Socket.IO-Client-Swift.xcodeproj">
    </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/KeychainAccess/Lib/KeychainAccess.xcodeproj">
+   </FileRef>
 </Workspace>

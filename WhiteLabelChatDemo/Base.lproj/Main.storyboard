@@ -1,12 +1,58 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="hrv-W7-Ug7">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
     </dependencies>
     <scenes>
+        <!--Splash View Controller-->
+        <scene sceneID="H9O-WR-XKk">
+            <objects>
+                <viewController id="aRg-fG-xMi" customClass="SplashViewController" customModule="WhiteLabelChatDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="Xud-PZ-jfX"/>
+                        <viewControllerLayoutGuide type="bottom" id="FEo-V1-Qlw"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="4eq-Fa-7rC">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="  Copyright © 2015 Fueled. All rights reserved." textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="9" translatesAutoresizingMaskIntoConstraints="NO" id="QiN-Ku-RdP">
+                                <rect key="frame" x="20" y="559" width="560" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="WhiteLabelChatDemo" textAlignment="center" lineBreakMode="middleTruncation" baselineAdjustment="alignBaselines" minimumFontSize="18" translatesAutoresizingMaskIntoConstraints="NO" id="wLK-pB-Kue">
+                                <rect key="frame" x="20" y="180" width="560" height="43"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="36"/>
+                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <constraints>
+                            <constraint firstItem="QiN-Ku-RdP" firstAttribute="leading" secondItem="4eq-Fa-7rC" secondAttribute="leading" constant="20" symbolic="YES" id="2Gk-SD-gfH"/>
+                            <constraint firstAttribute="bottom" secondItem="QiN-Ku-RdP" secondAttribute="bottom" constant="20" id="6Tr-Ww-CE5"/>
+                            <constraint firstItem="wLK-pB-Kue" firstAttribute="leading" secondItem="4eq-Fa-7rC" secondAttribute="leading" constant="20" symbolic="YES" id="HnW-su-NV3"/>
+                            <constraint firstAttribute="centerX" secondItem="QiN-Ku-RdP" secondAttribute="centerX" id="ayJ-ke-cO9"/>
+                            <constraint firstAttribute="centerX" secondItem="wLK-pB-Kue" secondAttribute="centerX" id="hXT-z5-d1l"/>
+                            <constraint firstItem="wLK-pB-Kue" firstAttribute="centerY" secondItem="4eq-Fa-7rC" secondAttribute="bottom" multiplier="1/3" constant="1" id="m8F-Sy-2h5"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="0Z7-vG-Bhw"/>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="ShowSignUpLoginViewControllerSegue" id="dTH-yR-HTy"/>
+                        <segue destination="6jQ-BI-adz" kind="show" identifier="ShowChatViewControllerSegue" id="nft-19-KWp"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="LFo-Sa-5si" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="653" y="527"/>
+        </scene>
         <!--Sign Up Login View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -79,11 +125,51 @@
                     <connections>
                         <outlet property="passwordTextField" destination="um4-E2-jNX" id="mym-EE-d8S"/>
                         <outlet property="usernameTextField" destination="zRc-4j-g9I" id="5eh-Gx-9Cg"/>
+                        <segue destination="6jQ-BI-adz" kind="show" identifier="ShowChatViewControllerSegue" id="6eI-aq-he8"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="920" y="555"/>
+            <point key="canvasLocation" x="1415" y="527"/>
+        </scene>
+        <!--Chat View Controller-->
+        <scene sceneID="Q1t-i8-3r1">
+            <objects>
+                <viewController id="6jQ-BI-adz" customClass="ChatViewController" customModule="WhiteLabelChatDemo" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="iYU-eG-KML"/>
+                        <viewControllerLayoutGuide type="bottom" id="6gT-FR-S5r"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="IiW-IL-Zyd">
+                        <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="MqD-db-Y8T" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1027" y="1275"/>
+        </scene>
+        <!--Navigation Controller-->
+        <scene sceneID="b7f-uE-HqL">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" navigationBarHidden="YES" id="hrv-W7-Ug7" sceneMemberID="viewController">
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="iVo-DS-2sx">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="aRg-fG-xMi" kind="relationship" relationship="rootViewController" id="UMG-hC-YUa"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="jdU-1g-aU4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-85" y="527"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="6eI-aq-he8"/>
+    </inferredMetricsTieBreakers>
 </document>

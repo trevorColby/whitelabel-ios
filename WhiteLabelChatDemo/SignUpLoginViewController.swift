@@ -10,21 +10,20 @@ import UIKit
 import WhiteLabelChat
 
 class SignUpLoginViewController: UIViewController {
+	private let ShowChatViewControllerSegue = "ShowChatViewControllerSegue"
+	
 	@IBOutlet var usernameTextField: UITextField!
 	@IBOutlet var passwordTextField: UITextField!
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		// Do any additional setup after loading the view, typically from a nib.
-	}
 	
 	@IBAction func signUpButtonTapped(sender: AnyObject) {
 		let username = self.usernameTextField.text ?? ""
 		User.registerWithUsername(username, password: "fueled") { (user, error) in
 			if let error = error {
 				print("Failed to sign up with username \(username): \(error)")
-			} else {
+			} else if let user = user {
+				UserHelper.persistUser(user)
 				print("Successfully signed up with username \(username)")
+				self.performSegueWithIdentifier(self.ShowChatViewControllerSegue, sender: self)
 			}
 		}
 	}
@@ -34,8 +33,11 @@ class SignUpLoginViewController: UIViewController {
 		User.loginWithUsername(username, password: "fueled") { (user, error) in
 			if let error = error {
 				print("Failed to login with username \(username): \(error)")
-			} else {
+			} else if let user = user {
+				UserHelper.persistUser(user)
 				print("Successfully logged in with username \(username)")
+				
+				self.performSegueWithIdentifier(self.ShowChatViewControllerSegue, sender: self)
 			}
 		}
 	}

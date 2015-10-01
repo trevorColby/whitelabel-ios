@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCF61BBD8F450061CF7C /* UserHelper.swift */; settings = {ASSET_TAGS = (); }; };
+		F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */; settings = {ASSET_TAGS = (); }; };
+		F417BCFF1BBD91440061CF7C /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */; };
+		F417BD001BBD91480061CF7C /* KeychainAccess.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD011BBD92C90061CF7C /* SplashViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD031BBD92D70061CF7C /* ChatViewController.swift */; settings = {ASSET_TAGS = (); }; };
+		F417BD071BBD93BA0061CF7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
 		F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; };
 		F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
@@ -15,7 +22,6 @@
 		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
 		F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCE1BBB153800CDA868 /* Assets.xcassets */; };
-		F46DFDD21BBB153800CDA868 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -25,6 +31,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				F417BD001BBD91480061CF7C /* KeychainAccess.framework in Embed Frameworks */,
 				F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */,
 				F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */,
 			);
@@ -34,13 +41,18 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		F417BCF61BBD8F450061CF7C /* UserHelper.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserHelper.swift; sourceTree = "<group>"; };
+		F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeychainManager.swift; sourceTree = "<group>"; };
+		F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = KeychainAccess.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F417BD011BBD92C90061CF7C /* SplashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		F417BD031BBD92D70061CF7C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
+		F417BD061BBD93BA0061CF7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F41C67B61BBC648B00CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpLoginViewController.swift; sourceTree = "<group>"; };
 		F46DFDCC1BBB153800CDA868 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		F46DFDCE1BBB153800CDA868 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		F46DFDD11BBB153800CDA868 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F46DFDD31BBB153800CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -50,6 +62,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F417BCFF1BBD91440061CF7C /* KeychainAccess.framework in Frameworks */,
 				F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */,
 				F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */,
 			);
@@ -79,11 +92,15 @@
 			isa = PBXGroup;
 			children = (
 				F46DFDC71BBB153800CDA868 /* AppDelegate.swift */,
+				F417BCF61BBD8F450061CF7C /* UserHelper.swift */,
+				F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */,
+				F417BD011BBD92C90061CF7C /* SplashViewController.swift */,
 				F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */,
+				F417BD031BBD92D70061CF7C /* ChatViewController.swift */,
 				F46DFDCB1BBB153800CDA868 /* Main.storyboard */,
 				F46DFDCE1BBB153800CDA868 /* Assets.xcassets */,
-				F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */,
 				F46DFDD31BBB153800CDA868 /* Info.plist */,
+				F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */,
 			);
 			path = WhiteLabelChatDemo;
 			sourceTree = "<group>";
@@ -91,6 +108,7 @@
 		F46DFDDB1BBB156E00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */,
 				F41C67B61BBC648B00CF6A04 /* SocketIO.framework */,
 				F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */,
 			);
@@ -155,7 +173,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F46DFDD21BBB153800CDA868 /* LaunchScreen.storyboard in Resources */,
+				F417BD071BBD93BA0061CF7C /* LaunchScreen.storyboard in Resources */,
 				F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */,
 				F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */,
 			);
@@ -170,26 +188,30 @@
 			files = (
 				F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */,
 				F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */,
+				F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */,
+				F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */,
+				F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */,
+				F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				F417BD061BBD93BA0061CF7C /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
 		F46DFDCB1BBB153800CDA868 /* Main.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
 				F46DFDCC1BBB153800CDA868 /* Base */,
 			);
 			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
-		F46DFDD01BBB153800CDA868 /* LaunchScreen.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				F46DFDD11BBB153800CDA868 /* Base */,
-			);
-			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
 		};
 /* End PBXVariantGroup section */
