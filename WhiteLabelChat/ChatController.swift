@@ -101,14 +101,14 @@ extension ChatController {
 			self.cleanupHandlers()
 		}
 		
-		self.handleNotificationEvents()
-		
 		socket.onAny { event in
 			print(event)
 		}
 		
 		self.socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
 		self.socketInternal = socket
+		
+		self.handleNotificationEvents()
 	}
 	
 	public func disconnect() {
