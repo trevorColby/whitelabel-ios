@@ -31,6 +31,8 @@ class ChatViewController: SLKTextViewController {
 	private var currentUser: User!
 	private let chatController = ChatController()
 	private var room: Room?
+	private var isTyping = false
+	private var isTypingTimer: NSTimer?
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -38,6 +40,8 @@ class ChatViewController: SLKTextViewController {
 		self.tableView.registerNib(UINib(nibName: "ChatMessageTableViewCell", bundle: nil), forCellReuseIdentifier: ChatMessageTableViewCellReuseIdentifier)
 		
 		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerReceivedNewMessageNotificationHandler:", name: ChatControllerReceivedNewMessageNotification, object: self.chatController)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerUserTypingNotification:", name: ChatControllerUserTypingNotification, object: self.chatController)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerUserStoppedTypingNotification:", name: ChatControllerUserStoppedTypingNotification, object: self.chatController)
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -83,6 +87,17 @@ class ChatViewController: SLKTextViewController {
 		if let room = self.room {
 			self.textView.refreshFirstResponder()
 			
+			if(self.isTyping) {
+				do {
+					try self.chatController.sendStopTypingIndicator(roomUUID: self.RoomUUID)
+				} catch {
+					print("Couldn't send stop typing indicator: \(error)")
+				}
+				self.isTyping = false
+				self.isTypingTimer?.invalidate()
+				self.isTypingTimer = nil
+			}
+			
 			do {
 				try self.chatController.sendMessage(self.textView.text ?? "", roomUUID: room.roomID)
 				
@@ -126,6 +141,39 @@ class ChatViewController: SLKTextViewController {
 		return cell
 	}
 	
+	override func textDidUpdate(animated: Bool) {
+		super.textDidUpdate(animated)
+		
+		do {
+			if self.textView.text.characters.isEmpty {
+				try self.chatController.sendStopTypingIndicator(roomUUID: self.RoomUUID)
+				
+				self.isTypingTimer?.invalidate()
+				self.isTypingTimer = nil
+			} else {
+				try self.chatController.sendStartTypingIndicator(roomUUID: self.RoomUUID)
+				
+				self.isTypingTimer?.invalidate()
+				self.isTypingTimer = NSTimer(timeInterval: 10.0, target: self, selector: "userStoppedTyping:", userInfo: nil, repeats: false)
+			}
+		} catch {
+			print("Error sending typing indicator: \(error)")
+		}
+	}
+	
+	func userStoppedTyping(timer: NSTimer) {
+		if(self.isTyping) {
+			do {
+				try self.chatController.sendStopTypingIndicator(roomUUID: self.RoomUUID)
+			} catch {
+				print("Couldn't send stop typing indicator: \(error)")
+			}
+			self.isTyping = false
+			self.isTypingTimer?.invalidate()
+			self.isTypingTimer = nil
+		}
+	}
+	
 	override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
 		cell.transform = self.tableView.transform
 	}
@@ -138,6 +186,10 @@ class ChatViewController: SLKTextViewController {
 		return 30.0 + CGFloat(((self.room?.messages[indexPath.row].content ?? "").characters.count + 99) / 100 * 30)
 	}
 	
+	override func canShowTypingIndicator() -> Bool {
+		return true
+	}
+	
 	func chatControllerReceivedNewMessageNotificationHandler(notification: NSNotification) {
 		if let room = self.room,
 			let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message {
@@ -145,6 +197,18 @@ class ChatViewController: SLKTextViewController {
 				self.tableView.beginUpdates()
 				self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
 				self.tableView.endUpdates()
+		}
+	}
+	
+	func chatControllerUserTypingNotification(notification: NSNotification) {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
+			self.typingIndicatorView.insertUsername(user.username)
+		}
+	}
+	
+	func chatControllerUserStoppedTypingNotification(notification: NSNotification) {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
+			self.typingIndicatorView.removeUsername(user.username)
 		}
 	}
 }
