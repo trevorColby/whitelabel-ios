@@ -32,6 +32,7 @@
 		F43501ED1BBDC3F200D5115D /* EthanolUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */; settings = {ASSET_TAGS = (); }; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
 		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
@@ -77,6 +78,7 @@
 		F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolUtilities.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolValidationFormatting.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = NSInvocationHelpers.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewRootViewControllerSegue.swift; sourceTree = "<group>"; };
 		F46DFDC41BBB153800CDA868 /* WhiteLabelChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WhiteLabelChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F46DFDC71BBB153800CDA868 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignUpLoginViewController.swift; sourceTree = "<group>"; };
@@ -139,6 +141,7 @@
 				F46DFDCE1BBB153800CDA868 /* Assets.xcassets */,
 				F46DFDD31BBB153800CDA868 /* Info.plist */,
 				F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */,
+				F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */,
 			);
 			path = WhiteLabelChatDemo;
 			sourceTree = "<group>";
@@ -234,6 +237,7 @@
 			files = (
 				F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */,
 				F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */,
+				F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */,
 				F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */,
 				F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */,
 				F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */,

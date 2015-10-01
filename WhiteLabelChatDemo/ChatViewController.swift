@@ -23,6 +23,7 @@ private let UIAnimationOptionsFromCurve = {(curve: UIViewAnimationCurve) -> UIVi
 }
 
 class ChatViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UITextFieldDelegate {
+	private let ShowSignUpLoginViewControllerSegue = "ShowSignUpLoginViewControllerSegue"
 	private let ChatMessageTableViewCellReuseIdentifier = "ChatMessageTableViewCellReuseIdentifier"
 	private let RoomUUID = NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!
 	
@@ -91,7 +92,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 		let disconnectAction: () -> () = {
 			self.chatController.disconnect()
 			UserHelper.logoutUser()
-			self.navigationController?.popViewControllerAnimated(true)
+			self.performSegueWithIdentifier(self.ShowSignUpLoginViewControllerSegue, sender: self)
 		}
 		
 		do {
@@ -129,6 +130,7 @@ class ChatViewController: UIViewController, UITableViewDelegate, UITableViewData
 	}
 	
 	func textFieldShouldReturn(textField: UITextField) -> Bool {
+		textField.resignFirstResponder()
 		return true
 	}
 	
