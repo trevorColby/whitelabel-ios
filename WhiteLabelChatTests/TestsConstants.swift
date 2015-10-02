@@ -1,5 +1,5 @@
 //
-//  Constants.swift
+//  TestsConstants.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 10/2/15.
