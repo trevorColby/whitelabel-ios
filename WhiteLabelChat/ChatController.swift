@@ -9,6 +9,9 @@
 import UIKit
 import SocketIO
 
+public let ChatControllerDidConnectNotification = "ChatControllerDidConnectNotification"
+public let ChatControllerDidDisconnectNotification = "ChatControllerDidDisconnectNotification"
+
 public let ChatControllerUserJoinedRoomNotification = "ChatControllerUserJoinedRoomNotification"
 public let ChatControllerUserLeftRoomNotification = "ChatControllerUserLeftRoomNotification"
 
@@ -86,26 +89,34 @@ extension ChatController {
 			socketURL += ":\(port)"
 		}
 		let socket = SocketIOClient(socketURL: socketURL, opts: ["connectParams": ["token": authToken]])
-		
-		socket.on("connect") { data, ack in
+			
+		let socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
+		let connectOnceUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
 			self.connectedUser = user
+			socketHandlerManager.off("connect", handlerUUID: uuid)
 			completionHandler?(error: nil)
 		}
+		let connectNotificationUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
+			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidConnectNotification, object: self)
+		}
 		socket.connect(timeoutAfter: timeout) { () -> Void in
-			socket.off("connect")
-			self.connectedUser = nil
+			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
+			self.disconnect()
 			completionHandler?(error: ErrorCode.ImpossibleToConnectToServer)
 		}
-		socket.on("disconnect") { data, ack in
+		socketHandlerManager.on("disconnect") { data, ack in
 			self.connectedUser = nil
 			self.cleanupHandlers()
+			self.socketHandlerManager = nil
+			self.socketInternal = nil
+			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
 		}
 		
 		socket.onAny { event in
 			print(event)
 		}
 		
-		self.socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
+		self.socketHandlerManager = socketHandlerManager
 		self.socketInternal = socket
 		
 		self.handleNotificationEvents()
@@ -116,8 +127,10 @@ extension ChatController {
 		self.connectedUser = nil
 		if let socket = try? self.getSocket() {
 			socket.disconnect()
-			self.cleanupHandlers()
-			self.socketInternal = nil
+		} else {
+			dispatch_async(dispatch_get_main_queue()) {
+				NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
+			}
 		}
 	}
 }
@@ -205,8 +218,8 @@ extension ChatController {
 // MARK: Notification helpers
 extension ChatController {
 	private func handleNotificationEvents() {
-		if let socket = self.socketInternal {
-			socket.on("userJoined") { (data, ack) -> Void in
+		if let socketHandlerManager = self.socketHandlerManager {
+			socketHandlerManager.on("userJoined") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
 					return
 				}
@@ -216,7 +229,7 @@ extension ChatController {
 				}
 			}
 			
-			socket.on("userLeft") { (data, ack) -> Void in
+			socketHandlerManager.on("userLeft") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
 					return
 				}
@@ -226,7 +239,7 @@ extension ChatController {
 				}
 			}
 			
-			socket.on("typing") { (data, ack) -> Void in
+			socketHandlerManager.on("typing") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
 					return
 				}
@@ -236,7 +249,7 @@ extension ChatController {
 				}
 			}
 			
-			socket.on("stopTyping") { (data, ack) -> Void in
+			socketHandlerManager.on("stopTyping") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
 					return
 				}
@@ -246,7 +259,7 @@ extension ChatController {
 				}
 			}
 			
-			socket.on("newMessage") { (data, ack) -> Void in
+			socketHandlerManager.on("newMessage") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
 					return
 				}
@@ -373,7 +386,7 @@ extension ChatController {
 				eventHandler(data: data)
 			}
 		} else {
-			let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.5 * Double(NSEC_PER_SEC)))
+			let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
 			dispatch_after(delayTime, dispatch_get_main_queue()) {
 				eventHandler(data: nil)
 			}

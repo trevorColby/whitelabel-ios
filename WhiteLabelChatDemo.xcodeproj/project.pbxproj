@@ -144,12 +144,12 @@
 				F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */,
 				F417BD031BBD92D70061CF7C /* ChatViewController.swift */,
 				F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */,
+				F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */,
 				F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */,
 				F46DFDCB1BBB153800CDA868 /* Main.storyboard */,
 				F46DFDCE1BBB153800CDA868 /* Assets.xcassets */,
 				F46DFDD31BBB153800CDA868 /* Info.plist */,
 				F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */,
-				F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */,
 			);
 			path = WhiteLabelChatDemo;
 			sourceTree = "<group>";

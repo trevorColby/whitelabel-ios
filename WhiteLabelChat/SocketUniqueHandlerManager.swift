@@ -58,6 +58,12 @@ class SocketUniqueHandlerManager {
 		}
 	}
 	
+	func off(event: String, handlerUUIDs: NSUUID...) {
+		for handlerUUID in handlerUUIDs {
+			self.off(event, handlerUUID: handlerUUID)
+		}
+	}
+	
 	private func lockHandlers<T>(action: () throws -> T) rethrows -> T {
 		self.handlersLock.lock()
 		defer { self.handlersLock.unlock() }
