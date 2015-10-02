@@ -22,14 +22,14 @@ class WhiteLabelHTTPClient {
 
 	static let sharedClient = WhiteLabelHTTPClient()
 	
-	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		guard let baseURL = Configuration.defaultBaseURL else {
 			fatalError("WhiteLabelHTTPClient.sendRequest(): baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
 		}
-		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL, completionHandler: completionHandler)
+		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	func sendRequest(method: HTTPMethod, var path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+	func sendRequest(method: HTTPMethod, var path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		let mainThreadCompletionHandler: WhiteLabelHTTPClientCompletionHandler = { (data, error) in
 			dispatch_async(dispatch_get_main_queue()) {
 				completionHandler?(data: data, error: error)
@@ -50,9 +50,13 @@ class WhiteLabelHTTPClient {
 				mainThreadCompletionHandler(data: nil, error: error)
 				return
 			}
-	}
+		}
 		
-		let dataTask = NSURLSession.sharedSession().dataTaskWithRequest(request) { (data, response, error) -> Void in
+		let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+		sessionConfiguration.timeoutIntervalForRequest = timeoutInterval
+		sessionConfiguration.timeoutIntervalForResource = timeoutInterval
+		let session = NSURLSession(configuration: sessionConfiguration)
+		let dataTask = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
 			if error != nil {
 				mainThreadCompletionHandler(data: nil, error: error)
 				return
