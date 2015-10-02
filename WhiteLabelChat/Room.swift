@@ -16,21 +16,17 @@ public class Room: NSObject {
 	
 	public var roomID: NSUUID
 	internal(set) public var numberOfUsers: Int?
-	// Post-Condition: messages is always sorted. First object is the latest message
+	// Post-Condition: the messages are always sorted. First object is the latest message
 	internal(set) public var messages: [Message] = []
 	
 	public func addMessage(message: Message) -> Int {
-		return self.addMessages([message]).firstIndex
+		return self.addMessages([message]).first ?? 0
 	}
 	
-	public func addMessages(var messages: [Message]) -> NSIndexSet {
-		messages.sortInPlace { (message1, message2) -> Bool in
-			return message2.dateSent.timeIntervalSinceDate(message1.dateSent) > 0
-		}
-		let array = self.messages as NSArray
-		let indexSet = NSMutableIndexSet()
+	public func addMessages(messages: [Message]) -> [Int] {
+		var indexes: [Int] = []
 		for message in messages {
-			let sortedIndex = array.indexOfObject(message, inSortedRange: NSMakeRange(0, self.messages.count), options: .InsertionIndex) { (messageObject1, messageObject2) -> NSComparisonResult in
+			let sortedIndex = (self.messages as NSArray).indexOfObject(message, inSortedRange: NSMakeRange(0, self.messages.count), options: .InsertionIndex) { (messageObject1, messageObject2) -> NSComparisonResult in
 				guard let message1 = messageObject1 as? Message else {
 					if messageObject2 is Message {
 						return .OrderedDescending
@@ -43,9 +39,10 @@ public class Room: NSObject {
 				
 				return message2.dateSent.compare(message1.dateSent)
 			}
-			indexSet.addIndex(sortedIndex)
+			indexes = indexes.map { ($0 >= sortedIndex) ? ($0 + 1) : $0 }
+			indexes.append(sortedIndex)
 			self.messages.insert(message, atIndex: sortedIndex)
 		}
-		return indexSet
+		return indexes
 	}
 }
