@@ -24,6 +24,7 @@
 		F4BC166E1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC166D1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift */; settings = {ASSET_TAGS = (); }; };
 		F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC166F1BBB1AE000B4AB72 /* Errors.swift */; settings = {ASSET_TAGS = (); }; };
 		F4EF91CD1BBF187600D19B4A /* ChatControllerIntegrityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */; settings = {ASSET_TAGS = (); }; };
+		F4EF91CF1BBF18AF00D19B4A /* RoomMethodsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */; settings = {ASSET_TAGS = (); }; };
 		F4EF91D11BBF190100D19B4A /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D01BBF190100D19B4A /* Constants.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		F4BC166D1BBB178B00B4AB72 /* WhiteLabelHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteLabelHTTPClient.swift; sourceTree = "<group>"; };
 		F4BC166F1BBB1AE000B4AB72 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatControllerIntegrityTests.swift; sourceTree = "<group>"; };
+		F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomMethodsTests.swift; sourceTree = "<group>"; };
 		F4EF91D01BBF190100D19B4A /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -127,6 +129,7 @@
 				F4EF91D01BBF190100D19B4A /* Constants.swift */,
 				F46DFD9C1BBB129400CDA868 /* RegisterLoginTests.swift */,
 				F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */,
+				F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */,
 				F46DFD9E1BBB129400CDA868 /* Info.plist */,
 			);
 			path = WhiteLabelChatTests;
@@ -268,6 +271,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F4EF91CD1BBF187600D19B4A /* ChatControllerIntegrityTests.swift in Sources */,
+				F4EF91CF1BBF18AF00D19B4A /* RoomMethodsTests.swift in Sources */,
 				F46DFD9D1BBB129400CDA868 /* RegisterLoginTests.swift in Sources */,
 				F4EF91D11BBF190100D19B4A /* Constants.swift in Sources */,
 			);
