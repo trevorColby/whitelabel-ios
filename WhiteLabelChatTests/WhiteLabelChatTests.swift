@@ -14,6 +14,7 @@ private let APICallTimeout: NSTimeInterval = 30.0
 
 var currentUser: User!
 var chatController = ChatController(chatServerURL: ServerURL)
+let roomUUID = NSUUID()
 
 func XCTAssertThrows(expectedErrorType: ErrorType? = nil, message: String? = nil, failureAction: (() -> ())? = nil, @noescape action: () throws -> ()) {
 	do {
@@ -136,8 +137,6 @@ class WhiteLabelChatTests: XCTestCase {
 		}
 	}
 	
-	let roomUUID = NSUUID()
-	
 	func testB_cantJoinRoom() {
 		XCTAssertThrows(ErrorCode.NotConnected, message: "Join room should fail because the user is not connected yet") {
 			try chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
@@ -173,7 +172,7 @@ class WhiteLabelChatTests: XCTestCase {
 	
 	func testD_joinRoomNoUserPhoto() {
 		XCTAssertThrows(ErrorCode.RequiresUserPhoto, message: "Join room should fail because the user doesn't have a photo") {
-			try chatController.joinRoom(roomUUID: self.roomUUID) { (room, error) -> () in
+			try chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
 				XCTFail("This shouldn't be called")
 			}
 		}
@@ -186,7 +185,7 @@ class WhiteLabelChatTests: XCTestCase {
 		XCTAssertNoThrow("Join room should succeed", failureAction: {
 			finished = true
 		}) {
-			try chatController.joinRoom(roomUUID: self.roomUUID) { (room, error) -> () in
+			try chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
 				defer { finished = true }
 				
 				XCTAssertNil(error)
@@ -196,7 +195,7 @@ class WhiteLabelChatTests: XCTestCase {
 					return
 				}
 				
-				XCTAssertEqual(room.roomID, self.roomUUID)
+				XCTAssertEqual(room.roomID, roomUUID)
 				XCTAssertEqual(room.messages.count, 0)
 			}
 		}
@@ -209,6 +208,7 @@ class WhiteLabelChatTests: XCTestCase {
 	func testF_sendMessage() {
 		let expectation = expectationWithDescription("sendMessage should post ChatControllerReceivedNewMessageNotification")
 		
+		var object: NSObjectProtocol!
 		var finished = false
 		
 		currentUser.userPhoto = NSURL(string: "http://fueled.com")
@@ -216,8 +216,11 @@ class WhiteLabelChatTests: XCTestCase {
 			finished = true
 		}) {
 			let testMessageContent = "Test Message \(arc4random())"
-			try chatController.sendMessage(testMessageContent, roomUUID: self.roomUUID) { (message, error) -> () in
-				NSNotificationCenter.defaultCenter().addObserverForName(ChatControllerReceivedNewMessageNotification, object: chatController, queue: NSOperationQueue()) { (notification) -> Void in
+			try chatController.sendMessage(testMessageContent, roomUUID: roomUUID) { (message, error) -> () in
+				var once = true
+				object = NSNotificationCenter.defaultCenter().addObserverForName(ChatControllerReceivedNewMessageNotification, object: chatController, queue: NSOperationQueue()) { (notification) -> Void in
+					defer {	expectation.fulfill() }
+					
 					XCTAssertNotNil(notification.userInfo?[ChatControllerMessageNotificationKey] as? Message)
 					
 					guard let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message else {
@@ -226,8 +229,6 @@ class WhiteLabelChatTests: XCTestCase {
 					
 					XCTAssertEqual(message.sender.username, currentUser.username)
 					XCTAssertEqual(message.content, testMessageContent)
-					
-					expectation.fulfill()
 				}
 				
 				XCTAssertNil(error)
@@ -244,7 +245,7 @@ class WhiteLabelChatTests: XCTestCase {
 				XCTAssertNoThrow("Join room should succeed", failureAction: {
 					finished = true
 				}) {
-					try chatController.messagesInRoom(roomUUID: self.roomUUID) { (messages, error) -> () in
+					try chatController.messagesInRoom(roomUUID: roomUUID) { (messages, error) -> () in
 						defer { finished = true }
 						
 						XCTAssertNil(error)
@@ -276,16 +277,95 @@ class WhiteLabelChatTests: XCTestCase {
 				print(error)
 			}
 		}
+		
+		NSNotificationCenter.defaultCenter().removeObserver(object)
 	}
 	
-	func testG_disconnectAndSendMessage() {
+	func testG_sendMessageWithMultipleClient() {
+		let expectation = expectationWithDescription("sendMessage should post ChatControllerReceivedNewMessageNotification twice")
+		
+		var object: NSObjectProtocol!
+		var finished = false
+		
+		var randomUserChatControllerStorage: ChatController!
+		self.signUpWithRandomUser { (randomUserChatController) -> () in
+			randomUserChatControllerStorage = randomUserChatController
+			
+			let testMessageContent = "Test Message \(arc4random())"
+			var calledCount = 0
+			object = NSNotificationCenter.defaultCenter().addObserverForName(ChatControllerReceivedNewMessageNotification, object: nil, queue: NSOperationQueue()) { (notification) -> Void in
+				defer {
+					if(++calledCount == 2) {
+						expectation.fulfill()
+						finished = true
+					}
+				}
+				
+				XCTAssertNotNil(notification.userInfo?[ChatControllerMessageNotificationKey] as? Message)
+				
+				guard let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message else {
+					return
+				}
+				
+				XCTAssertEqual(message.sender.username, randomUserChatController.connectedUser?.username)
+				XCTAssertEqual(message.content, testMessageContent)
+			}
+			
+			XCTAssertNoThrow("Join room should succeed") {
+				try randomUserChatController.joinRoom(roomUUID: roomUUID) { (room, error) in
+					XCTAssertNoThrow("Send message should succeed") {
+						try randomUserChatController.sendMessage(testMessageContent, roomUUID: roomUUID) { (message, error) in
+							XCTAssertNil(error)
+							XCTAssertNotNil(message)
+							
+							guard let message = message else {
+								return
+							}
+							
+							XCTAssertEqual(message.sender.username, randomUserChatController.connectedUser?.username)
+							XCTAssertEqual(message.content, testMessageContent)
+						}
+					}
+				}
+			}
+		}
+		
+		waitForExpectationsWithTimeout(APICallTimeout) { (error) -> Void in
+			if let error = error {
+				print(error)
+			}
+			finished = true
+		}
+		
+		while !finished {
+			NSRunLoop.currentRunLoop().runMode(NSDefaultRunLoopMode, beforeDate: NSDate.distantFuture())
+		}
+		
+		NSNotificationCenter.defaultCenter().removeObserver(object)
+	}
+	
+	func signUpWithRandomUser(completionHandler: (randomUserChatController: ChatController) -> ()) {
+		let username = "test\(arc4random())"
+		let password = "test\(arc4random())"
+		User.registerWithUsername(username, password: password) { (user, error) -> () in
+			User.loginWithUsername(username, password: password) { (user, error) -> () in
+				let chatController = ChatController()
+				user!.userPhoto = NSURL(string: "http://fueled.com")
+				chatController.connectWithUser(user!, timeout: 0) { (error) -> () in
+					completionHandler(randomUserChatController: chatController)
+				}
+			}
+		}
+	}
+	
+	func testH_disconnectAndSendMessage() {
 		let expectation = expectationWithDescription("disconnect should post ChatControllerDidDisconnectNotification")
 		NSNotificationCenter.defaultCenter().addObserverForName(ChatControllerDidDisconnectNotification, object: chatController, queue: NSOperationQueue()) { (notification) -> Void in
 			expectation.fulfill()
 		}
 		chatController.disconnect()
 		XCTAssertThrows(ErrorCode.NotConnected, message: "Join room should fail because the user disconnected") {
-			try chatController.joinRoom(roomUUID: self.roomUUID) { (room, error) -> () in
+			try chatController.joinRoom(roomUUID: roomUUID) { (room, error) -> () in
 				XCTFail("This shouldn't be called")
 			}
 		}
