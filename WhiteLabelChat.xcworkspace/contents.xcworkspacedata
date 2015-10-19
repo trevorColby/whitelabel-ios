@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:WhiteLabelChat.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:WhiteLabelChatDemo.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/socket.io-client-swift/Socket.IO-Client-Swift.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/KeychainAccess/Lib/KeychainAccess.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-ui-components/EthanolUIComponents.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-ui-extensions/EthanolUIExtensions.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-tools/EthanolTools.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-utilities/EthanolUtilities.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/ethanol-validation-formatting/EthanolValidationFormatting.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/NSInvocation-Helpers/NSInvocationHelpers.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/CocoaLumberjack/Lumberjack.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:Carthage/Checkouts/SlackTextViewController/Framework/SlackTextViewController.xcodeproj">
+   </FileRef>
+</Workspace>

@@ -1,0 +1,30 @@
+[submodule "Carthage/Checkouts/socket.io-client-swift"]
+	path = Carthage/Checkouts/socket.io-client-swift
+	url = https://github.com/socketio/socket.io-client-swift.git
+[submodule "Carthage/Checkouts/KeychainAccess"]
+	path = Carthage/Checkouts/KeychainAccess
+	url = https://github.com/kishikawakatsumi/KeychainAccess.git
+[submodule "Carthage/Checkouts/CocoaLumberjack"]
+	path = Carthage/Checkouts/CocoaLumberjack
+	url = https://github.com/CocoaLumberjack/CocoaLumberjack.git
+[submodule "Carthage/Checkouts/NSInvocation-Helpers"]
+	path = Carthage/Checkouts/NSInvocation-Helpers
+	url = https://github.com/stephanecopin/NSInvocation-Helpers.git
+[submodule "Carthage/Checkouts/ethanol-utilities"]
+	path = Carthage/Checkouts/ethanol-utilities
+	url = https://github.com/Fueled/ethanol-utilities.git
+[submodule "Carthage/Checkouts/ethanol-ui-extensions"]
+	path = Carthage/Checkouts/ethanol-ui-extensions
+	url = https://github.com/Fueled/ethanol-ui-extensions.git
+[submodule "Carthage/Checkouts/ethanol-tools"]
+	path = Carthage/Checkouts/ethanol-tools
+	url = https://github.com/Fueled/ethanol-tools.git
+[submodule "Carthage/Checkouts/ethanol-validation-formatting"]
+	path = Carthage/Checkouts/ethanol-validation-formatting
+	url = https://github.com/Fueled/ethanol-validation-formatting.git
+[submodule "Carthage/Checkouts/ethanol-ui-components"]
+	path = Carthage/Checkouts/ethanol-ui-components
+	url = https://github.com/Fueled/ethanol-ui-components.git
+[submodule "Carthage/Checkouts/SlackTextViewController"]
+	path = Carthage/Checkouts/SlackTextViewController
+	url = https://github.com/slackhq/SlackTextViewController.git
