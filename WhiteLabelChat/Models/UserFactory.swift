@@ -9,17 +9,17 @@
 import UIKit
 
 private class DefaultUser: User {
-	class func newInstance(userID userID: String?, username: String, authToken: String?) -> User {
+	class func newInstance(userID userID: String, username: String, authToken: String?) -> User {
 		return DefaultUser(userID: userID, username: username, authToken: authToken)
 	}
 	
-	init(userID: String?, username: String, authToken: String?) {
+	init(userID: String, username: String, authToken: String?) {
 		self.userID = userID
 		self.username = username
 		self.authToken = authToken
 	}
 	
-	let userID: String?
+	let userID: String
 	let username: String
 	var userPhoto: NSURL?
 	let authToken: String?
@@ -37,7 +37,7 @@ public class UserFactory {
 		self.registeredClass = `class`
 	}
 	
-	public func instanciate(userID userID: String?, username: String, authToken: String?) -> User {
+	public func instanciate(userID userID: String, username: String, authToken: String?) -> User {
 		let classType = self.registeredClass ?? DefaultUser.self
 		return classType.newInstance(userID: userID, username: username, authToken: authToken)
 	}

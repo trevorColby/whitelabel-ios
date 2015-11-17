@@ -9,9 +9,9 @@
 import Foundation
 
 public protocol User: class {
-	static func newInstance(userID userID: String?, username: String, authToken: String?) -> User
+	static func newInstance(userID userID: String, username: String, authToken: String?) -> User
 	
-	var userID: String? { get }
+	var userID: String { get }
 	var username: String { get }
 	var userPhoto: NSURL? { get set }
 	var authToken: String? { get }

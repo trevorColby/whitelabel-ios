@@ -18,7 +18,7 @@ class UserHelper {
 		get {
 			if let data = KeychainManager.sharedManager[CachedUserKey] {
 				if let json = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? JSON {
-					let user = UserFactory.sharedFactory.instanciate(userID: json["id"] as? String, username: json["username"] as! String, authToken: json["token"] as? String)
+					let user = UserFactory.sharedFactory.instanciate(userID: json["id"] as! String, username: json["username"] as! String, authToken: json["token"] as? String)
 					if let userPhoto = json["userPhoto"] as? String {
 						user.userPhoto = NSURL(string: userPhoto)
 					}
@@ -30,11 +30,9 @@ class UserHelper {
 		set(newValue) {
 			if let user = newValue {
 				var dictionary = [
+					"id": user.userID,
 					"username": user.username,
 				]
-				if let id = user.userID {
-					dictionary["id"] = id
-				}
 				if let authToken = user.authToken {
 					dictionary["token"] = authToken
 				}

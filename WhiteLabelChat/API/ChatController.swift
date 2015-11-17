@@ -189,7 +189,8 @@ extension ChatController {
 					throw ErrorCode.InvalidResponseReceived
 				}
 				
-				completionHandler?(room: try mapRoomFromJSON(json), error: nil)
+				let room = try mapRoomFromJSON(json)
+				completionHandler?(room: room, error: nil)
 			} catch {
 				completionHandler?(room: nil, error: error)
 			}
@@ -220,9 +221,9 @@ extension ChatController {
 					throw error
 				}
 				
-				let message = MessageFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
-				completionHandler?(message: message, error: nil)
 				dispatch_async(dispatch_get_main_queue()) {
+					let message = MessageFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
+					completionHandler?(message: message, error: nil)
 					self.sendReceivedNewMessageNotification(message)
 				}
 			} catch {
@@ -258,6 +259,7 @@ extension ChatController {
 			"room": roomUUID.UUIDString,
 			"username": user.username,
 			"userPhoto": userPhoto.absoluteString,
+			"userProfileId": user.userID,
 		]
 	}
 }
