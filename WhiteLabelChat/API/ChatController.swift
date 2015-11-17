@@ -118,7 +118,7 @@ extension ChatController {
 
 // MARK: Connection/Deconnection
 extension ChatController {
-	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())?) {
+	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())? = nil) {
 		guard let authToken = user.authToken else {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
