@@ -106,7 +106,7 @@ class MessagesRoomsTests: XCTestCase {
 				}
 				
 				XCTAssertEqual(room.roomID, roomUUID)
-				XCTAssertEqual(room.messages.count, 0)
+				XCTAssertEqual(room.arrayOfMessages.count, 0)
 			}
 		}
 		

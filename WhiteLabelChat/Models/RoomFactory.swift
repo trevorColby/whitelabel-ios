@@ -16,13 +16,13 @@ private class DefaultRoom: Room {
 	init(roomID: NSUUID, numberOfUsers: Int?, messages: [Message]?) {
 		self.roomID = roomID
 		self.numberOfUsers = numberOfUsers
-		self.messages = messages ?? []
+		self.arrayOfMessages = messages ?? []
 	}
 	
 	var roomID: NSUUID
 	var numberOfUsers: Int?
 	// Post-Condition: the messages are always sorted. First object is the latest message
-	let messages: [Message]
+	let arrayOfMessages: [Message]
 }
 
 public class RoomFactory {

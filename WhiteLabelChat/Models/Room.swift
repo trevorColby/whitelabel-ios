@@ -13,5 +13,5 @@ public protocol Room: class {
 	
 	var roomID: NSUUID { get }
 	var numberOfUsers: Int? { get }
-	var messages: [Message] { get }
+	var arrayOfMessages: [Message] { get }
 }

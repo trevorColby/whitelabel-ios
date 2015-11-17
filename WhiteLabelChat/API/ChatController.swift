@@ -205,7 +205,7 @@ extension ChatController {
 	// This method will join the specified room if the connected user hasn't joined it yet
 	public func messagesInRoom(roomUUID roomUUID: NSUUID, completionHandler: ((messages: [Message]?, error: ErrorType?) -> ())? = nil) throws {
 		try self.joinRoom(roomUUID: roomUUID, completionHandler: { (room, error) -> () in
-			completionHandler?(messages: room?.messages, error: error)
+			completionHandler?(messages: room?.arrayOfMessages, error: error)
 		})
 	}
 	

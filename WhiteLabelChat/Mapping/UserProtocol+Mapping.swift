@@ -13,7 +13,7 @@ func mapUserFromJSON(json: JSON) throws -> User {
 		throw ErrorCode.IncompleteJSON
 	}
 	
-	let user = UserFactory.sharedFactory.instanciate(userID: json["id"] as? String, username: username, authToken: json["token"] as? String)
+	let user = UserFactory.sharedFactory.instanciate(userID: json["id"] as? String ?? json["uuid"] as? String, username: username, authToken: json["token"] as? String)
 	if let userPhoto = json["userPhoto"] as? String {
 		user.userPhoto = NSURL(string: userPhoto)
 	}

@@ -71,7 +71,7 @@ class ChatViewController: SLKTextViewController {
 					if let room = room {
 						print("Joined room \(room.roomID.UUIDString)")
 						self.roomUUID = room.roomID
-						self.messages = room.messages
+						self.messages = room.arrayOfMessages
 						self.reloadMessages()
 					}
 				}
