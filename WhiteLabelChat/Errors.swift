@@ -18,3 +18,7 @@ enum ErrorCode: ErrorType {
 	case RequiresUserPhoto
 	case ValidationError(message: String)
 }
+
+public enum MappingError: ErrorType {
+	case NoFactoryMethod
+}

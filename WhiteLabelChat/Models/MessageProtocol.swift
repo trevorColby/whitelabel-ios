@@ -8,7 +8,9 @@
 
 import Foundation
 
-public protocol MessageProtocol: class {
+public protocol MessageProtocol: class, Mappable {
+	static func newInstance(messageID messageID: NSUUID?, content: String, roomID: NSUUID, sender: UserProtocol, dateSent: NSDate) -> MessageProtocol
+	
 	var messageID: NSUUID? { get }
 	var content: String { get }
 	var sender: UserProtocol { get }

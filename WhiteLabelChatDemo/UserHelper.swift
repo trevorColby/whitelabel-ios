@@ -18,7 +18,11 @@ class UserHelper {
 		get {
 			if let data = KeychainManager.sharedManager[CachedUserKey] {
 				if let json = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? JSON {
-					return (try? User.mapFromJSON(json)) ?? nil
+					let user = UserProtocolFactory.sharedFactory.instanciate(userID: json["id"] as? String, username: json["username"] as! String, authToken: json["token"] as? String)
+					if let userPhoto = json["userPhoto"] as? String {
+						user.userPhoto = NSURL(string: userPhoto)
+					}
+					return user
 				}
 			}
 			return nil

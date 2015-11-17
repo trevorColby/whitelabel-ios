@@ -15,6 +15,7 @@
 		F49252B11BFB9ECE0089B5B2 /* UserProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B01BFB9ECE0089B5B2 /* UserProtocol.swift */; };
 		F49252B31BFB9F160089B5B2 /* RoomProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B21BFB9F160089B5B2 /* RoomProtocol.swift */; };
 		F49252B51BFBA27E0089B5B2 /* MessageProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B41BFBA27E0089B5B2 /* MessageProtocol.swift */; };
+		F49252BF1BFBBD080089B5B2 /* Mappable.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252BE1BFBBD080089B5B2 /* Mappable.swift */; };
 		F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC166F1BBB1AE000B4AB72 /* Errors.swift */; };
 		F4EF91CD1BBF187600D19B4A /* ChatControllerIntegrityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */; };
 		F4EF91CF1BBF18AF00D19B4A /* RoomMethodsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */; };
@@ -23,12 +24,12 @@
 		F4EF91E61BBF31F100D19B4A /* UserProtocol+Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D81BBF31F100D19B4A /* UserProtocol+Authentication.swift */; };
 		F4EF91E71BBF31F100D19B4A /* WhiteLabelHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DA1BBF31F100D19B4A /* WhiteLabelHTTPClient.swift */; };
 		F4EF91E81BBF31F100D19B4A /* SocketUniqueHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DC1BBF31F100D19B4A /* SocketUniqueHandlerManager.swift */; };
-		F4EF91E91BBF31F100D19B4A /* Message+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DE1BBF31F100D19B4A /* Message+Mapping.swift */; };
-		F4EF91EB1BBF31F100D19B4A /* Room+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91E01BBF31F100D19B4A /* Room+Mapping.swift */; };
-		F4EF91ED1BBF31F100D19B4A /* User+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91E21BBF31F100D19B4A /* User+Mapping.swift */; };
-		F4EF91F21BBF321400D19B4A /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91EF1BBF321400D19B4A /* Message.swift */; };
-		F4EF91F31BBF321400D19B4A /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91F01BBF321400D19B4A /* Room.swift */; };
-		F4EF91F41BBF321400D19B4A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91F11BBF321400D19B4A /* User.swift */; };
+		F4EF91E91BBF31F100D19B4A /* MessageProtocol+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DE1BBF31F100D19B4A /* MessageProtocol+Mapping.swift */; };
+		F4EF91EB1BBF31F100D19B4A /* RoomProtocol+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91E01BBF31F100D19B4A /* RoomProtocol+Mapping.swift */; };
+		F4EF91ED1BBF31F100D19B4A /* UserProtocol+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91E21BBF31F100D19B4A /* UserProtocol+Mapping.swift */; };
+		F4EF91F21BBF321400D19B4A /* MessageProtocolFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91EF1BBF321400D19B4A /* MessageProtocolFactory.swift */; };
+		F4EF91F31BBF321400D19B4A /* RoomProtocolFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91F01BBF321400D19B4A /* RoomProtocolFactory.swift */; };
+		F4EF91F41BBF321400D19B4A /* UserProtocolFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91F11BBF321400D19B4A /* UserProtocolFactory.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +54,7 @@
 		F49252B01BFB9ECE0089B5B2 /* UserProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProtocol.swift; sourceTree = "<group>"; };
 		F49252B21BFB9F160089B5B2 /* RoomProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProtocol.swift; sourceTree = "<group>"; };
 		F49252B41BFBA27E0089B5B2 /* MessageProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageProtocol.swift; sourceTree = "<group>"; };
+		F49252BE1BFBBD080089B5B2 /* Mappable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mappable.swift; sourceTree = "<group>"; };
 		F4BC166F1BBB1AE000B4AB72 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatControllerIntegrityTests.swift; sourceTree = "<group>"; };
 		F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomMethodsTests.swift; sourceTree = "<group>"; };
@@ -61,12 +63,12 @@
 		F4EF91D81BBF31F100D19B4A /* UserProtocol+Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserProtocol+Authentication.swift"; sourceTree = "<group>"; };
 		F4EF91DA1BBF31F100D19B4A /* WhiteLabelHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteLabelHTTPClient.swift; sourceTree = "<group>"; };
 		F4EF91DC1BBF31F100D19B4A /* SocketUniqueHandlerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketUniqueHandlerManager.swift; sourceTree = "<group>"; };
-		F4EF91DE1BBF31F100D19B4A /* Message+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+Mapping.swift"; sourceTree = "<group>"; };
-		F4EF91E01BBF31F100D19B4A /* Room+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Room+Mapping.swift"; sourceTree = "<group>"; };
-		F4EF91E21BBF31F100D19B4A /* User+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Mapping.swift"; sourceTree = "<group>"; };
-		F4EF91EF1BBF321400D19B4A /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
-		F4EF91F01BBF321400D19B4A /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
-		F4EF91F11BBF321400D19B4A /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		F4EF91DE1BBF31F100D19B4A /* MessageProtocol+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "MessageProtocol+Mapping.swift"; sourceTree = "<group>"; };
+		F4EF91E01BBF31F100D19B4A /* RoomProtocol+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "RoomProtocol+Mapping.swift"; sourceTree = "<group>"; };
+		F4EF91E21BBF31F100D19B4A /* UserProtocol+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserProtocol+Mapping.swift"; sourceTree = "<group>"; };
+		F4EF91EF1BBF321400D19B4A /* MessageProtocolFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MessageProtocolFactory.swift; sourceTree = "<group>"; };
+		F4EF91F01BBF321400D19B4A /* RoomProtocolFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomProtocolFactory.swift; sourceTree = "<group>"; };
+		F4EF91F11BBF321400D19B4A /* UserProtocolFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = UserProtocolFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -172,9 +174,9 @@
 		F4EF91DD1BBF31F100D19B4A /* Mapping */ = {
 			isa = PBXGroup;
 			children = (
-				F4EF91DE1BBF31F100D19B4A /* Message+Mapping.swift */,
-				F4EF91E01BBF31F100D19B4A /* Room+Mapping.swift */,
-				F4EF91E21BBF31F100D19B4A /* User+Mapping.swift */,
+				F4EF91DE1BBF31F100D19B4A /* MessageProtocol+Mapping.swift */,
+				F4EF91E01BBF31F100D19B4A /* RoomProtocol+Mapping.swift */,
+				F4EF91E21BBF31F100D19B4A /* UserProtocol+Mapping.swift */,
 			);
 			path = Mapping;
 			sourceTree = "<group>";
@@ -182,12 +184,13 @@
 		F4EF91E41BBF31F100D19B4A /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				F4EF91EF1BBF321400D19B4A /* Message.swift */,
-				F4EF91F01BBF321400D19B4A /* Room.swift */,
-				F4EF91F11BBF321400D19B4A /* User.swift */,
+				F49252BE1BFBBD080089B5B2 /* Mappable.swift */,
 				F49252B41BFBA27E0089B5B2 /* MessageProtocol.swift */,
 				F49252B21BFB9F160089B5B2 /* RoomProtocol.swift */,
 				F49252B01BFB9ECE0089B5B2 /* UserProtocol.swift */,
+				F4EF91EF1BBF321400D19B4A /* MessageProtocolFactory.swift */,
+				F4EF91F01BBF321400D19B4A /* RoomProtocolFactory.swift */,
+				F4EF91F11BBF321400D19B4A /* UserProtocolFactory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -306,15 +309,16 @@
 				F4EF91E71BBF31F100D19B4A /* WhiteLabelHTTPClient.swift in Sources */,
 				F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */,
 				F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */,
-				F4EF91E91BBF31F100D19B4A /* Message+Mapping.swift in Sources */,
+				F4EF91E91BBF31F100D19B4A /* MessageProtocol+Mapping.swift in Sources */,
 				F4EF91E61BBF31F100D19B4A /* UserProtocol+Authentication.swift in Sources */,
+				F49252BF1BFBBD080089B5B2 /* Mappable.swift in Sources */,
 				F4EF91E51BBF31F100D19B4A /* ChatController.swift in Sources */,
-				F4EF91F21BBF321400D19B4A /* Message.swift in Sources */,
+				F4EF91F21BBF321400D19B4A /* MessageProtocolFactory.swift in Sources */,
 				F49252B11BFB9ECE0089B5B2 /* UserProtocol.swift in Sources */,
-				F4EF91F41BBF321400D19B4A /* User.swift in Sources */,
-				F4EF91EB1BBF31F100D19B4A /* Room+Mapping.swift in Sources */,
-				F4EF91ED1BBF31F100D19B4A /* User+Mapping.swift in Sources */,
-				F4EF91F31BBF321400D19B4A /* Room.swift in Sources */,
+				F4EF91EB1BBF31F100D19B4A /* RoomProtocol+Mapping.swift in Sources */,
+				F4EF91ED1BBF31F100D19B4A /* UserProtocol+Mapping.swift in Sources */,
+				F4EF91F41BBF321400D19B4A /* UserProtocolFactory.swift in Sources */,
+				F4EF91F31BBF321400D19B4A /* RoomProtocolFactory.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,7 +8,9 @@
 
 import Foundation
 
-public protocol UserProtocol: class {
+public protocol UserProtocol: class, Mappable {
+	static func newInstance(userID userID: String?, username: String, authToken: String?) -> UserProtocol
+	
 	var userID: String? { get }
 	var username: String { get }
 	var userPhoto: NSURL? { get set }

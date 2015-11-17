@@ -8,7 +8,9 @@
 
 import Foundation
 
-public protocol RoomProtocol: class {
+public protocol RoomProtocol: class, Mappable {
+	static func newInstance(roomID roomID: NSUUID, numberOfUsers: Int?, messages: [MessageProtocol]?) -> RoomProtocol
+	
 	var roomID: NSUUID { get }
 	var numberOfUsers: Int? { get }
 	// Post-Condition: the messages are always sorted. First object is the latest message

@@ -99,14 +99,13 @@ extension ChatController {
 				return
 			}
 			
-			let user: User
+			let user: UserProtocol
 			do {
-				guard let token = data["token"] as? String else {
+				if data["token"] as? String == nil {
 					throw ErrorCode.IncompleteJSON
 				}
 				
-				user = try User.mapFromJSON(data)
-				user.authToken = token
+				user = try mapUserFromJSON(data)
 			} catch {
 				completionHandler?(user: nil, error: error)
 				return
@@ -189,7 +188,7 @@ extension ChatController {
 					throw ErrorCode.InvalidResponseReceived
 				}
 				
-				completionHandler?(room: try Room.mapFromJSON(json), error: nil)
+				completionHandler?(room: try mapRoomFromJSON(json), error: nil)
 			} catch {
 				completionHandler?(room: nil, error: error)
 			}
@@ -220,7 +219,7 @@ extension ChatController {
 					throw error
 				}
 				
-				let message = Message(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
+				let message = MessageProtocolFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
 				completionHandler?(message: message, error: nil)
 				dispatch_async(dispatch_get_main_queue()) {
 					self.sendReceivedNewMessageNotification(message)
@@ -271,7 +270,7 @@ extension ChatController {
 					return
 				}
 				
-				if let user = try? User.mapFromJSON(json), let room = try? Room.mapFromJSON(json) {
+				if let user = try? mapUserFromJSON(json), let room = try? mapRoomFromJSON(json) {
 					self.sendUserJoinedRoomNotification(user, room: room)
 				}
 			}
@@ -281,7 +280,7 @@ extension ChatController {
 					return
 				}
 				
-				if let user = try? User.mapFromJSON(json), let room = try? Room.mapFromJSON(json) {
+				if let user = try? mapUserFromJSON(json), let room = try? mapRoomFromJSON(json) {
 					self.sendUserLeftRoomNotification(user, room: room)
 				}
 			}
@@ -291,7 +290,7 @@ extension ChatController {
 					return
 				}
 				
-				if let user = try? User.mapFromJSON(json) {
+				if let user = try? mapUserFromJSON(json) {
 					self.sendUserTypingNotification(user)
 				}
 			}
@@ -301,7 +300,7 @@ extension ChatController {
 					return
 				}
 				
-				if let user = try? User.mapFromJSON(json) {
+				if let user = try? mapUserFromJSON(json) {
 					self.sendUserStoppedTypingNotification(user)
 				}
 			}
@@ -311,7 +310,7 @@ extension ChatController {
 					return
 				}
 				
-				if let message = try? Message.mapFromJSON(json) {
+				if let message = try? mapMessageFromJSON(json) {
 					self.sendReceivedNewMessageNotification(message)
 				}
 			}

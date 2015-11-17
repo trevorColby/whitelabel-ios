@@ -41,7 +41,6 @@
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
 		F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCE1BBB153800CDA868 /* Assets.xcassets */; };
 		F47B96D41BBD98E600E5F99C /* ChatMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */; };
-		F49252B91BFBB7610089B5B2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B81BFBB7610089B5B2 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -94,7 +93,6 @@
 		F46DFDD31BBB153800CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageTableViewCell.swift; sourceTree = "<group>"; };
-		F49252B81BFBB7610089B5B2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				F46DFDC71BBB153800CDA868 /* AppDelegate.swift */,
-				F49252B81BFBB7610089B5B2 /* User.swift */,
 				F417BCF61BBD8F450061CF7C /* UserHelper.swift */,
 				F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */,
 				F417BD011BBD92C90061CF7C /* SplashViewController.swift */,
@@ -253,7 +250,6 @@
 				F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */,
 				F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */,
 				F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */,
-				F49252B91BFBB7610089B5B2 /* User.swift in Sources */,
 				F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */,
 				F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */,
 				F47B96D41BBD98E600E5F99C /* ChatMessageTableViewCell.swift in Sources */,
