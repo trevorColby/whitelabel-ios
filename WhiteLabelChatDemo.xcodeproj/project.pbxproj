@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCF61BBD8F450061CF7C /* UserHelper.swift */; settings = {ASSET_TAGS = (); }; };
-		F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */; settings = {ASSET_TAGS = (); }; };
+		F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCF61BBD8F450061CF7C /* UserHelper.swift */; };
+		F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */; };
 		F417BCFF1BBD91440061CF7C /* KeychainAccess.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */; };
 		F417BD001BBD91480061CF7C /* KeychainAccess.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F417BCFE1BBD91440061CF7C /* KeychainAccess.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD011BBD92C90061CF7C /* SplashViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD031BBD92D70061CF7C /* ChatViewController.swift */; settings = {ASSET_TAGS = (); }; };
-		F417BD071BBD93BA0061CF7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */; settings = {ASSET_TAGS = (); }; };
+		F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD011BBD92C90061CF7C /* SplashViewController.swift */; };
+		F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F417BD031BBD92D70061CF7C /* ChatViewController.swift */; };
+		F417BD071BBD93BA0061CF7C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F417BD051BBD93BA0061CF7C /* LaunchScreen.storyboard */; };
 		F41C67B11BBC641F00CF6A04 /* WhiteLabelChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; };
 		F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
@@ -32,15 +32,16 @@
 		F43501ED1BBDC3F200D5115D /* EthanolUtilities.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DF1BBDC3EA00D5115D /* EthanolUtilities.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E01BBDC3EA00D5115D /* EthanolValidationFormatting.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F43501E11BBDC3EA00D5115D /* NSInvocationHelpers.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */; settings = {ASSET_TAGS = (); }; };
+		F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */ = {isa = PBXBuildFile; fileRef = F43501F01BBDC6E200D5115D /* NewRootViewControllerSegue.swift */; };
 		F44AC2321BBDE10E003127CD /* SlackTextViewController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */; };
 		F44AC2331BBDE115003127CD /* SlackTextViewController.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		F44AC2351BBDE521003127CD /* ChatMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */; settings = {ASSET_TAGS = (); }; };
+		F44AC2351BBDE521003127CD /* ChatMessageTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = F44AC2341BBDE521003127CD /* ChatMessageTableViewCell.xib */; };
 		F46DFDC81BBB153800CDA868 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC71BBB153800CDA868 /* AppDelegate.swift */; };
 		F46DFDCA1BBB153800CDA868 /* SignUpLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F46DFDC91BBB153800CDA868 /* SignUpLoginViewController.swift */; };
 		F46DFDCD1BBB153800CDA868 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCB1BBB153800CDA868 /* Main.storyboard */; };
 		F46DFDCF1BBB153800CDA868 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F46DFDCE1BBB153800CDA868 /* Assets.xcassets */; };
-		F47B96D41BBD98E600E5F99C /* ChatMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */; settings = {ASSET_TAGS = (); }; };
+		F47B96D41BBD98E600E5F99C /* ChatMessageTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */; };
+		F49252B91BFBB7610089B5B2 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B81BFBB7610089B5B2 /* User.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -93,6 +94,7 @@
 		F46DFDD31BBB153800CDA868 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = WhiteLabelChat.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F47B96D31BBD98E600E5F99C /* ChatMessageTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatMessageTableViewCell.swift; sourceTree = "<group>"; };
+		F49252B81BFBB7610089B5B2 /* User.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -138,6 +140,7 @@
 			isa = PBXGroup;
 			children = (
 				F46DFDC71BBB153800CDA868 /* AppDelegate.swift */,
+				F49252B81BFBB7610089B5B2 /* User.swift */,
 				F417BCF61BBD8F450061CF7C /* UserHelper.swift */,
 				F417BCFC1BBD8FFB0061CF7C /* KeychainManager.swift */,
 				F417BD011BBD92C90061CF7C /* SplashViewController.swift */,
@@ -250,6 +253,7 @@
 				F43501F11BBDC6E200D5115D /* NewRootViewControllerSegue.swift in Sources */,
 				F417BCF71BBD8F450061CF7C /* UserHelper.swift in Sources */,
 				F417BCFD1BBD8FFB0061CF7C /* KeychainManager.swift in Sources */,
+				F49252B91BFBB7610089B5B2 /* User.swift in Sources */,
 				F417BD041BBD92D70061CF7C /* ChatViewController.swift in Sources */,
 				F417BD021BBD92C90061CF7C /* SplashViewController.swift in Sources */,
 				F47B96D41BBD98E600E5F99C /* ChatMessageTableViewCell.swift in Sources */,

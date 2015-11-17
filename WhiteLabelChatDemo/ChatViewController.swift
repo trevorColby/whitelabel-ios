@@ -28,9 +28,14 @@ class ChatViewController: SLKTextViewController {
 	private let ChatMessageTableViewCellReuseIdentifier = "ChatMessageTableViewCellReuseIdentifier"
 	private let RoomUUID = NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!
 	
-	private var currentUser: User!
+	private var currentUser: UserProtocol!
 	private let chatController = ChatController()
-	private var room: Room?
+	private var room: RoomProtocol? {
+		didSet {
+			self.messages = self.room?.messages ?? []
+		}
+	}
+	private var messages: [MessageProtocol] = []
 	private var isTyping = false
 	private var isTypingTimer: NSTimer?
 	
@@ -129,15 +134,13 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return self.room?.messages.count ?? 0
+		return self.messages.count ?? 0
 	}
 	
 	override func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCellWithIdentifier(ChatMessageTableViewCellReuseIdentifier, forIndexPath: indexPath) as! ChatMessageTableViewCell
-		if let room = room {
-			cell.usernameLabel.text = room.messages[indexPath.row].sender.username
-			cell.messageLabel.text = room.messages[indexPath.row].content
-		}
+		cell.usernameLabel.text = self.messages[indexPath.row].sender.username
+		cell.messageLabel.text = self.messages[indexPath.row].content
 		return cell
 	}
 	
@@ -183,7 +186,7 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	override func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
-		return 30.0 + CGFloat(((self.room?.messages[indexPath.row].content ?? "").characters.count + 99) / 100 * 30)
+		return 30.0 + CGFloat((self.messages[indexPath.row].content.characters.count + 99) / 100 * 30)
 	}
 	
 	override func canShowTypingIndicator() -> Bool {
@@ -191,9 +194,8 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	func chatControllerReceivedNewMessageNotificationHandler(notification: NSNotification) {
-		if let room = self.room,
-			let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message {
-				let index = room.addMessage(message)
+		if let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? MessageProtocol {
+				let index = self.addMessage(message)
 				self.tableView.beginUpdates()
 				self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
 				self.tableView.endUpdates()
@@ -201,14 +203,41 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	func chatControllerUserTypingNotification(notification: NSNotification) {
-		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? UserProtocol {
 			self.typingIndicatorView.insertUsername(user.username)
 		}
 	}
 	
 	func chatControllerUserStoppedTypingNotification(notification: NSNotification) {
-		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? UserProtocol {
 			self.typingIndicatorView.removeUsername(user.username)
 		}
+	}
+	
+	private func addMessage(message: MessageProtocol) -> Int {
+		return self.addMessages([message]).first ?? 0
+	}
+	
+	private func addMessages(messages: [MessageProtocol]) -> [Int] {
+		var indexes: [Int] = []
+		for message in messages {
+			let sortedIndex = (self.messages.map { $0.dateSent } as NSArray).indexOfObject(message.dateSent, inSortedRange: NSMakeRange(0, self.messages.count), options: NSBinarySearchingOptions.InsertionIndex) { (dateObject1, dateObject2) -> NSComparisonResult in
+				guard let date1 = dateObject1 as? NSDate else {
+					if dateObject2 is NSDate {
+						return .OrderedDescending
+					}
+					return .OrderedSame
+				}
+				guard let date2 = dateObject2 as? NSDate else {
+					return .OrderedAscending
+				}
+				
+				return date2.compare(date1)
+			}
+			indexes = indexes.map { ($0 >= sortedIndex) ? ($0 + 1) : $0 }
+			indexes.append(sortedIndex)
+			self.messages.insert(message, atIndex: sortedIndex)
+		}
+		return indexes
 	}
 }

@@ -8,22 +8,22 @@
 
 import Foundation
 
-public class Room: RoomProtocol {
+class Room: RoomProtocol {
 	init(roomID: NSUUID, numberOfUsers: Int?) {
 		self.roomID = roomID
 		self.numberOfUsers = numberOfUsers
 	}
 	
-	public internal(set) var roomID: NSUUID
-	public internal(set) var numberOfUsers: Int?
+	var roomID: NSUUID
+	var numberOfUsers: Int?
 	// Post-Condition: the messages are always sorted. First object is the latest message
-	public internal(set) var messages: [MessageProtocol] = []
+	var messages: [MessageProtocol] = []
 	
-	public func addMessage(message: MessageProtocol) -> Int {
+	func addMessage(message: MessageProtocol) -> Int {
 		return self.addMessages([message]).first ?? 0
 	}
 	
-	public func addMessages(messages: [MessageProtocol]) -> [Int] {
+	func addMessages(messages: [MessageProtocol]) -> [Int] {
 		var indexes: [Int] = []
 		for message in messages {
 			let sortedIndex = (self.messages.map { $0.dateSent } as NSArray).indexOfObject(message.dateSent, inSortedRange: NSMakeRange(0, self.messages.count), options: NSBinarySearchingOptions.InsertionIndex) { (dateObject1, dateObject2) -> NSComparisonResult in

@@ -17,7 +17,7 @@ class SignUpLoginViewController: UIViewController {
 	
 	@IBAction func signUpButtonTapped(sender: AnyObject) {
 		let username = self.usernameTextField.text ?? ""
-		User.registerWithUsername(username, password: self.passwordTextField.text ?? "") { (user, error) in
+		ChatController.registerWithUsername(username, password: self.passwordTextField.text ?? "") { (user, error) in
 			if let error = error {
 				print("Failed to sign up with username \(username): \(error)")
 			} else if let user = user {
@@ -30,7 +30,7 @@ class SignUpLoginViewController: UIViewController {
 	
 	@IBAction func loginButtonTapped(sender: AnyObject) {
 		let username = self.usernameTextField.text ?? ""
-		User.loginWithUsername(username, password: self.passwordTextField.text ?? "") { (user, error) in
+		ChatController.loginWithUsername(username, password: self.passwordTextField.text ?? "") { (user, error) in
 			if let error = error {
 				print("Failed to login with username \(username): \(error)")
 			} else if let user = user {

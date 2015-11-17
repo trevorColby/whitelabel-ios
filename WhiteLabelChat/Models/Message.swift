@@ -6,7 +6,7 @@
 //  Copyright © 2015 Fueled. All rights reserved.
 //
 
-public class Message: MessageProtocol {
+class Message: MessageProtocol {
 	init(messageID: NSUUID?, content: String, roomID: NSUUID, sender: UserProtocol, dateSent: NSDate) {
 		self.messageID = messageID
 		self.content = content
@@ -15,9 +15,9 @@ public class Message: MessageProtocol {
 		self.dateSent = dateSent
 	}
 	
-	public let messageID: NSUUID?
-	public let content: String
-	public let sender: UserProtocol
-	public let roomID: NSUUID
-	public let dateSent: NSDate
+	let messageID: NSUUID?
+	let content: String
+	let sender: UserProtocol
+	let roomID: NSUUID
+	let dateSent: NSDate
 }

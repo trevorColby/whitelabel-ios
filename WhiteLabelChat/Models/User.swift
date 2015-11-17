@@ -8,14 +8,14 @@
 
 import UIKit
 
-public class User: UserProtocol {
+class User: UserProtocol {
 	init(userID: String?, username: String) {
 		self.userID = userID
 		self.username = username
 	}
 	
-	public let userID: String?
-	public let username: String
-	public var userPhoto: NSURL?
-	public internal(set) var authToken: String?
+	let userID: String?
+	let username: String
+	var userPhoto: NSURL?
+	var authToken: String?
 }

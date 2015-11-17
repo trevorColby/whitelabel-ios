@@ -77,6 +77,46 @@ public class ChatController: NSObject {
 }
 
 // MARK: --- Public methods
+// MARK: Login/logout
+extension ChatController {
+	public static func registerWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+		self.handleSignUpLogin(isSignUp: true, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
+	}
+	
+	public static func loginWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+		self.handleSignUpLogin(isSignUp: false, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
+	}
+	
+	private static func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up/" : "auth/", parameters: ["username": username, "password": password], timeoutInterval: timeoutInterval) { (data, error) -> () in
+			if let error = error {
+				completionHandler?(user: nil, error: error)
+				return
+			}
+			
+			guard let data = data else {
+				completionHandler?(user: nil, error: nil)
+				return
+			}
+			
+			let user: User
+			do {
+				guard let token = data["token"] as? String else {
+					throw ErrorCode.IncompleteJSON
+				}
+				
+				user = try User.mapFromJSON(data)
+				user.authToken = token
+			} catch {
+				completionHandler?(user: nil, error: error)
+				return
+			}
+			
+			completionHandler?(user: user, error: nil)
+		}
+	}
+}
+
 // MARK: Connection/Deconnection
 extension ChatController {
 	public func connectWithUser(user: UserProtocol, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())?) {
@@ -137,7 +177,7 @@ extension ChatController {
 
 // MARK: Public API
 extension ChatController {
-	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
+	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: RoomProtocol?, error: ErrorType?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 			do {

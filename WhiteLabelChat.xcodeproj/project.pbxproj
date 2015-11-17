@@ -20,7 +20,7 @@
 		F4EF91CF1BBF18AF00D19B4A /* RoomMethodsTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */; };
 		F4EF91D11BBF190100D19B4A /* TestsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D01BBF190100D19B4A /* TestsConstants.swift */; };
 		F4EF91E51BBF31F100D19B4A /* ChatController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D71BBF31F100D19B4A /* ChatController.swift */; };
-		F4EF91E61BBF31F100D19B4A /* User+Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D81BBF31F100D19B4A /* User+Login.swift */; };
+		F4EF91E61BBF31F100D19B4A /* UserProtocol+Authentication.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D81BBF31F100D19B4A /* UserProtocol+Authentication.swift */; };
 		F4EF91E71BBF31F100D19B4A /* WhiteLabelHTTPClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DA1BBF31F100D19B4A /* WhiteLabelHTTPClient.swift */; };
 		F4EF91E81BBF31F100D19B4A /* SocketUniqueHandlerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DC1BBF31F100D19B4A /* SocketUniqueHandlerManager.swift */; };
 		F4EF91E91BBF31F100D19B4A /* Message+Mapping.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91DE1BBF31F100D19B4A /* Message+Mapping.swift */; };
@@ -58,7 +58,7 @@
 		F4EF91CE1BBF18AF00D19B4A /* RoomMethodsTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoomMethodsTests.swift; sourceTree = "<group>"; };
 		F4EF91D01BBF190100D19B4A /* TestsConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestsConstants.swift; sourceTree = "<group>"; };
 		F4EF91D71BBF31F100D19B4A /* ChatController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatController.swift; sourceTree = "<group>"; };
-		F4EF91D81BBF31F100D19B4A /* User+Login.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "User+Login.swift"; sourceTree = "<group>"; };
+		F4EF91D81BBF31F100D19B4A /* UserProtocol+Authentication.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UserProtocol+Authentication.swift"; sourceTree = "<group>"; };
 		F4EF91DA1BBF31F100D19B4A /* WhiteLabelHTTPClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WhiteLabelHTTPClient.swift; sourceTree = "<group>"; };
 		F4EF91DC1BBF31F100D19B4A /* SocketUniqueHandlerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SocketUniqueHandlerManager.swift; sourceTree = "<group>"; };
 		F4EF91DE1BBF31F100D19B4A /* Message+Mapping.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Message+Mapping.swift"; sourceTree = "<group>"; };
@@ -148,7 +148,7 @@
 			isa = PBXGroup;
 			children = (
 				F4EF91D71BBF31F100D19B4A /* ChatController.swift */,
-				F4EF91D81BBF31F100D19B4A /* User+Login.swift */,
+				F4EF91D81BBF31F100D19B4A /* UserProtocol+Authentication.swift */,
 			);
 			path = API;
 			sourceTree = "<group>";
@@ -307,7 +307,7 @@
 				F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */,
 				F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */,
 				F4EF91E91BBF31F100D19B4A /* Message+Mapping.swift in Sources */,
-				F4EF91E61BBF31F100D19B4A /* User+Login.swift in Sources */,
+				F4EF91E61BBF31F100D19B4A /* UserProtocol+Authentication.swift in Sources */,
 				F4EF91E51BBF31F100D19B4A /* ChatController.swift in Sources */,
 				F4EF91F21BBF321400D19B4A /* Message.swift in Sources */,
 				F49252B11BFB9ECE0089B5B2 /* UserProtocol.swift in Sources */,

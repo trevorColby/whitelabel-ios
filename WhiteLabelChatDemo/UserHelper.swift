@@ -9,12 +9,12 @@
 import UIKit
 import WhiteLabelChat
 
-private var currentUserInstance: User?
+private var currentUserInstance: UserProtocol?
 
 class UserHelper {
 	private static let CachedUserKey = "CachedUserKey"
 	
-	private class var cachedUser: User? {
+	private class var cachedUser: UserProtocol? {
 		get {
 			if let data = KeychainManager.sharedManager[CachedUserKey] {
 				if let json = NSKeyedUnarchiver.unarchiveObjectWithData(data) as? JSON {
@@ -25,7 +25,18 @@ class UserHelper {
 		}
 		set(newValue) {
 			if let user = newValue {
-				let dictionary = user.toJSON()
+				var dictionary = [
+					"username": user.username,
+				]
+				if let id = user.userID {
+					dictionary["id"] = id
+				}
+				if let authToken = user.authToken {
+					dictionary["token"] = authToken
+				}
+				if let userPhoto = user.userPhoto {
+					dictionary["userPhoto"] = userPhoto.absoluteString
+				}
 				let data = NSKeyedArchiver.archivedDataWithRootObject(dictionary)
 				KeychainManager.sharedManager[CachedUserKey] = data
 			} else {
@@ -34,7 +45,7 @@ class UserHelper {
 		}
 	}
 	
-	class var currentUser: User? {
+	class var currentUser: UserProtocol? {
 		get {
 			if let cachedUser = cachedUser {
 				currentUserInstance = cachedUser
@@ -43,7 +54,7 @@ class UserHelper {
 		}
 	}
 	
-	class func persistUser(user: User) {
+	class func persistUser(user: UserProtocol) {
 		cachedUser = user
 	}
 	

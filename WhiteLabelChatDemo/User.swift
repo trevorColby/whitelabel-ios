@@ -1,17 +1,32 @@
 //
-//  User+Mapping.swift
-//  WhiteLabelChat
+//  User.swift
+//  WhiteLabelChatDemo
 //
 //  Created by Stephane Copin on 9/29/15.
 //  Copyright © 2015 Fueled. All rights reserved.
 //
 
-import Foundation
+import UIKit
+import WhiteLabelChat
 
-extension User {
+enum MappingError: ErrorType {
+	case IncompleteJSON
+}
+
+public class User: UserProtocol {
+	init(userID: String?, username: String) {
+		self.userID = userID
+		self.username = username
+	}
+	
+	public let userID: String?
+	public let username: String
+	public var userPhoto: NSURL?
+	public var authToken: String?
+	
 	class func mapFromJSON(json: JSON) throws -> User {
 		guard let username = json["username"] as? String else {
-			throw ErrorCode.IncompleteJSON
+			throw MappingError.IncompleteJSON
 		}
 		
 		let user = User(userID: json["id"] as? String, username: username)
@@ -20,21 +35,5 @@ extension User {
 			user.userPhoto = NSURL(string: userPhoto)
 		}
 		return user
-	}
-	
-	func toJSON() -> JSON {
-		var result = [
-			"username": self.username,
-		]
-		if let id = self.userID {
-			result["id"] = id
-		}
-		if let authToken = self.authToken {
-			result["token"] = authToken
-		}
-		if let userPhoto = self.userPhoto {
-			result["userPhoto"] = userPhoto.absoluteString
-		}
-		return result
 	}
 }

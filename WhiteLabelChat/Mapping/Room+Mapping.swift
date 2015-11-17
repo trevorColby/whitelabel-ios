@@ -8,8 +8,8 @@
 
 import Foundation
 
-public extension Room {
-	public class func mapFromJSON(json: JSON) throws -> Room {
+extension Room {
+	class func mapFromJSON(json: JSON) throws -> Room {
 		guard let id = json["room"] as? String, let uuid = NSUUID(UUIDString: id) else {
 			throw ErrorCode.IncompleteJSON
 		}
