@@ -48,7 +48,7 @@ class WhiteLabelChatTests: XCTestCase {
 		let username = "test\(arc4random())"
 		let password = "test\(arc4random())"
 		let expectation = expectationWithDescription("Register & Login successfully")
-		User.registerWithUsername(username, password: password) { (user, error) -> () in
+		ChatController.registerWithUsername(username, password: password) { (user, error) -> () in
 			XCTAssertNotNil(user)
 			XCTAssertNil(error)
 			guard let user = user else {
@@ -57,7 +57,7 @@ class WhiteLabelChatTests: XCTestCase {
 			XCTAssertEqual(user.username, username)
 			XCTAssertTrue(user.isAuthenticated)
 			
-			User.loginWithUsername(username, password: password) { (user, error) -> () in
+			ChatController.loginWithUsername(username, password: password) { (user, error) -> () in
 				expectation.fulfill()
 				
 				XCTAssertNotNil(user)
@@ -80,7 +80,7 @@ class WhiteLabelChatTests: XCTestCase {
 	
 	func testUserInvalidRequestLogin() {
 		let expectation = expectationWithDescription("Login fails because of a validation error")
-		User.loginWithUsername("*&$^#!", password: "fueled") { (user, error) -> () in
+		ChatController.loginWithUsername("*&$^#!", password: "fueled") { (user, error) -> () in
 			XCTAssertNil(user)
 			XCTAssertNotNil(error)
 			switch(error!) {

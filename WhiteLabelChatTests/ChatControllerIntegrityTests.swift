@@ -22,13 +22,13 @@ class MessagesRoomsTests: XCTestCase {
 	func testA_createOrLoginUnitTestAccount() {
 		var finished = false
 		
-		User.registerWithUsername(self.username, password: self.password) { (user, error) -> () in
+		ChatController.registerWithUsername(self.username, password: self.password) { (user, error) -> () in
 			if let user = user {
 				currentUser = user
 				
 				finished = true
 			} else {
-				User.loginWithUsername(self.username, password: self.password) { (user, error) -> () in
+				ChatController.loginWithUsername(self.username, password: self.password) { (user, error) -> () in
 					currentUser = user
 					
 					finished = true
@@ -63,7 +63,7 @@ class MessagesRoomsTests: XCTestCase {
 		
 		var finished = false
 		
-		chatController.connectWithUser(currentUser, timeout: Int(APICallTimeout)) { (error) -> () in
+		chatController.connectWithUser(currentUser, timeoutInterval: APICallTimeout) { (error) -> () in
 			XCTAssertNil(error)
 			
 			finished = true
@@ -257,11 +257,11 @@ class MessagesRoomsTests: XCTestCase {
 	func signUpWithRandomUser(completionHandler: (randomUserChatController: ChatController) -> ()) {
 		let username = "test\(arc4random())"
 		let password = "test\(arc4random())"
-		User.registerWithUsername(username, password: password) { (user, error) -> () in
-			User.loginWithUsername(username, password: password) { (user, error) -> () in
+		ChatController.registerWithUsername(username, password: password) { (user, error) -> () in
+			ChatController.loginWithUsername(username, password: password) { (user, error) -> () in
 				let chatController = ChatController()
 				user!.userPhoto = NSURL(string: "http://fueled.com")
-				chatController.connectWithUser(user!, timeout: 0) { (error) -> () in
+				chatController.connectWithUser(user!, timeoutInterval: 0) { (error) -> () in
 					completionHandler(randomUserChatController: chatController)
 				}
 			}
