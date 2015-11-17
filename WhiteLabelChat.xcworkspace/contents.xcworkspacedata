@@ -35,6 +35,6 @@
       location = "group:Carthage/Checkouts/CocoaLumberjack/Lumberjack.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:Carthage/Checkouts/SlackTextViewController/Framework/SlackTextViewController.xcodeproj">
+      location = "group:Carthage/Checkouts/SlackTextViewController/SlackTextViewController/SlackTextViewController.xcodeproj">
    </FileRef>
 </Workspace>
