@@ -21,20 +21,4 @@ extension User {
 		}
 		return user
 	}
-	
-	func toJSON() -> JSON {
-		var result = [
-			"username": self.username,
-		]
-		if let id = self.userID {
-			result["id"] = id
-		}
-		if let authToken = self.authToken {
-			result["token"] = authToken
-		}
-		if let userPhoto = self.userPhoto {
-			result["userPhoto"] = userPhoto.absoluteString
-		}
-		return result
-	}
 }
