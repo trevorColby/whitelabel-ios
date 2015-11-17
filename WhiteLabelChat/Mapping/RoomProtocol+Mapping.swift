@@ -1,5 +1,5 @@
 //
-//  RoomProtocol+Mapping.swift
+//  Room+Mapping.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 9/30/15.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-func mapRoomFromJSON(json: JSON) throws -> RoomProtocol {
+func mapRoomFromJSON(json: JSON) throws -> Room {
 	guard let id = json["room"] as? String, let uuid = NSUUID(UUIDString: id) else {
 		throw ErrorCode.IncompleteJSON
 	}
 	
-	var messages: [MessageProtocol]!
+	var messages: [Message]!
 	if let messagesJSON = json["messages"] as? [JSON] {
 		messages = []
 		for messageJSON in messagesJSON {
@@ -22,6 +22,6 @@ func mapRoomFromJSON(json: JSON) throws -> RoomProtocol {
 			}
 		}
 	}
-	let room = RoomProtocolFactory.sharedFactory.instanciate(roomID: uuid, numberOfUsers: json["numUsers"] as? Int, messages: messages)
+	let room = RoomFactory.sharedFactory.instanciate(roomID: uuid, numberOfUsers: json["numUsers"] as? Int, messages: messages)
 	return room
 }

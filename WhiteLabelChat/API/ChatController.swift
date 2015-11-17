@@ -51,9 +51,9 @@ public class ChatController: NSObject {
 	
 	let host: String
 	let port: NSNumber?
-	private(set) var connectedUser: UserProtocol?
+	private(set) var connectedUser: User?
 	
-	private func getConnectedUser() throws -> UserProtocol {
+	private func getConnectedUser() throws -> User {
 		guard let connectedUser = self.connectedUser else {
 			throw ErrorCode.NotConnected
 		}
@@ -79,15 +79,15 @@ public class ChatController: NSObject {
 // MARK: --- Public methods
 // MARK: Login/logout
 extension ChatController {
-	public static func registerWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+	public static func registerWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
 		self.handleSignUpLogin(isSignUp: true, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	public static func loginWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+	public static func loginWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
 		self.handleSignUpLogin(isSignUp: false, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	private static func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: UserProtocol?, error: ErrorType?) -> ())? = nil) {
+	private static func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
 		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up/" : "auth/", parameters: ["username": username, "password": password], timeoutInterval: timeoutInterval) { (data, error) -> () in
 			if let error = error {
 				completionHandler?(user: nil, error: error)
@@ -99,7 +99,7 @@ extension ChatController {
 				return
 			}
 			
-			let user: UserProtocol
+			let user: User
 			do {
 				if data["token"] as? String == nil {
 					throw ErrorCode.IncompleteJSON
@@ -118,7 +118,7 @@ extension ChatController {
 
 // MARK: Connection/Deconnection
 extension ChatController {
-	public func connectWithUser(user: UserProtocol, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())?) {
+	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())?) {
 		guard let authToken = user.authToken else {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
@@ -176,7 +176,7 @@ extension ChatController {
 
 // MARK: Public API
 extension ChatController {
-	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: RoomProtocol?, error: ErrorType?) -> ())? = nil) throws {
+	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 			do {
@@ -203,13 +203,13 @@ extension ChatController {
 	}
 	
 	// This method will join the specified room if the connected user hasn't joined it yet
-	public func messagesInRoom(roomUUID roomUUID: NSUUID, completionHandler: ((messages: [MessageProtocol]?, error: ErrorType?) -> ())? = nil) throws {
+	public func messagesInRoom(roomUUID roomUUID: NSUUID, completionHandler: ((messages: [Message]?, error: ErrorType?) -> ())? = nil) throws {
 		try self.joinRoom(roomUUID: roomUUID, completionHandler: { (room, error) -> () in
 			completionHandler?(messages: room?.messages, error: error)
 		})
 	}
 	
-	public func sendMessage(message: String, roomUUID: NSUUID, completionHandler: ((message: MessageProtocol?, error: ErrorType?) -> ())? = nil) throws {
+	public func sendMessage(message: String, roomUUID: NSUUID, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
 		var parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		parameters["message"] = message
@@ -219,7 +219,7 @@ extension ChatController {
 					throw error
 				}
 				
-				let message = MessageProtocolFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
+				let message = MessageFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
 				completionHandler?(message: message, error: nil)
 				dispatch_async(dispatch_get_main_queue()) {
 					self.sendReceivedNewMessageNotification(message)
@@ -317,7 +317,7 @@ extension ChatController {
 		}
 	}
 	
-	private func sendUserJoinedRoomNotification(user: UserProtocol, room: RoomProtocol) {
+	private func sendUserJoinedRoomNotification(user: User, room: Room) {
 		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserJoinedRoomNotification, object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
@@ -325,7 +325,7 @@ extension ChatController {
 			])
 	}
 	
-	private func sendUserLeftRoomNotification(user: UserProtocol, room: RoomProtocol) {
+	private func sendUserLeftRoomNotification(user: User, room: Room) {
 		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserLeftRoomNotification, object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
@@ -333,21 +333,21 @@ extension ChatController {
 			])
 	}
 	
-	private func sendUserTypingNotification(user: UserProtocol) {
+	private func sendUserTypingNotification(user: User) {
 		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserTypingNotification, object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 			])
 	}
 	
-	private func sendUserStoppedTypingNotification(user: UserProtocol) {
+	private func sendUserStoppedTypingNotification(user: User) {
 		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserStoppedTypingNotification, object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 			])
 	}
 	
-	private func sendReceivedNewMessageNotification(message: MessageProtocol) {
+	private func sendReceivedNewMessageNotification(message: Message) {
 		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerReceivedNewMessageNotification, object: self, userInfo:
 			[
 				ChatControllerMessageNotificationKey: message,

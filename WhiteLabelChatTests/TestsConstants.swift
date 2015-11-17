@@ -12,5 +12,5 @@ import Foundation
 let ServerURL = NSURL(string: "http://172.16.31.79:3000")!
 let APICallTimeout: NSTimeInterval = 30.0
 
-var currentUser: UserProtocol!
+var currentUser: User!
 var chatController = ChatController(chatServerURL: ServerURL)

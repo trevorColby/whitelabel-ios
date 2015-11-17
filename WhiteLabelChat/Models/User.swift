@@ -1,5 +1,5 @@
 //
-//  UserProtocol.swift
+//  User.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 11/17/15.
@@ -8,8 +8,8 @@
 
 import Foundation
 
-public protocol UserProtocol: class, Mappable {
-	static func newInstance(userID userID: String?, username: String, authToken: String?) -> UserProtocol
+public protocol User: class {
+	static func newInstance(userID userID: String?, username: String, authToken: String?) -> User
 	
 	var userID: String? { get }
 	var username: String { get }

@@ -1,5 +1,5 @@
 //
-//  UserProtocol+Authentication.swift
+//  User+Authentication.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 9/29/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public extension UserProtocol {
+public extension User {
 	var isAuthenticated: Bool {
 		return self.authToken != nil
 	}

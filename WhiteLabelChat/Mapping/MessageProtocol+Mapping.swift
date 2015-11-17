@@ -1,5 +1,5 @@
 //
-//  MessageProtocol+Mapping.swift
+//  Message+Mapping.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 9/30/15.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-func mapMessageFromJSON(var json: JSON) throws -> MessageProtocol {
+func mapMessageFromJSON(var json: JSON) throws -> Message {
 	guard let id = json["uuid"] as? String, let uuid = NSUUID(UUIDString: id),
 		let content = json["message"] as? String,
 		let roomID = json["room"] as? String, let roomUUID = NSUUID(UUIDString: roomID),
@@ -17,5 +17,5 @@ func mapMessageFromJSON(var json: JSON) throws -> MessageProtocol {
 	}
 	let sender = try mapUserFromJSON(json)
 	
-	return MessageProtocolFactory.sharedFactory.instanciate(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: NSDate())
+	return MessageFactory.sharedFactory.instanciate(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: NSDate())
 }

@@ -28,10 +28,10 @@ class ChatViewController: SLKTextViewController {
 	private let ChatMessageTableViewCellReuseIdentifier = "ChatMessageTableViewCellReuseIdentifier"
 	private let RoomUUID = NSUUID(UUIDString: "6CE97FFF-224D-43D5-8BFF-8AE62204BA6C")!
 	
-	private var currentUser: UserProtocol!
+	private var currentUser: User!
 	private let chatController = ChatController()
 	private var roomUUID: NSUUID?
-	private var messages: [MessageProtocol] = []
+	private var messages: [Message] = []
 	private var isTyping = false
 	private var isTypingTimer: NSTimer?
 	
@@ -191,7 +191,7 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	func chatControllerReceivedNewMessageNotificationHandler(notification: NSNotification) {
-		if let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? MessageProtocol {
+		if let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message {
 				let index = self.addMessage(message)
 				self.tableView.beginUpdates()
 				self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
@@ -200,22 +200,22 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	func chatControllerUserTypingNotification(notification: NSNotification) {
-		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? UserProtocol {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
 			self.typingIndicatorView.insertUsername(user.username)
 		}
 	}
 	
 	func chatControllerUserStoppedTypingNotification(notification: NSNotification) {
-		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? UserProtocol {
+		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
 			self.typingIndicatorView.removeUsername(user.username)
 		}
 	}
 	
-	private func addMessage(message: MessageProtocol) -> Int {
+	private func addMessage(message: Message) -> Int {
 		return self.addMessages([message]).first ?? 0
 	}
 	
-	private func addMessages(messages: [MessageProtocol]) -> [Int] {
+	private func addMessages(messages: [Message]) -> [Int] {
 		var indexes: [Int] = []
 		for message in messages {
 			let sortedIndex = (self.messages.map { $0.dateSent } as NSArray).indexOfObject(message.dateSent, inSortedRange: NSMakeRange(0, self.messages.count), options: NSBinarySearchingOptions.InsertionIndex) { (dateObject1, dateObject2) -> NSComparisonResult in

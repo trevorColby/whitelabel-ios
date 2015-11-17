@@ -1,5 +1,5 @@
 //
-//  UserProtocol+Mapping.swift
+//  User+Mapping.swift
 //  WhiteLabelChat
 //
 //  Created by Stephane Copin on 9/29/15.
@@ -8,12 +8,12 @@
 
 import Foundation
 
-func mapUserFromJSON(json: JSON) throws -> UserProtocol {
+func mapUserFromJSON(json: JSON) throws -> User {
 	guard let username = json["username"] as? String else {
 		throw ErrorCode.IncompleteJSON
 	}
 	
-	let user = UserProtocolFactory.sharedFactory.instanciate(userID: json["id"] as? String, username: username, authToken: json["token"] as? String)
+	let user = UserFactory.sharedFactory.instanciate(userID: json["id"] as? String, username: username, authToken: json["token"] as? String)
 	if let userPhoto = json["userPhoto"] as? String {
 		user.userPhoto = NSURL(string: userPhoto)
 	}
