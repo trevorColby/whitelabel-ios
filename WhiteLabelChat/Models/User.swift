@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class User: NSObject {
+public class User: UserProtocol {
 	init(userID: String?, username: String) {
 		self.userID = userID
 		self.username = username
@@ -17,5 +17,5 @@ public class User: NSObject {
 	public let userID: String?
 	public let username: String
 	public var userPhoto: NSURL?
-	var authToken: String?
+	public internal(set) var authToken: String?
 }

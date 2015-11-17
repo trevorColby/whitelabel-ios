@@ -16,7 +16,7 @@ public extension Room {
 		
 		let room = Room(roomID: uuid, numberOfUsers: json["numUsers"] as? Int)
 		if let messagesJSON = json["messages"] as? [JSON] {
-			var messages: [Message] = []
+			var messages: [MessageProtocol] = []
 			for messageJSON in messagesJSON {
 				if let message = try? Message.mapFromJSON(messageJSON) {
 					messages.append(message)
