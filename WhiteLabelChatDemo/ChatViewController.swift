@@ -30,11 +30,7 @@ class ChatViewController: SLKTextViewController {
 	
 	private var currentUser: UserProtocol!
 	private let chatController = ChatController()
-	private var room: RoomProtocol? {
-		didSet {
-			self.messages = self.room?.messages ?? []
-		}
-	}
+	private var roomUUID: NSUUID?
 	private var messages: [MessageProtocol] = []
 	private var isTyping = false
 	private var isTypingTimer: NSTimer?
@@ -74,7 +70,8 @@ class ChatViewController: SLKTextViewController {
 					}
 					if let room = room {
 						print("Joined room \(room.roomID.UUIDString)")
-						self.room = room
+						self.roomUUID = room.roomID
+						self.messages = room.messages
 						self.reloadMessages()
 					}
 				}
@@ -89,12 +86,12 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	override func didPressRightButton(sender: AnyObject!) {
-		if let room = self.room {
+		if let roomUUID = self.roomUUID {
 			self.textView.refreshFirstResponder()
 			
 			if(self.isTyping) {
 				do {
-					try self.chatController.sendStopTypingIndicator(roomUUID: self.RoomUUID)
+					try self.chatController.sendStopTypingIndicator(roomUUID: roomUUID)
 				} catch {
 					print("Couldn't send stop typing indicator: \(error)")
 				}
@@ -104,7 +101,7 @@ class ChatViewController: SLKTextViewController {
 			}
 			
 			do {
-				try self.chatController.sendMessage(self.textView.text ?? "", roomUUID: room.roomID)
+				try self.chatController.sendMessage(self.textView.text ?? "", roomUUID: roomUUID)
 				
 				super.didPressRightButton(sender)
 			} catch {
