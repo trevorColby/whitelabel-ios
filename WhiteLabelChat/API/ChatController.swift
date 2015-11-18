@@ -141,6 +141,7 @@ extension ChatController {
 		socket.connect(timeoutAfter: Int(round(timeoutInterval))) { () -> Void in
 			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
 			self.disconnect()
+			LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
 			completionHandler?(error: ErrorCode.ImpossibleToConnectToServer)
 		}
 		socketHandlerManager.on("disconnect") { data, ack in
@@ -152,7 +153,7 @@ extension ChatController {
 		}
 		
 		socket.onAny { event in
-			print(event)
+			LogManager.sharedManager.log(.Debug, message: "Received event \(event.event) with items \(event.items)")
 		}
 		
 		self.socketHandlerManager = socketHandlerManager
@@ -358,6 +359,17 @@ extension ChatController {
 // MARK: Emit/Listen helpers
 extension ChatController {
 	private func emitAndListenForEvent(emitEvent emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {
+		LogManager.sharedManager.log(.Debug, message: "\(emitEvent): emitting event")
+		if let parameters = parameters {
+			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): with parameters \(parameters)")
+		}
+		if let listenEvent = listenEvent {
+			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): listen for event \(listenEvent)")
+		}
+		if listenForValidationError {
+			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): listening for validation error")
+		}
+		
 		let socket = try self.getSocket()
 		if let parameters = parameters {
 			socket.emit(emitEvent, parameters)
