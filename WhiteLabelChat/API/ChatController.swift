@@ -24,7 +24,7 @@ public let ChatControllerUserNotificationKey = "ChatControllerUserNotificationKe
 public let ChatControllerRoomNotificationKey = "ChatControllerRoomNotificationKey"
 public let ChatControllerMessageNotificationKey = "ChatControllerMessageNotificationKey"
 
-public class ChatController: NSObject {
+public class ChatController {
 	private var socketInternal: SocketIOClient?
 	private func getSocket() throws -> SocketIOClient {
 		guard let socketInternal = self.socketInternal else {
@@ -60,7 +60,7 @@ public class ChatController: NSObject {
 		return connectedUser
 	}
 	
-	public convenience override init() {
+	public convenience init() {
 		guard let baseURL = Configuration.defaultBaseURL else {
 			fatalError("ChatController(): baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
 		}
