@@ -7,11 +7,11 @@
 //
 
 private class DefaultMessage: Message {
-	class func newInstance(messageID messageID: NSUUID?, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
+	class func newInstance(messageID messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
 		return DefaultMessage(messageID: messageID, content: content, roomID: roomID, sender: sender, dateSent: dateSent)
 	}
 	
-	init(messageID: NSUUID?, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) {
+	init(messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) {
 		self.messageID = messageID
 		self.content = content
 		self.roomID = roomID
@@ -19,11 +19,12 @@ private class DefaultMessage: Message {
 		self.dateSent = dateSent
 	}
 	
-	let messageID: NSUUID?
+	var messageID: NSUUID
 	let content: String
 	let sender: User
 	let roomID: NSUUID
-	let dateSent: NSDate
+	var dateSent: NSDate
+	var isBeingSent: Bool = false
 }
 
 public class MessageFactory {
@@ -38,7 +39,7 @@ public class MessageFactory {
 		self.registeredClass = `class`
 	}
 	
-	public func instanciate(messageID messageID: NSUUID?, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
+	public func instanciate(messageID messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
 		let classType = self.registeredClass ?? DefaultMessage.self
 		return classType.newInstance(messageID: messageID, content: content, roomID: roomID, sender: sender, dateSent: dateSent)
 	}

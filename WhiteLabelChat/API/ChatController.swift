@@ -215,6 +215,9 @@ extension ChatController {
 		let user = try self.getConnectedUser()
 		var parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		parameters["message"] = message
+		let temporaryUUID = NSUUID()
+		let message = MessageFactory.sharedFactory.instanciate(messageID: temporaryUUID, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
+		message.isBeingSent = true
 		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 			do {
 				if let error = error {
@@ -222,12 +225,68 @@ extension ChatController {
 				}
 				
 				dispatch_async(dispatch_get_main_queue()) {
-					let message = MessageFactory.sharedFactory.instanciate(messageID: nil, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
-					completionHandler?(message: message, error: nil)
-					self.sendReceivedNewMessageNotification(message)
+					do {
+						let parameters = try self.parametersForRoom(roomUUID: roomUUID)
+						try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
+							do {
+								if let error = error {
+									throw error
+								}
+								
+								guard let json = data?.first as? JSON,
+									let messages = json["messages"] as? [[String: AnyObject]]
+									where messages.count > 0 else
+								{
+									throw ErrorCode.InvalidResponseReceived
+								}
+								
+								let sortedMessages = messages.map { (message) -> ([String: AnyObject], NSDate?) in
+									if let sent = message["sent"] as? String {
+										return (message, ISO8601DateFormatter.dateFromString(sent))
+									}
+									return (message, nil)
+								}.sort { messageWithDate1, messageWithDate2 in
+									if let date1 = messageWithDate1.1 {
+										if let date2 = messageWithDate2.1 {
+											return date1.laterDate(date2) == date1
+										}
+										return true
+									} else if messageWithDate2.1 != nil {
+										return true
+									}
+									return false
+								}
+								
+								guard let remoteMessage = sortedMessages.filter({ $0.0["message"] as? String == message.content }).first else {
+									LogManager.sharedManager.log(.Error, message: "Couldn't find message \(message) in remote messages: \(messages)")
+									throw ErrorCode.InvalidResponseReceived
+								}
+								
+								LogManager.sharedManager.log(.Debug, message: "Updating temporary message \(message) with actual message \(remoteMessage)")
+								
+								try mapMessageFromJSON(sortedMessages.first!.0, withExistingMessage: message)
+								message.isBeingSent = false
+								
+								LogManager.sharedManager.log(.Debug, message: "Final message \(message)")
+								
+								completionHandler?(message: message, error: nil)
+								self.sendReceivedNewMessageNotification(message)
+							} catch {
+								completionHandler?(message: nil, error: error)
+							}
+						}
+					} catch {
+						dispatch_async(dispatch_get_main_queue()) {
+							message.isBeingSent = false
+							completionHandler?(message: nil, error: error)
+						}
+					}
 				}
 			} catch {
-				completionHandler?(message: nil, error: error)
+				dispatch_async(dispatch_get_main_queue()) {
+					message.isBeingSent = false
+					completionHandler?(message: nil, error: error)
+				}
 			}
 		}
 	}

@@ -16,6 +16,7 @@
 		F49252B31BFB9F160089B5B2 /* Room.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B21BFB9F160089B5B2 /* Room.swift */; };
 		F49252B51BFBA27E0089B5B2 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252B41BFBA27E0089B5B2 /* Message.swift */; };
 		F49252CB1BFD047B0089B5B2 /* LogManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252CA1BFD047B0089B5B2 /* LogManager.swift */; };
+		F49252CD1BFD2CC50089B5B2 /* ISO8601DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = F49252CC1BFD2CC50089B5B2 /* ISO8601DateFormatter.swift */; };
 		F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4BC166F1BBB1AE000B4AB72 /* Errors.swift */; };
 		F4EF91CD1BBF187600D19B4A /* ChatControllerIntegrityTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */; };
 		F4EF91D11BBF190100D19B4A /* TestsConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = F4EF91D01BBF190100D19B4A /* TestsConstants.swift */; };
@@ -54,6 +55,7 @@
 		F49252B21BFB9F160089B5B2 /* Room.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Room.swift; sourceTree = "<group>"; };
 		F49252B41BFBA27E0089B5B2 /* Message.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		F49252CA1BFD047B0089B5B2 /* LogManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LogManager.swift; sourceTree = "<group>"; };
+		F49252CC1BFD2CC50089B5B2 /* ISO8601DateFormatter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ISO8601DateFormatter.swift; sourceTree = "<group>"; };
 		F4BC166F1BBB1AE000B4AB72 /* Errors.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Errors.swift; sourceTree = "<group>"; };
 		F4EF91CC1BBF187600D19B4A /* ChatControllerIntegrityTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatControllerIntegrityTests.swift; sourceTree = "<group>"; };
 		F4EF91D01BBF190100D19B4A /* TestsConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestsConstants.swift; sourceTree = "<group>"; };
@@ -165,6 +167,7 @@
 			children = (
 				F4EF91DC1BBF31F100D19B4A /* SocketUniqueHandlerManager.swift */,
 				F49252CA1BFD047B0089B5B2 /* LogManager.swift */,
+				F49252CC1BFD2CC50089B5B2 /* ISO8601DateFormatter.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -304,6 +307,7 @@
 				F49252B51BFBA27E0089B5B2 /* Message.swift in Sources */,
 				F4EF91E81BBF31F100D19B4A /* SocketUniqueHandlerManager.swift in Sources */,
 				F4EF91E71BBF31F100D19B4A /* WhiteLabelHTTPClient.swift in Sources */,
+				F49252CD1BFD2CC50089B5B2 /* ISO8601DateFormatter.swift in Sources */,
 				F46DFDE11BBB16D500CDA868 /* Configuration.swift in Sources */,
 				F4BC16701BBB1AE000B4AB72 /* Errors.swift in Sources */,
 				F4EF91E91BBF31F100D19B4A /* MessageProtocol+Mapping.swift in Sources */,

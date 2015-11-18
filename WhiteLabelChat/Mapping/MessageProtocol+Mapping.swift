@@ -8,14 +8,26 @@
 
 import Foundation
 
-func mapMessageFromJSON(var json: JSON) throws -> Message {
+func mapMessageFromJSON(var json: JSON, withExistingMessage existingMessage: Message? = nil) throws -> Message {
 	guard let id = json["uuid"] as? String, let uuid = NSUUID(UUIDString: id),
 		let content = json["message"] as? String,
 		let roomID = json["room"] as? String, let roomUUID = NSUUID(UUIDString: roomID),
-		let _ = json["sent"] as? String else {
+		let sent = json["sent"] as? String,
+		let dateSent = ISO8601DateFormatter.dateFromString(sent) else
+	{
 			throw ErrorCode.IncompleteJSON
 	}
 	let sender = try mapUserFromJSON(json)
 	
-	return MessageFactory.sharedFactory.instanciate(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: NSDate())
+	if let existingMessage = existingMessage where existingMessage.roomID == roomUUID && existingMessage.content == content && existingMessage.sender.userID == sender.userID && existingMessage.sender.username == sender.username {
+		existingMessage.messageID = uuid
+		existingMessage.dateSent = dateSent
+		return existingMessage
+	}
+	
+	let message = MessageFactory.sharedFactory.instanciate(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: dateSent)
+	if existingMessage != nil {
+		LogManager.sharedManager.log(.Warning, message: "Was given existing message \(existingMessage) which didn't match with the received response \(json), so created new message \(message)")
+	}
+	return message
 }
