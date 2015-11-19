@@ -118,7 +118,7 @@ extension ChatController {
 
 // MARK: Connection/Deconnection
 extension ChatController {
-	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())? = nil) {
+	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, var completionHandler: ((error: ErrorType?) -> ())? = nil) {
 		guard let authToken = user.authToken else {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
@@ -141,14 +141,22 @@ extension ChatController {
 		socket.connect(timeoutAfter: Int(round(timeoutInterval))) { () -> Void in
 			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
 			self.disconnect()
-			LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
-			completionHandler?(error: ErrorCode.ImpossibleToConnectToServer)
+			if let completionHandler = completionHandler {
+				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
+				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
+			}
+			completionHandler = nil
 		}
 		socketHandlerManager.on("disconnect") { data, ack in
 			self.connectedUser = nil
 			self.cleanupHandlers()
 			self.socketHandlerManager = nil
 			self.socketInternal = nil
+			if let completionHandler = completionHandler {
+				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
+				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
+			}
+			completionHandler = nil
 			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
 		}
 		
