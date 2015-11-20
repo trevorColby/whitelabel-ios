@@ -128,10 +128,12 @@ extension ChatController {
 			socketURL += ":\(port)"
 		}
 		let socket = SocketIOClient(socketURL: socketURL, opts: ["connectParams": ["token": authToken]])
-			
+		socket.reconnectWait = 2
+		
+		self.connectedUser = user
+		
 		let socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
 		let connectOnceUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
-			self.connectedUser = user
 			socketHandlerManager.off("connect", handlerUUID: uuid)
 			completionHandler?(error: nil)
 		}
@@ -140,7 +142,6 @@ extension ChatController {
 		}
 		socket.connect(timeoutAfter: Int(round(timeoutInterval))) { () -> Void in
 			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
-			self.disconnect()
 			if let completionHandler = completionHandler {
 				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
 				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
@@ -148,10 +149,6 @@ extension ChatController {
 			completionHandler = nil
 		}
 		socketHandlerManager.on("disconnect") { data, ack in
-			self.connectedUser = nil
-			self.cleanupHandlers()
-			self.socketHandlerManager = nil
-			self.socketInternal = nil
 			if let completionHandler = completionHandler {
 				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
 				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
@@ -166,11 +163,10 @@ extension ChatController {
 		
 		self.socketHandlerManager = socketHandlerManager
 		self.socketInternal = socket
-		
-		self.handleNotificationEvents()
 	}
 	
 	public func disconnect() {
+		self.cleanupHandlers()
 		self.socketHandlerManager = nil
 		self.connectedUser = nil
 		if let socket = try? self.getSocket() {
@@ -221,81 +217,92 @@ extension ChatController {
 	
 	public func sendMessage(message: String, roomUUID: NSUUID, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
-		var parameters = try self.parametersForRoom(roomUUID: roomUUID)
-		parameters["message"] = message
 		let temporaryUUID = NSUUID()
 		let message = MessageFactory.sharedFactory.instanciate(messageID: temporaryUUID, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
 		message.isBeingSent = true
-		try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
-			do {
-				if let error = error {
-					throw error
-				}
-				
-				dispatch_async(dispatch_get_main_queue()) {
-					do {
-						let parameters = try self.parametersForRoom(roomUUID: roomUUID)
-						try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
-							do {
-								if let error = error {
-									throw error
-								}
-								
-								guard let json = data?.first as? JSON,
-									let messages = json["messages"] as? [[String: AnyObject]]
-									where messages.count > 0 else
-								{
-									throw ErrorCode.InvalidResponseReceived
-								}
-								
-								let sortedMessages = messages.map { (message) -> ([String: AnyObject], NSDate?) in
-									if let sent = message["sent"] as? String {
-										return (message, ISO8601DateFormatter.dateFromString(sent))
+		try self.resendMessage(message, completionHandler: completionHandler)
+	}
+
+	public func resendMessage(message: Message, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
+		if !message.isBeingSent {
+			completionHandler?(message: message, error: ErrorCode.MessageAlreadySent)
+			return
+		}
+		
+		var parameters = try self.parametersForRoom(roomUUID: message.roomID)
+		parameters["message"] = message.content
+		do {
+			try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
+				do {
+					if let error = error {
+						throw error
+					}
+					
+					dispatch_async(dispatch_get_main_queue()) {
+						do {
+							let parameters = try self.parametersForRoom(roomUUID: message.roomID)
+							try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
+								do {
+									if let error = error {
+										throw error
 									}
-									return (message, nil)
-								}.sort { messageWithDate1, messageWithDate2 in
-									if let date1 = messageWithDate1.1 {
-										if let date2 = messageWithDate2.1 {
-											return date1.laterDate(date2) == date1
+									
+									guard let json = data?.first as? JSON,
+										let messages = json["messages"] as? [[String: AnyObject]]
+										where messages.count > 0 else
+									{
+										throw ErrorCode.InvalidResponseReceived
+									}
+									
+									let sortedMessages = messages.map { (message) -> ([String: AnyObject], NSDate?) in
+										if let sent = message["sent"] as? String {
+											return (message, ISO8601DateFormatter.dateFromString(sent))
 										}
-										return true
-									} else if messageWithDate2.1 != nil {
-										return true
+										return (message, nil)
+										}.sort { messageWithDate1, messageWithDate2 in
+											if let date1 = messageWithDate1.1 {
+												if let date2 = messageWithDate2.1 {
+													return date1.laterDate(date2) == date1
+												}
+												return true
+											} else if messageWithDate2.1 != nil {
+												return true
+											}
+											return false
 									}
-									return false
+									
+									guard let remoteMessage = sortedMessages.filter({ $0.0["message"] as? String == message.content }).first else {
+										LogManager.sharedManager.log(.Error, message: "Couldn't find message \(message) in remote messages: \(messages)")
+										throw ErrorCode.InvalidResponseReceived
+									}
+									
+									LogManager.sharedManager.log(.Debug, message: "Updating temporary message \(message) with actual message \(remoteMessage)")
+									
+									try mapMessageFromJSON(remoteMessage.0, withExistingMessage: message)
+									message.isBeingSent = false
+									
+									LogManager.sharedManager.log(.Debug, message: "Final message \(message)")
+									
+									completionHandler?(message: message, error: nil)
+									self.sendReceivedNewMessageNotification(message)
+								} catch {
+									completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
 								}
-								
-								guard let remoteMessage = sortedMessages.filter({ $0.0["message"] as? String == message.content }).first else {
-									LogManager.sharedManager.log(.Error, message: "Couldn't find message \(message) in remote messages: \(messages)")
-									throw ErrorCode.InvalidResponseReceived
-								}
-								
-								LogManager.sharedManager.log(.Debug, message: "Updating temporary message \(message) with actual message \(remoteMessage)")
-								
-								try mapMessageFromJSON(sortedMessages.first!.0, withExistingMessage: message)
-								message.isBeingSent = false
-								
-								LogManager.sharedManager.log(.Debug, message: "Final message \(message)")
-								
-								completionHandler?(message: message, error: nil)
-								self.sendReceivedNewMessageNotification(message)
-							} catch {
-								completionHandler?(message: nil, error: error)
+							}
+						} catch {
+							dispatch_async(dispatch_get_main_queue()) {
+								completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
 							}
 						}
-					} catch {
-						dispatch_async(dispatch_get_main_queue()) {
-							message.isBeingSent = false
-							completionHandler?(message: nil, error: error)
-						}
+					}
+				} catch {
+					dispatch_async(dispatch_get_main_queue()) {
+						completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
 					}
 				}
-			} catch {
-				dispatch_async(dispatch_get_main_queue()) {
-					message.isBeingSent = false
-					completionHandler?(message: nil, error: error)
-				}
 			}
+		} catch {
+			throw ErrorCode.CannotSendMessage(message: message, innerError: error)
 		}
 	}
 	

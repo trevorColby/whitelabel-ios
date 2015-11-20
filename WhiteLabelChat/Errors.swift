@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum ErrorCode: ErrorType {
+public enum ErrorCode: ErrorType {
 	case InvalidResponseReceived
 	case RequestFailed
 	case IncompleteJSON
@@ -17,6 +17,8 @@ enum ErrorCode: ErrorType {
 	case Disconnected
 	case RequiresUserPhoto
 	case ValidationError(message: String)
+	case CannotSendMessage(message: Message, innerError: ErrorType)
+	case MessageAlreadySent
 }
 
 public enum MappingError: ErrorType {
