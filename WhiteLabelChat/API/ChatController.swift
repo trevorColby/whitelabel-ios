@@ -10,6 +10,7 @@ import UIKit
 import SocketIO
 
 public let ChatControllerDidConnectNotification = "ChatControllerDidConnectNotification"
+public let ChatControllerReconnectingNotification = "ChatControllerReconnectingNotification"
 public let ChatControllerDidDisconnectNotification = "ChatControllerDidDisconnectNotification"
 
 public let ChatControllerUserJoinedRoomNotification = "ChatControllerUserJoinedRoomNotification"
@@ -23,6 +24,14 @@ public let ChatControllerReceivedNewMessageNotification = "ChatControllerReceive
 public let ChatControllerUserNotificationKey = "ChatControllerUserNotificationKey"
 public let ChatControllerRoomNotificationKey = "ChatControllerRoomNotificationKey"
 public let ChatControllerMessageNotificationKey = "ChatControllerMessageNotificationKey"
+
+public enum ConnectionStatus {
+	case NotConnected
+	case Connecting
+	case Disconnected
+	case Reconnecting
+	case Connected
+}
 
 public class ChatController {
 	private var socketInternal: SocketIOClient?
@@ -49,15 +58,28 @@ public class ChatController {
 		return socketHandlerManager
 	}
 	
-	let host: String
-	let port: NSNumber?
-	private(set) var connectedUser: User?
+	public let host: String
+	public let port: NSNumber?
+	private(set) public var connectedUser: User?
 	
 	private func getConnectedUser() throws -> User {
 		guard let connectedUser = self.connectedUser else {
 			throw ErrorCode.NotConnected
 		}
 		return connectedUser
+	}
+	
+	public var status: ConnectionStatus {
+		switch(self.socketInternal?.status) {
+		case .Some(.Connecting):
+			return .Connecting
+		case .Some(.Reconnecting):
+			return .Reconnecting
+		case .Some(.Connected):
+			return .Connected
+		default:
+			return .NotConnected
+		}
 	}
 	
 	public convenience init() {
@@ -155,6 +177,9 @@ extension ChatController {
 			}
 			completionHandler = nil
 			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
+		}
+		socketHandlerManager.on("reconnect") { data, ack in
+			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerReconnectingNotification, object: self)
 		}
 		
 		socket.onAny { event in
