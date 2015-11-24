@@ -188,6 +188,8 @@ extension ChatController {
 		
 		self.socketHandlerManager = socketHandlerManager
 		self.socketInternal = socket
+		
+		self.handleNotificationEvents()
 	}
 	
 	public func disconnect() {
