@@ -38,11 +38,11 @@ class ChatViewController: SLKTextViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		
-		self.tableView.registerNib(UINib(nibName: "ChatMessageTableViewCell", bundle: nil), forCellReuseIdentifier: ChatMessageTableViewCellReuseIdentifier)
+		self.tableView!.registerNib(UINib(nibName: "ChatMessageTableViewCell", bundle: nil), forCellReuseIdentifier: ChatMessageTableViewCellReuseIdentifier)
 		
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerReceivedNewMessageNotificationHandler:", name: ChatControllerReceivedNewMessageNotification, object: self.chatController)
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerUserTypingNotification:", name: ChatControllerUserTypingNotification, object: self.chatController)
-		NSNotificationCenter.defaultCenter().addObserver(self, selector: "chatControllerUserStoppedTypingNotification:", name: ChatControllerUserStoppedTypingNotification, object: self.chatController)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.chatControllerReceivedNewMessageNotificationHandler(_:)), name: ChatControllerReceivedNewMessageNotification, object: self.chatController)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.chatControllerUserTypingNotification(_:)), name: ChatControllerUserTypingNotification, object: self.chatController)
+		NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(ChatViewController.chatControllerUserStoppedTypingNotification(_:)), name: ChatControllerUserStoppedTypingNotification, object: self.chatController)
 	}
 
 	override func viewWillAppear(animated: Bool) {
@@ -81,7 +81,7 @@ class ChatViewController: SLKTextViewController {
 		}
 	}
 	
-	override class func tableViewStyleForCoder(decoder: NSCoder!) -> UITableViewStyle {
+	override class func tableViewStyleForCoder(decoder: NSCoder) -> UITableViewStyle {
 		return .Plain
 	}
 	
@@ -127,7 +127,7 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	private func reloadMessages() {
-		self.tableView.reloadData()
+		self.tableView!.reloadData()
 	}
 	
 	override func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -154,7 +154,7 @@ class ChatViewController: SLKTextViewController {
 				try self.chatController.sendStartTypingIndicator(roomUUID: self.RoomUUID)
 				
 				self.isTypingTimer?.invalidate()
-				self.isTypingTimer = NSTimer(timeInterval: 10.0, target: self, selector: "userStoppedTyping:", userInfo: nil, repeats: false)
+				self.isTypingTimer = NSTimer(timeInterval: 10.0, target: self, selector: #selector(ChatViewController.userStoppedTyping(_:)), userInfo: nil, repeats: false)
 			}
 		} catch {
 			print("Error sending typing indicator: \(error)")
@@ -175,7 +175,7 @@ class ChatViewController: SLKTextViewController {
 	}
 	
 	override func tableView(tableView: UITableView, willDisplayCell cell: UITableViewCell, forRowAtIndexPath indexPath: NSIndexPath) {
-		cell.transform = self.tableView.transform
+		cell.transform = self.tableView!.transform
 	}
 	
 	override func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -193,21 +193,21 @@ class ChatViewController: SLKTextViewController {
 	func chatControllerReceivedNewMessageNotificationHandler(notification: NSNotification) {
 		if let message = notification.userInfo?[ChatControllerMessageNotificationKey] as? Message {
 				let index = self.addMessage(message)
-				self.tableView.beginUpdates()
-				self.tableView.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
-				self.tableView.endUpdates()
+				self.tableView!.beginUpdates()
+				self.tableView!.insertRowsAtIndexPaths([NSIndexPath(forRow: index, inSection: 0)], withRowAnimation: .Automatic)
+				self.tableView!.endUpdates()
 		}
 	}
 	
 	func chatControllerUserTypingNotification(notification: NSNotification) {
 		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
-			self.typingIndicatorView.insertUsername(user.username)
+			self.typingIndicatorView!.insertUsername(user.username)
 		}
 	}
 	
 	func chatControllerUserStoppedTypingNotification(notification: NSNotification) {
 		if let user = notification.userInfo?[ChatControllerUserNotificationKey] as? User {
-			self.typingIndicatorView.removeUsername(user.username)
+			self.typingIndicatorView!.removeUsername(user.username)
 		}
 	}
 	

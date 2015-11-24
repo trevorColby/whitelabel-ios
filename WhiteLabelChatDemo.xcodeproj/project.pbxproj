@@ -18,6 +18,8 @@
 		F41C67B21BBC641F00CF6A04 /* WhiteLabelChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F46DFDD91BBB155E00CDA868 /* WhiteLabelChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F41C67B71BBC648B00CF6A04 /* SocketIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; };
 		F41C67B81BBC649000CF6A04 /* SocketIO.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F41C67B61BBC648B00CF6A04 /* SocketIO.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		F41E25351DAE9341008B0D1F /* libPhoneNumber.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F41E25331DAE933C008B0D1F /* libPhoneNumber.framework */; };
+		F41E25361DAE9341008B0D1F /* libPhoneNumber.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = F41E25331DAE933C008B0D1F /* libPhoneNumber.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		F43501E21BBDC3EA00D5115D /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */; };
 		F43501E31BBDC3EA00D5115D /* EthanolTools.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */; };
 		F43501E41BBDC3EA00D5115D /* EthanolUIComponents.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */; };
@@ -56,6 +58,7 @@
 				F43501EB1BBDC3F200D5115D /* EthanolUIComponents.framework in Embed Frameworks */,
 				F43501EC1BBDC3F200D5115D /* EthanolUIExtensions.framework in Embed Frameworks */,
 				F43501ED1BBDC3F200D5115D /* EthanolUtilities.framework in Embed Frameworks */,
+				F41E25361DAE9341008B0D1F /* libPhoneNumber.framework in Embed Frameworks */,
 				F43501EE1BBDC3F200D5115D /* EthanolValidationFormatting.framework in Embed Frameworks */,
 				F43501EF1BBDC3F200D5115D /* NSInvocationHelpers.framework in Embed Frameworks */,
 				F417BD001BBD91480061CF7C /* KeychainAccess.framework in Embed Frameworks */,
@@ -75,6 +78,7 @@
 		F417BD031BBD92D70061CF7C /* ChatViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ChatViewController.swift; sourceTree = "<group>"; };
 		F417BD061BBD93BA0061CF7C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		F41C67B61BBC648B00CF6A04 /* SocketIO.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = SocketIO.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F41E25331DAE933C008B0D1F /* libPhoneNumber.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = libPhoneNumber.framework; path = libPhoneNumber.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = CocoaLumberjack.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolTools.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		F43501DD1BBDC3EA00D5115D /* EthanolUIComponents.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = EthanolUIComponents.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -106,6 +110,7 @@
 				F43501E41BBDC3EA00D5115D /* EthanolUIComponents.framework in Frameworks */,
 				F43501E51BBDC3EA00D5115D /* EthanolUIExtensions.framework in Frameworks */,
 				F43501E61BBDC3EA00D5115D /* EthanolUtilities.framework in Frameworks */,
+				F41E25351DAE9341008B0D1F /* libPhoneNumber.framework in Frameworks */,
 				F43501E71BBDC3EA00D5115D /* EthanolValidationFormatting.framework in Frameworks */,
 				F43501E81BBDC3EA00D5115D /* NSInvocationHelpers.framework in Frameworks */,
 				F417BCFF1BBD91440061CF7C /* KeychainAccess.framework in Frameworks */,
@@ -157,6 +162,7 @@
 		F46DFDDB1BBB156E00CDA868 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				F41E25331DAE933C008B0D1F /* libPhoneNumber.framework */,
 				F44AC2311BBDE10E003127CD /* SlackTextViewController.framework */,
 				F43501DB1BBDC3EA00D5115D /* CocoaLumberjack.framework */,
 				F43501DC1BBDC3EA00D5115D /* EthanolTools.framework */,
@@ -200,11 +206,13 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = Fueled;
 				TargetAttributes = {
 					F46DFDC31BBB153800CDA868 = {
 						CreatedOnToolsVersion = 7.0;
+						DevelopmentTeam = 2GVJ6JS822;
+						LastSwiftMigration = 0800;
 					};
 				};
 			};
@@ -291,8 +299,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -336,8 +346,10 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -356,6 +368,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				SDKROOT = iphoneos;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -365,10 +378,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2GVJ6JS822;
 				INFOPLIST_FILE = WhiteLabelChatDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.WhiteLabelChatDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Debug;
 		};
@@ -376,10 +391,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = 2GVJ6JS822;
 				INFOPLIST_FILE = WhiteLabelChatDemo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.Fueled.WhiteLabelChatDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 2.3;
 			};
 			name = Release;
 		};

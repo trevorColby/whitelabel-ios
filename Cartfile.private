@@ -1,4 +1,4 @@
-github "kishikawakatsumi/KeychainAccess"
+github "mherod/KeychainAccess" "193c67293892f2ae99be4076b87a648e1d99a6e8"
 github "Fueled/ethanol-ui-extensions"
 github "Fueled/ethanol-ui-components"
 github "slackhq/SlackTextViewController"

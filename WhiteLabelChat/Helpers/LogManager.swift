@@ -45,7 +45,7 @@ public class LogManager {
 	
 	public var logLevel: Level = .Disabled
 	
-	internal func log(level: Level, message: String, file: String = __FILE__, function: String = __FUNCTION__, line: UInt = __LINE__) {
+	internal func log(level: Level, message: String, file: String = #file, function: String = __FUNCTION__, line: UInt = __LINE__) {
 		if level != .Disabled && level.rawValue <= self.logLevel.rawValue {
 			self.logFunction(level: level, message: message, file: file, function: function, line: line)
 		}

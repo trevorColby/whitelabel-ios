@@ -29,17 +29,18 @@ class WhiteLabelHTTPClient {
 		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	func sendRequest(method: HTTPMethod, var path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		let mainThreadCompletionHandler: WhiteLabelHTTPClientCompletionHandler = { (data, error) in
 			dispatch_async(dispatch_get_main_queue()) {
 				completionHandler?(data: data, error: error)
 			}
 		}
-		
+
+		var path = path
 		if let parameters = parameters as? [String: String] where method == .GET {
 			path += "?" + parameters.map { (key, value) in "\(key)=\(value)" }.joinWithSeparator("&")
 		}
-		let request = NSMutableURLRequest(URL: baseURL.URLByAppendingPathComponent(path))
+		let request = NSMutableURLRequest(URL: baseURL.URLByAppendingPathComponent(path)!)
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 		request.HTTPMethod = method.rawValue

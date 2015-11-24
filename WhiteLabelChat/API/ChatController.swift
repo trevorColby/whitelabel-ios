@@ -29,7 +29,6 @@ public enum ConnectionStatus {
 	case NotConnected
 	case Connecting
 	case Disconnected
-	case Reconnecting
 	case Connected
 }
 
@@ -58,8 +57,7 @@ public class ChatController {
 		return socketHandlerManager
 	}
 	
-	public let host: String
-	public let port: NSNumber?
+	public let chatServerURL: NSURL
 	private(set) public var connectedUser: User?
 	
 	private func getConnectedUser() throws -> User {
@@ -73,8 +71,6 @@ public class ChatController {
 		switch(self.socketInternal?.status) {
 		case .Some(.Connecting):
 			return .Connecting
-		case .Some(.Reconnecting):
-			return .Reconnecting
 		case .Some(.Connected):
 			return .Connected
 		default:
@@ -90,11 +86,7 @@ public class ChatController {
 	}
 	
 	public init(chatServerURL: NSURL) {
-		guard let host = chatServerURL.host else {
-			fatalError("ChatController(): chatServerURL '\(chatServerURL)' doesn't have a host")
-		}
-		self.host = host
-		self.port = chatServerURL.port
+		self.chatServerURL = chatServerURL
 	}
 }
 
@@ -140,16 +132,12 @@ extension ChatController {
 
 // MARK: Connection/Deconnection
 extension ChatController {
-	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, var completionHandler: ((error: ErrorType?) -> ())? = nil) {
+	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())? = nil) {
 		guard let authToken = user.authToken else {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
-		
-		var socketURL = self.host
-		if let port = self.port {
-			socketURL += ":\(port)"
-		}
-		let socket = SocketIOClient(socketURL: socketURL, opts: ["connectParams": ["token": authToken]])
+
+		let socket = SocketIOClient(socketURL: self.chatServerURL, config: [.ConnectParams(["token": authToken])])
 		socket.reconnectWait = 2
 		
 		self.connectedUser = user
@@ -162,6 +150,7 @@ extension ChatController {
 		let connectNotificationUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
 			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidConnectNotification, object: self)
 		}
+		var completionHandler = completionHandler
 		socket.connect(timeoutAfter: Int(round(timeoutInterval))) { () -> Void in
 			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
 			if let completionHandler = completionHandler {
@@ -359,7 +348,7 @@ extension ChatController {
 		return [
 			"room": roomUUID.UUIDString,
 			"username": user.username,
-			"userPhoto": userPhoto.absoluteString,
+			"userPhoto": userPhoto.absoluteString!,
 			"userProfileId": user.userID,
 		]
 	}

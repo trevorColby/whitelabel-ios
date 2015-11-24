@@ -8,7 +8,7 @@
 
 import Foundation
 
-func mapMessageFromJSON(var json: JSON, withExistingMessage existingMessage: Message? = nil) throws -> Message {
+func mapMessageFromJSON(json: JSON, withExistingMessage existingMessage: Message? = nil) throws -> Message {
 	guard let id = json["uuid"] as? String, let uuid = NSUUID(UUIDString: id),
 		let content = json["message"] as? String,
 		let roomID = json["room"] as? String, let roomUUID = NSUUID(UUIDString: roomID),
