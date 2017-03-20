@@ -7,11 +7,11 @@
 //
 
 private class DefaultMessage: Message {
-	class func newInstance(messageID messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
+	class func newInstance(messageID: UUID, content: String, roomID: UUID, sender: User, dateSent: Date) -> Message {
 		return DefaultMessage(messageID: messageID, content: content, roomID: roomID, sender: sender, dateSent: dateSent)
 	}
 	
-	init(messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) {
+	init(messageID: UUID, content: String, roomID: UUID, sender: User, dateSent: Date) {
 		self.messageID = messageID
 		self.content = content
 		self.roomID = roomID
@@ -19,27 +19,27 @@ private class DefaultMessage: Message {
 		self.dateSent = dateSent
 	}
 	
-	var messageID: NSUUID
+	var messageID: UUID
 	let content: String
 	let sender: User
-	let roomID: NSUUID
-	var dateSent: NSDate
+	let roomID: UUID
+	var dateSent: Date
 	var isBeingSent: Bool = false
 }
 
-public class MessageFactory {
-	private var registeredClass: Message.Type?
-	public static let sharedFactory = MessageFactory()
+open class MessageFactory {
+	fileprivate var registeredClass: Message.Type?
+	open static let sharedFactory = MessageFactory()
 	
-	private init() {
+	fileprivate init() {
 		
 	}
 	
-	public func registerClass(`class`: Message.Type) {
+	open func registerClass(_ class: Message.Type) {
 		self.registeredClass = `class`
 	}
 	
-	public func instanciate(messageID messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message {
+	open func instanciate(messageID: UUID, content: String, roomID: UUID, sender: User, dateSent: Date) -> Message {
 		let classType = self.registeredClass ?? DefaultMessage.self
 		return classType.newInstance(messageID: messageID, content: content, roomID: roomID, sender: sender, dateSent: dateSent)
 	}

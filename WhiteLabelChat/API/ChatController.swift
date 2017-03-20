@@ -26,55 +26,55 @@ public let ChatControllerRoomNotificationKey = "ChatControllerRoomNotificationKe
 public let ChatControllerMessageNotificationKey = "ChatControllerMessageNotificationKey"
 
 public enum ConnectionStatus {
-	case NotConnected
-	case Connecting
-	case Disconnected
-	case Connected
+	case notConnected
+	case connecting
+	case disconnected
+	case connected
 }
 
-public class ChatController {
-	private var socketInternal: SocketIOClient?
-	private func getSocket() throws -> SocketIOClient {
+open class ChatController {
+	fileprivate var socketInternal: SocketIOClient?
+	fileprivate func getSocket() throws -> SocketIOClient {
 		guard let socketInternal = self.socketInternal else {
-			throw ErrorCode.NotConnected
+			throw ErrorCode.notConnected
 		}
-		if socketInternal.status != .Connected {
-			throw ErrorCode.NotConnected
+		if socketInternal.status != .connected {
+			throw ErrorCode.notConnected
 		}
 		return socketInternal
 	}
 	
-	private typealias CompletionHandlerType = (data: [AnyObject]?, error: ErrorType?) -> ()
-	private typealias HandlersType = [String: CompletionHandlerType]
-	private var handlers: HandlersType = [:]
-	private lazy var handlersLock = NSLock()
+	fileprivate typealias CompletionHandlerType = (_ data: [AnyObject]?, _ error: Error?) -> ()
+	fileprivate typealias HandlersType = [String: CompletionHandlerType]
+	fileprivate var handlers: HandlersType = [:]
+	fileprivate lazy var handlersLock = NSLock()
 	
-	private var socketHandlerManager: SocketUniqueHandlerManager?
-	private func getSocketHandlerManager() throws -> SocketUniqueHandlerManager {
+	fileprivate var socketHandlerManager: SocketUniqueHandlerManager?
+	fileprivate func getSocketHandlerManager() throws -> SocketUniqueHandlerManager {
 		guard let socketHandlerManager = self.socketHandlerManager else {
-			throw ErrorCode.NotConnected
+			throw ErrorCode.notConnected
 		}
 		return socketHandlerManager
 	}
 	
-	public let chatServerURL: NSURL
-	private(set) public var connectedUser: User?
+	open let chatServerURL: URL
+	fileprivate(set) open var connectedUser: User?
 	
-	private func getConnectedUser() throws -> User {
+	fileprivate func getConnectedUser() throws -> User {
 		guard let connectedUser = self.connectedUser else {
-			throw ErrorCode.NotConnected
+			throw ErrorCode.notConnected
 		}
 		return connectedUser
 	}
 	
-	public var status: ConnectionStatus {
+	open var status: ConnectionStatus {
 		switch(self.socketInternal?.status) {
-		case .Some(.Connecting):
-			return .Connecting
-		case .Some(.Connected):
-			return .Connected
+		case .some(.connecting):
+			return .connecting
+		case .some(.connected):
+			return .connected
 		default:
-			return .NotConnected
+			return .notConnected
 		}
 	}
 	
@@ -82,10 +82,10 @@ public class ChatController {
 		guard let baseURL = Configuration.defaultBaseURL else {
 			fatalError("ChatController(): baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
 		}
-		self.init(chatServerURL: baseURL)
+		self.init(chatServerURL: baseURL as URL)
 	}
 	
-	public init(chatServerURL: NSURL) {
+	public init(chatServerURL: URL) {
 		self.chatServerURL = chatServerURL
 	}
 }
@@ -93,51 +93,51 @@ public class ChatController {
 // MARK: --- Public methods
 // MARK: Login/logout
 extension ChatController {
-	public static func registerWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
+	public static func registerWithUsername(_ username: String, password: String, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((_ user: User?, _ error: Error?) -> ())? = nil) {
 		self.handleSignUpLogin(isSignUp: true, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	public static func loginWithUsername(username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
+	public static func loginWithUsername(_ username: String, password: String, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((_ user: User?, _ error: Error?) -> ())? = nil) {
 		self.handleSignUpLogin(isSignUp: false, username: username, password: password, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	private static func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((user: User?, error: ErrorType?) -> ())? = nil) {
-		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up/" : "auth/", parameters: ["username": username, "password": password], timeoutInterval: timeoutInterval) { (data, error) -> () in
+	fileprivate static func handleSignUpLogin(isSignUp signUp: Bool, username: String, password: String, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((_ user: User?, _ error: Error?) -> ())? = nil) {
+		WhiteLabelHTTPClient.sharedClient.sendRequest(.POST, path: signUp ? "sign-up/" : "auth/", parameters: ["username": username as AnyObject, "password": password as AnyObject], timeoutInterval: timeoutInterval) { (data, error) -> () in
 			if let error = error {
-				completionHandler?(user: nil, error: error)
+				completionHandler?(nil, error)
 				return
 			}
 			
 			guard let data = data else {
-				completionHandler?(user: nil, error: nil)
+				completionHandler?(nil, nil)
 				return
 			}
 			
 			let user: User
 			do {
 				if data["token"] as? String == nil {
-					throw ErrorCode.IncompleteJSON
+					throw ErrorCode.incompleteJSON
 				}
 				
 				user = try mapUserFromJSON(data)
 			} catch {
-				completionHandler?(user: nil, error: error)
+				completionHandler?(nil, error)
 				return
 			}
 			
-			completionHandler?(user: user, error: nil)
+			completionHandler?(user, nil)
 		}
 	}
 }
 
 // MARK: Connection/Deconnection
 extension ChatController {
-	public func connectWithUser(user: User, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((error: ErrorType?) -> ())? = nil) {
+	public func connectWithUser(_ user: User, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: ((_ error: Error?) -> ())? = nil) {
 		guard let authToken = user.authToken else {
 			fatalError("Given non-authenticated user \(user.username) to ChatController.connectWithUser()")
 		}
 
-		let socket = SocketIOClient(socketURL: self.chatServerURL, config: [.ConnectParams(["token": authToken])])
+		let socket = SocketIOClient(socketURL: self.chatServerURL, config: [.connectParams(["token": authToken])])
 		socket.reconnectWait = 2
 		
 		self.connectedUser = user
@@ -145,34 +145,34 @@ extension ChatController {
 		let socketHandlerManager = SocketUniqueHandlerManager(socket: socket)
 		let connectOnceUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
 			socketHandlerManager.off("connect", handlerUUID: uuid)
-			completionHandler?(error: nil)
+			completionHandler?(nil)
 		}
 		let connectNotificationUUID = socketHandlerManager.on("connect") { (uuid, data) -> Void in
-			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidConnectNotification, object: self)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChatControllerDidConnectNotification), object: self)
 		}
 		var completionHandler = completionHandler
 		socket.connect(timeoutAfter: Int(round(timeoutInterval))) { () -> Void in
 			socketHandlerManager.off("connect", handlerUUIDs: connectOnceUUID, connectNotificationUUID)
 			if let completionHandler = completionHandler {
-				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
-				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
+				LogManager.sharedManager.log(.error, message: "Error connecting to chat server")
+				completionHandler(ErrorCode.impossibleToConnectToServer)
 			}
 			completionHandler = nil
 		}
 		socketHandlerManager.on("disconnect") { data, ack in
 			if let completionHandler = completionHandler {
-				LogManager.sharedManager.log(.Error, message: "Error connecting to chat server")
-				completionHandler(error: ErrorCode.ImpossibleToConnectToServer)
+				LogManager.sharedManager.log(.error, message: "Error connecting to chat server")
+				completionHandler(ErrorCode.impossibleToConnectToServer)
 			}
 			completionHandler = nil
-			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChatControllerDidDisconnectNotification), object: self)
 		}
 		socketHandlerManager.on("reconnect") { data, ack in
-			NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerReconnectingNotification, object: self)
+			NotificationCenter.default.post(name: NSNotification.Name(rawValue: ChatControllerReconnectingNotification), object: self)
 		}
 		
 		socket.onAny { event in
-			LogManager.sharedManager.log(.Debug, message: "Received event \(event.event) with items \(event.items)")
+			LogManager.sharedManager.log(.debug, message: "Received event \(event.event) with items \(event.items)")
 		}
 		
 		self.socketHandlerManager = socketHandlerManager
@@ -188,8 +188,8 @@ extension ChatController {
 		if let socket = try? self.getSocket() {
 			socket.disconnect()
 		} else {
-			dispatch_async(dispatch_get_main_queue()) {
-				NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerDidDisconnectNotification, object: self)
+			DispatchQueue.main.async {
+				NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerDidDisconnectNotification), object: self)
 			}
 		}
 	}
@@ -197,7 +197,7 @@ extension ChatController {
 
 // MARK: Public API
 extension ChatController {
-	public func joinRoom(roomUUID roomUUID: NSUUID, completionHandler: ((room: Room?, error: ErrorType?) -> ())? = nil) throws {
+	public func joinRoom(roomUUID: UUID, completionHandler: ((_ room: Room?, _ error: Error?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 			do {
@@ -206,47 +206,47 @@ extension ChatController {
 				}
 				
 				guard let json = data?.first as? JSON else {
-					throw ErrorCode.InvalidResponseReceived
+					throw ErrorCode.invalidResponseReceived
 				}
 				
 				let room = try mapRoomFromJSON(json)
-				completionHandler?(room: room, error: nil)
+				completionHandler?(room, nil)
 			} catch {
-				completionHandler?(room: nil, error: error)
+				completionHandler?(nil, error)
 			}
 		}
 	}
 	
-	public func leaveRoom(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func leaveRoom(roomUUID: UUID, completionHandler: ((_ error: Error?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "leaveRoom", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
-			completionHandler?(error: error)
+			completionHandler?(error)
 		}
 	}
 	
 	// This method will join the specified room if the connected user hasn't joined it yet
-	public func messagesInRoom(roomUUID roomUUID: NSUUID, completionHandler: ((messages: [Message]?, error: ErrorType?) -> ())? = nil) throws {
+	public func messagesInRoom(roomUUID: UUID, completionHandler: ((_ messages: [Message]?, _ error: Error?) -> ())? = nil) throws {
 		try self.joinRoom(roomUUID: roomUUID, completionHandler: { (room, error) -> () in
-			completionHandler?(messages: room?.arrayOfMessages, error: error)
+			completionHandler?(room?.arrayOfMessages, error)
 		})
 	}
 	
-	public func sendMessage(message: String, roomUUID: NSUUID, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
+	public func sendMessage(_ message: String, roomUUID: UUID, completionHandler: ((_ message: Message?, _ error: Error?) -> ())? = nil) throws {
 		let user = try self.getConnectedUser()
-		let temporaryUUID = NSUUID()
-		let message = MessageFactory.sharedFactory.instanciate(messageID: temporaryUUID, content: message, roomID: roomUUID, sender: user, dateSent: NSDate())
+		let temporaryUUID = UUID()
+		let message = MessageFactory.sharedFactory.instanciate(messageID: temporaryUUID, content: message, roomID: roomUUID, sender: user, dateSent: Date())
 		message.isBeingSent = true
 		try self.resendMessage(message, completionHandler: completionHandler)
 	}
 
-	public func resendMessage(message: Message, completionHandler: ((message: Message?, error: ErrorType?) -> ())? = nil) throws {
+	public func resendMessage(_ message: Message, completionHandler: ((_ message: Message?, _ error: Error?) -> ())? = nil) throws {
 		if !message.isBeingSent {
-			completionHandler?(message: message, error: ErrorCode.MessageAlreadySent)
+			completionHandler?(message, ErrorCode.messageAlreadySent)
 			return
 		}
 		
-		var parameters = try self.parametersForRoom(roomUUID: message.roomID)
-		parameters["message"] = message.content
+		var parameters = try self.parametersForRoom(roomUUID: message.roomID as UUID)
+		parameters["message"] = message.content as NSObject?
 		do {
 			try self.emitAndListenForEvent(emitEvent: "newMessage", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
 				do {
@@ -254,9 +254,9 @@ extension ChatController {
 						throw error
 					}
 					
-					dispatch_async(dispatch_get_main_queue()) {
+					DispatchQueue.main.async {
 						do {
-							let parameters = try self.parametersForRoom(roomUUID: message.roomID)
+							let parameters = try self.parametersForRoom(roomUUID: message.roomID as UUID)
 							try self.emitAndListenForEvent(emitEvent: "joinRoom", parameters: parameters, listenEvent: "joinedRoom", listenForValidationError: true) { (data, error) -> () in
 								do {
 									if let error = error {
@@ -264,21 +264,20 @@ extension ChatController {
 									}
 									
 									guard let json = data?.first as? JSON,
-										let messages = json["messages"] as? [[String: AnyObject]]
-										where messages.count > 0 else
+										let messages = json["messages"] as? [[String: AnyObject]], messages.count > 0 else
 									{
-										throw ErrorCode.InvalidResponseReceived
+										throw ErrorCode.invalidResponseReceived
 									}
 									
-									let sortedMessages = messages.map { (message) -> ([String: AnyObject], NSDate?) in
+									let sortedMessages = messages.map { (message) -> ([String: AnyObject], Date?) in
 										if let sent = message["sent"] as? String {
 											return (message, ISO8601DateFormatter.dateFromString(sent))
 										}
 										return (message, nil)
-										}.sort { messageWithDate1, messageWithDate2 in
+										}.sorted { messageWithDate1, messageWithDate2 in
 											if let date1 = messageWithDate1.1 {
 												if let date2 = messageWithDate2.1 {
-													return date1.laterDate(date2) == date1
+													return (date1 as NSDate).laterDate(date2) == date1
 												}
 												return true
 											} else if messageWithDate2.1 != nil {
@@ -288,51 +287,51 @@ extension ChatController {
 									}
 									
 									guard let remoteMessage = sortedMessages.filter({ $0.0["message"] as? String == message.content }).first else {
-										LogManager.sharedManager.log(.Error, message: "Couldn't find message \(message) in remote messages: \(messages)")
-										throw ErrorCode.InvalidResponseReceived
+										LogManager.sharedManager.log(.error, message: "Couldn't find message \(message) in remote messages: \(messages)")
+										throw ErrorCode.invalidResponseReceived
 									}
 									
-									LogManager.sharedManager.log(.Debug, message: "Updating temporary message \(message) with actual message \(remoteMessage)")
+									LogManager.sharedManager.log(.debug, message: "Updating temporary message \(message) with actual message \(remoteMessage)")
 									
 									try mapMessageFromJSON(remoteMessage.0, withExistingMessage: message)
 									message.isBeingSent = false
 									
-									LogManager.sharedManager.log(.Debug, message: "Final message \(message)")
+									LogManager.sharedManager.log(.debug, message: "Final message \(message)")
 									
-									completionHandler?(message: message, error: nil)
+									completionHandler?(message, nil)
 									self.sendReceivedNewMessageNotification(message)
 								} catch {
-									completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
+									completionHandler?(nil, ErrorCode.cannotSendMessage(message: message, innerError: error))
 								}
 							}
 						} catch {
-							dispatch_async(dispatch_get_main_queue()) {
-								completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
+							DispatchQueue.main.async {
+								completionHandler?(nil, ErrorCode.cannotSendMessage(message: message, innerError: error))
 							}
 						}
 					}
 				} catch {
-					dispatch_async(dispatch_get_main_queue()) {
-						completionHandler?(message: nil, error: ErrorCode.CannotSendMessage(message: message, innerError: error))
+					DispatchQueue.main.async {
+						completionHandler?(nil, ErrorCode.cannotSendMessage(message: message, innerError: error))
 					}
 				}
 			}
 		} catch {
-			throw ErrorCode.CannotSendMessage(message: message, innerError: error)
+			throw ErrorCode.cannotSendMessage(message: message, innerError: error)
 		}
 	}
 	
-	public func sendStartTypingIndicator(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func sendStartTypingIndicator(roomUUID: UUID, completionHandler: ((_ error: Error?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "typing", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
-			completionHandler?(error: error)
+			completionHandler?(error)
 		}
 	}
 	
-	public func sendStopTypingIndicator(roomUUID roomUUID: NSUUID, completionHandler: ((error: ErrorType?) -> ())? = nil) throws {
+	public func sendStopTypingIndicator(roomUUID: UUID, completionHandler: ((_ error: Error?) -> ())? = nil) throws {
 		let parameters = try self.parametersForRoom(roomUUID: roomUUID)
 		try self.emitAndListenForEvent(emitEvent: "stopTyping", parameters: parameters, listenForValidationError: true) { (data, error) -> () in
-			completionHandler?(error: error)
+			completionHandler?(error)
 		}
 	}
 }
@@ -340,23 +339,23 @@ extension ChatController {
 // MARK: --- Private methods
 // MARK: Utility methods
 extension ChatController {
-	private func parametersForRoom(roomUUID roomUUID: NSUUID) throws -> [String: NSObject] {
+	fileprivate func parametersForRoom(roomUUID: UUID) throws -> [String: NSObject] {
 		let user = try self.getConnectedUser()
 		guard let userPhoto = user.userPhoto else {
-			throw ErrorCode.RequiresUserPhoto
+			throw ErrorCode.requiresUserPhoto
 		}
 		return [
-			"room": roomUUID.UUIDString,
-			"username": user.username,
-			"userPhoto": userPhoto.absoluteString!,
-			"userProfileId": user.userID,
+			"room": roomUUID.uuidString as NSObject,
+			"username": user.username as NSObject,
+			"userPhoto": userPhoto.absoluteString as NSObject,
+			"userProfileId": user.userID as NSObject,
 		]
 	}
 }
 
 // MARK: Notification helpers
 extension ChatController {
-	private func handleNotificationEvents() {
+	fileprivate func handleNotificationEvents() {
 		if let socketHandlerManager = self.socketHandlerManager {
 			socketHandlerManager.on("userJoined") { (uuid, data) -> Void in
 				guard let json = data.first as? JSON else {
@@ -410,38 +409,38 @@ extension ChatController {
 		}
 	}
 	
-	private func sendUserJoinedRoomNotification(user: User, room: Room) {
-		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserJoinedRoomNotification, object: self, userInfo:
+	fileprivate func sendUserJoinedRoomNotification(_ user: User, room: Room) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerUserJoinedRoomNotification), object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 				ChatControllerRoomNotificationKey: room,
 			])
 	}
 	
-	private func sendUserLeftRoomNotification(user: User, room: Room) {
-		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserLeftRoomNotification, object: self, userInfo:
+	fileprivate func sendUserLeftRoomNotification(_ user: User, room: Room) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerUserLeftRoomNotification), object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 				ChatControllerRoomNotificationKey: room,
 			])
 	}
 	
-	private func sendUserTypingNotification(user: User) {
-		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserTypingNotification, object: self, userInfo:
+	fileprivate func sendUserTypingNotification(_ user: User) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerUserTypingNotification), object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 			])
 	}
 	
-	private func sendUserStoppedTypingNotification(user: User) {
-		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerUserStoppedTypingNotification, object: self, userInfo:
+	fileprivate func sendUserStoppedTypingNotification(_ user: User) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerUserStoppedTypingNotification), object: self, userInfo:
 			[
 				ChatControllerUserNotificationKey: user,
 			])
 	}
 	
-	private func sendReceivedNewMessageNotification(message: Message) {
-		NSNotificationCenter.defaultCenter().postNotificationName(ChatControllerReceivedNewMessageNotification, object: self, userInfo:
+	fileprivate func sendReceivedNewMessageNotification(_ message: Message) {
+		NotificationCenter.default.post(name: Notification.Name(rawValue: ChatControllerReceivedNewMessageNotification), object: self, userInfo:
 			[
 				ChatControllerMessageNotificationKey: message,
 			])
@@ -450,16 +449,16 @@ extension ChatController {
 
 // MARK: Emit/Listen helpers
 extension ChatController {
-	private func emitAndListenForEvent(emitEvent emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {
-		LogManager.sharedManager.log(.Debug, message: "\(emitEvent): emitting event")
+	fileprivate func emitAndListenForEvent(emitEvent: String, parameters: [String: NSObject]? = nil, listenEvent: String? = nil, listenForValidationError: Bool = false, completionHandler: CompletionHandlerType? = nil) throws {
+		LogManager.sharedManager.log(.debug, message: "\(emitEvent): emitting event")
 		if let parameters = parameters {
-			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): with parameters \(parameters)")
+			LogManager.sharedManager.log(.debug, message: "\(emitEvent): with parameters \(parameters)")
 		}
 		if let listenEvent = listenEvent {
-			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): listen for event \(listenEvent)")
+			LogManager.sharedManager.log(.debug, message: "\(emitEvent): listen for event \(listenEvent)")
 		}
 		if listenForValidationError {
-			LogManager.sharedManager.log(.Debug, message: "\(emitEvent): listening for validation error")
+			LogManager.sharedManager.log(.debug, message: "\(emitEvent): listening for validation error")
 		}
 		
 		let socket = try self.getSocket()
@@ -473,18 +472,18 @@ extension ChatController {
 		}
 	}
 	
-	private func listenForEvent(event: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: CompletionHandlerType) throws {
+	fileprivate func listenForEvent(_ event: String? = nil, validationErrorObject: [String: NSObject]? = nil, completionHandler: @escaping CompletionHandlerType) throws {
 		if event == nil && validationErrorObject == nil {
-			dispatch_async(dispatch_get_main_queue()) {
-				completionHandler(data: nil, error: nil)
+			DispatchQueue.main.async {
+				completionHandler(nil, nil)
 			}
 			return
 		}
 		
 		let socketHandlerManager = try getSocketHandlerManager()
-		let uuid = NSUUID()
+		let uuid = UUID()
 		self.lockHandlers {
-			self.handlers[uuid.UUIDString] = completionHandler
+			self.handlers[uuid.uuidString] = completionHandler
 		}
 		
 		if let validationErrorObject = validationErrorObject {
@@ -492,18 +491,18 @@ extension ChatController {
 				if let handler = self.handlerForUUID(uuid) {
 					let response = data.first as? [String: AnyObject]
 					
-					if let object = response?["_object"] as? [String: NSObject] where validationErrorObject != object {
+					if let object = response?["_object"] as? [String: NSObject], validationErrorObject != object {
 						return
 					}
 					
 					self.lockHandlers {
-						self.handlers.removeValueForKey(uuid.UUIDString)
+						self.handlers.removeValue(forKey: uuid.uuidString)
 					}
 					
 					let details = response?["details"] as? [[String: AnyObject]]
 					let message = details?.first?["message"] as? String
-					dispatch_async(dispatch_get_main_queue()) {
-						handler(data: nil, error: ErrorCode.ValidationError(message: message ?? "Unknown error"))
+					DispatchQueue.main.async {
+						handler(nil, ErrorCode.validationError(message: message ?? "Unknown error"))
 					}
 				}
 				socketHandlerManager.off("validationError", handlerUUID: uuid)
@@ -513,13 +512,13 @@ extension ChatController {
 			}
 		}
 		
-		let eventHandler: (data: [AnyObject]?) -> () = { (data) in
+		let eventHandler: (_ data: [AnyObject]?) -> () = { (data) in
 			if let handler = self.handlerForUUID(uuid) {
 				self.lockHandlers {
-					self.handlers.removeValueForKey(uuid.UUIDString)
+					self.handlers.removeValue(forKey: uuid.uuidString)
 				}
-				dispatch_async(dispatch_get_main_queue()) {
-					handler(data: data, error: nil)
+				DispatchQueue.main.async {
+					handler(data, nil)
 				}
 			}
 			
@@ -533,12 +532,12 @@ extension ChatController {
 		
 		if let event = event {
 			socketHandlerManager.on(event) { (handlerUUID, data) in
-				eventHandler(data: data)
+				eventHandler(data)
 			}
 		} else {
-			let delayTime = dispatch_time(DISPATCH_TIME_NOW, Int64(0.3 * Double(NSEC_PER_SEC)))
-			dispatch_after(delayTime, dispatch_get_main_queue()) {
-				eventHandler(data: nil)
+			let delayTime = DispatchTime.now() + Double(Int64(0.3 * Double(NSEC_PER_SEC))) / Double(NSEC_PER_SEC)
+			DispatchQueue.main.asyncAfter(deadline: delayTime) {
+				eventHandler(nil)
 			}
 		}
 	}
@@ -546,10 +545,10 @@ extension ChatController {
 
 // MARK: Completion Handler helpers
 extension ChatController {
-	private func cleanupHandlers() {
-		dispatch_async(dispatch_get_main_queue()) {
+	fileprivate func cleanupHandlers() {
+		DispatchQueue.main.async {
 			for (_, handler) in self.handlers {
-				handler(data: nil, error: ErrorCode.Disconnected)
+				handler(nil, ErrorCode.disconnected)
 			}
 		}
 		self.handlers.removeAll()
@@ -557,16 +556,17 @@ extension ChatController {
 			socket.removeAllHandlers()
 		}
 	}
-	
-	private func lockHandlers<T>(action: () throws -> T) rethrows -> T {
+
+	@discardableResult
+	fileprivate func lockHandlers<T>(action: () throws -> T) rethrows -> T {
 		self.handlersLock.lock()
 		defer { self.handlersLock.unlock() }
 		return try action()
 	}
 	
-	private func handlerForUUID(uuid: NSUUID) -> CompletionHandlerType? {
+	fileprivate func handlerForUUID(_ uuid: UUID) -> CompletionHandlerType? {
 		return self.lockHandlers {
-			return self.handlers[uuid.UUIDString]
+			return self.handlers[uuid.uuidString]
 		}
 	}
 }

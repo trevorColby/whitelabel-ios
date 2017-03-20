@@ -8,19 +8,19 @@
 
 import Foundation
 
-public enum ErrorCode: ErrorType {
-	case InvalidResponseReceived
-	case RequestFailed
-	case IncompleteJSON
-	case NotConnected
-	case ImpossibleToConnectToServer
-	case Disconnected
-	case RequiresUserPhoto
-	case ValidationError(message: String)
-	case CannotSendMessage(message: Message, innerError: ErrorType)
-	case MessageAlreadySent
+public enum ErrorCode: Error {
+	case invalidResponseReceived
+	case requestFailed
+	case incompleteJSON
+	case notConnected
+	case impossibleToConnectToServer
+	case disconnected
+	case requiresUserPhoto
+	case validationError(message: String)
+	case cannotSendMessage(message: Message, innerError: Error)
+	case messageAlreadySent
 }
 
-public enum MappingError: ErrorType {
-	case NoFactoryMethod
+public enum MappingError: Error {
+	case noFactoryMethod
 }

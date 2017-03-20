@@ -9,9 +9,9 @@
 import Foundation
 
 public protocol Room: class {
-	static func newInstance(roomID roomID: NSUUID, numberOfUsers: Int?, messages: [Message]?) -> Room
+	static func newInstance(roomID: UUID, numberOfUsers: Int?, messages: [Message]?) -> Room
 	
-	var roomID: NSUUID { get }
+	var roomID: UUID { get }
 	var numberOfUsers: Int? { get }
 	var arrayOfMessages: [Message] { get }
 }

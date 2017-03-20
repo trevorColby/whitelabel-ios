@@ -10,7 +10,7 @@ import UIKit
 
 public typealias JSON = [String: AnyObject]
 
-typealias WhiteLabelHTTPClientCompletionHandler = (data: JSON?, error: ErrorType?) -> ()
+typealias WhiteLabelHTTPClientCompletionHandler = (_ data: JSON?, _ error: Error?) -> ()
 
 class WhiteLabelHTTPClient {
 	enum HTTPMethod: String {
@@ -22,49 +22,49 @@ class WhiteLabelHTTPClient {
 
 	static let sharedClient = WhiteLabelHTTPClient()
 	
-	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+	func sendRequest(_ method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		guard let baseURL = Configuration.defaultBaseURL else {
 			fatalError("WhiteLabelHTTPClient.sendRequest(): baseURL is nil and Configuration.defaultBaseURL is nil, did you forget to set it to your base URL?")
 		}
-		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
+		self.sendRequest(method, path: path, parameters: parameters, baseURL: baseURL as URL, timeoutInterval: timeoutInterval, completionHandler: completionHandler)
 	}
 	
-	func sendRequest(method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, baseURL: NSURL, timeoutInterval: NSTimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
+	func sendRequest(_ method: HTTPMethod, path: String, parameters: [String: AnyObject]? = nil, baseURL: URL, timeoutInterval: TimeInterval = Configuration.defaultTimeoutInterval, completionHandler: WhiteLabelHTTPClientCompletionHandler?) {
 		let mainThreadCompletionHandler: WhiteLabelHTTPClientCompletionHandler = { (data, error) in
-			dispatch_async(dispatch_get_main_queue()) {
-				completionHandler?(data: data, error: error)
+			DispatchQueue.main.async {
+				completionHandler?(data, error)
 			}
 		}
 
 		var path = path
-		if let parameters = parameters as? [String: String] where method == .GET {
-			path += "?" + parameters.map { (key, value) in "\(key)=\(value)" }.joinWithSeparator("&")
+		if let parameters = parameters as? [String: String], method == .GET {
+			path += "?" + parameters.map { (key, value) in "\(key)=\(value)" }.joined(separator: "&")
 		}
-		let request = NSMutableURLRequest(URL: baseURL.URLByAppendingPathComponent(path)!)
+		var request = URLRequest(url: baseURL.appendingPathComponent(path))
 		request.addValue("application/json", forHTTPHeaderField: "Accept")
 		request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-		request.HTTPMethod = method.rawValue
-		if let parameters = parameters where method != .GET {
+		request.httpMethod = method.rawValue
+		if let parameters = parameters, method != .GET {
 			do {
-				request.HTTPBody = try NSJSONSerialization.dataWithJSONObject(parameters, options: NSJSONWritingOptions(rawValue: 0))
+				request.httpBody = try JSONSerialization.data(withJSONObject: parameters, options: JSONSerialization.WritingOptions(rawValue: 0))
 			} catch {
-				mainThreadCompletionHandler(data: nil, error: error)
+				mainThreadCompletionHandler(nil, error)
 				return
 			}
 		}
 		
-		let sessionConfiguration = NSURLSessionConfiguration.defaultSessionConfiguration()
+		let sessionConfiguration = URLSessionConfiguration.default
 		sessionConfiguration.timeoutIntervalForRequest = timeoutInterval
 		sessionConfiguration.timeoutIntervalForResource = timeoutInterval
-		let session = NSURLSession(configuration: sessionConfiguration)
-		let dataTask = session.dataTaskWithRequest(request) { (data, response, error) -> Void in
+		let session = URLSession(configuration: sessionConfiguration)
+		let dataTask = session.dataTask(with: request, completionHandler: { (data, response, error) -> Void in
 			if error != nil {
-				mainThreadCompletionHandler(data: nil, error: error)
+				mainThreadCompletionHandler(nil, error)
 				return
 			}
 			
-			guard let response = response as? NSHTTPURLResponse else {
-				mainThreadCompletionHandler(data: nil, error: ErrorCode.InvalidResponseReceived)
+			guard let response = response as? HTTPURLResponse else {
+				mainThreadCompletionHandler(nil, ErrorCode.invalidResponseReceived)
 				return
 			}
 			
@@ -72,18 +72,18 @@ class WhiteLabelHTTPClient {
 				var json: JSON? = nil
 				if let data = data {
 					do {
-						json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions(rawValue: 0)) as? JSON
+						json = try JSONSerialization.jsonObject(with: data, options: JSONSerialization.ReadingOptions(rawValue: 0)) as? JSON
 					} catch {
-						mainThreadCompletionHandler(data: nil, error: error)
+						mainThreadCompletionHandler(nil, error)
 						return
 					}
 				}
 				
-				mainThreadCompletionHandler(data: json, error: nil)
+				mainThreadCompletionHandler(json, nil)
 			} else {
-				mainThreadCompletionHandler(data: nil, error: ErrorCode.RequestFailed)
+				mainThreadCompletionHandler(nil, ErrorCode.requestFailed)
 			}
-		}
+		}) 
 		dataTask.resume()
 	}
 }

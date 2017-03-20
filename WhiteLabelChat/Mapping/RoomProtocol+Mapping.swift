@@ -8,9 +8,9 @@
 
 import Foundation
 
-func mapRoomFromJSON(json: JSON) throws -> Room {
-	guard let id = json["room"] as? String, let uuid = NSUUID(UUIDString: id) else {
-		throw ErrorCode.IncompleteJSON
+func mapRoomFromJSON(_ json: JSON) throws -> Room {
+	guard let id = json["room"] as? String, let uuid = UUID(uuidString: id) else {
+		throw ErrorCode.incompleteJSON
 	}
 	
 	var messages: [Message]!

@@ -8,14 +8,14 @@
 
 import Foundation
 
-func mapUserFromJSON(json: JSON) throws -> User {
+func mapUserFromJSON(_ json: JSON) throws -> User {
 	guard let username = json["username"] as? String else {
-		throw ErrorCode.IncompleteJSON
+		throw ErrorCode.incompleteJSON
 	}
 	
 	let user = UserFactory.sharedFactory.instanciate(userID: json["userProfileId"] as! String, username: username, authToken: json["token"] as? String)
 	if let userPhoto = json["userPhoto"] as? String {
-		user.userPhoto = NSURL(string: userPhoto)
+		user.userPhoto = URL(string: userPhoto)
 	}
 	return user
 }
