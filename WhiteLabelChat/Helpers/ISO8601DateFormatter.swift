@@ -9,18 +9,18 @@
 import UIKit
 
 class ISO8601DateFormatter {
-	static private var iso8601DateFormatter: NSDateFormatter = {
-		let dateFormatter = NSDateFormatter()
-		dateFormatter.timeZone = NSTimeZone(forSecondsFromGMT: 0)
+	static fileprivate var iso8601DateFormatter: DateFormatter = {
+		let dateFormatter = DateFormatter()
+		dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
 		dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss.SSSZZZZZ"
 		return dateFormatter
 	}()
 	
-	class func dateFromString(string: String) -> NSDate? {
-		return self.iso8601DateFormatter.dateFromString(string)
+	class func dateFromString(_ string: String) -> Date? {
+		return self.iso8601DateFormatter.date(from: string)
 	}
 	
-	class func stringFromDate(date: NSDate) -> String {
-		return self.iso8601DateFormatter.stringFromDate(date)
+	class func stringFromDate(_ date: Date) -> String {
+		return self.iso8601DateFormatter.string(from: date)
 	}
 }

@@ -9,34 +9,35 @@
 import SocketIO
 
 class SocketUniqueHandlerManager {
-	private let socket: SocketIOClient
+	fileprivate let socket: SocketIOClient
 	
-	private lazy var handlersLock = NSLock()
-	typealias CompletionHandlerType = (uuid: NSUUID, data: [AnyObject]) -> Void
-	private typealias HandlersType = [String: CompletionHandlerType]
-	private typealias EventHandlersType = [String: HandlersType]
-	private var handlers: EventHandlersType = [:]
+	fileprivate lazy var handlersLock = NSLock()
+	typealias CompletionHandlerType = (_ uuid: UUID, _ data: [AnyObject]) -> Void
+	fileprivate typealias HandlersType = [String: CompletionHandlerType]
+	fileprivate typealias EventHandlersType = [String: HandlersType]
+	fileprivate var handlers: EventHandlersType = [:]
 	
 	init(socket: SocketIOClient) {
 		self.socket = socket
 	}
-	
-	func on(event: String, handlerUUID: NSUUID = NSUUID(), completion: CompletionHandlerType) -> NSUUID {
+
+	@discardableResult
+	func on(_ event: String, handlerUUID: UUID = UUID(), completion: @escaping CompletionHandlerType) -> UUID {
 		if var handlers = self.handlersForEvent(event) {
-			handlers[handlerUUID.UUIDString] = completion
+			handlers[handlerUUID.uuidString] = completion
 			
 			self.lockHandlers {
 				self.handlers[event] = handlers
 			}
 		} else {
 			self.lockHandlers {
-				self.handlers[event] = [handlerUUID.UUIDString: completion]
+				self.handlers[event] = [handlerUUID.uuidString: completion]
 			}
 			
 			self.socket.on(event) { (data, ack) in
 				if let handlers = self.handlersForEvent(event) {
 					for (_, handler) in handlers {
-						handler(uuid: handlerUUID, data: data)
+						handler(handlerUUID, data as [AnyObject])
 					}
 				}
 			}
@@ -44,9 +45,9 @@ class SocketUniqueHandlerManager {
 		return handlerUUID
 	}
 	
-	func off(event: String, handlerUUID: NSUUID) {
+	func off(_ event: String, handlerUUID: UUID) {
 		if var handlers = self.handlersForEvent(event) {
-			handlers.removeValueForKey(handlerUUID.UUIDString)
+			handlers.removeValue(forKey: handlerUUID.uuidString)
 			
 			self.lockHandlers {
 				self.handlers[event] = handlers
@@ -58,19 +59,19 @@ class SocketUniqueHandlerManager {
 		}
 	}
 	
-	func off(event: String, handlerUUIDs: NSUUID...) {
+	func off(_ event: String, handlerUUIDs: UUID...) {
 		for handlerUUID in handlerUUIDs {
 			self.off(event, handlerUUID: handlerUUID)
 		}
 	}
 	
-	private func lockHandlers<T>(action: () throws -> T) rethrows -> T {
+	fileprivate func lockHandlers<T>(action: () throws -> T) rethrows -> T {
 		self.handlersLock.lock()
 		defer { self.handlersLock.unlock() }
 		return try action()
 	}
 	
-	private func handlersForEvent(event: String) -> HandlersType? {
+	fileprivate func handlersForEvent(_ event: String) -> HandlersType? {
 		return self.lockHandlers {
 			return self.handlers[event]
 		}

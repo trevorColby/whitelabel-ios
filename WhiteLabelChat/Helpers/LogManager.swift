@@ -8,30 +8,30 @@
 
 import UIKit
 
-public class LogManager {
+open class LogManager {
 	public enum Level: Int {
-		case Disabled = 0
-		case Error = 1
-		case Warning = 2
-		case Debug = 3
-		case All = 100
+		case disabled = 0
+		case error = 1
+		case warning = 2
+		case debug = 3
+		case all = 100
 	}
 	
-	public typealias LogFunction = (level: Level, message: String, file: String, function: String, line: UInt) -> Void
+	public typealias LogFunction = (_ level: Level, _ message: String, _ file: String, _ function: String, _ line: UInt) -> Void
 	
-	public static let sharedManager = LogManager()
+	open static let sharedManager = LogManager()
 
-	private init() {
+	fileprivate init() {
 		
 	}
 	
-	private let defaultLogFunction: LogFunction = { (level, message, _, _, _) in
+	fileprivate let defaultLogFunction: LogFunction = { (level, message, _, _, _) in
 		return NSLog(message)
 	}
 	
-	private var logFunctionStorage: LogFunction?
+	fileprivate var logFunctionStorage: LogFunction?
 	// Can never be nil, but setting it to nil will reset it the default log function
-	public var logFunction: LogFunction! {
+	open var logFunction: LogFunction! {
 		get {
 			if let logFunction = self.logFunctionStorage {
 				return logFunction
@@ -43,11 +43,11 @@ public class LogManager {
 		}
 	}
 	
-	public var logLevel: Level = .Disabled
+	open var logLevel: Level = .disabled
 	
-	internal func log(level: Level, message: String, file: String = #file, function: String = __FUNCTION__, line: UInt = __LINE__) {
-		if level != .Disabled && level.rawValue <= self.logLevel.rawValue {
-			self.logFunction(level: level, message: message, file: file, function: function, line: line)
+	internal func log(_ level: Level, message: String, file: String = #file, function: String = #function, line: UInt = #line) {
+		if level != .disabled && level.rawValue <= self.logLevel.rawValue {
+			self.logFunction(level, message, file, function, line)
 		}
 	}
 }

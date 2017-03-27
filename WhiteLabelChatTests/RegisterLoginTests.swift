@@ -9,7 +9,7 @@
 import XCTest
 @testable import WhiteLabelChat
 
-func XCTAssertThrows(expectedErrorType: ErrorType? = nil, message: String? = nil, failureAction: (() -> ())? = nil, @noescape action: () throws -> ()) {
+func XCTAssertThrows(_ expectedErrorType: Error? = nil, message: String? = nil, failureAction: (() -> ())? = nil, action: () throws -> ()) {
 	do {
 		try action()
 		
@@ -26,7 +26,7 @@ func XCTAssertThrows(expectedErrorType: ErrorType? = nil, message: String? = nil
 	}
 }
 
-func XCTAssertNoThrow(message: String? = nil, failureAction: (() -> ())? = nil, @noescape action: () throws -> ()) {
+func XCTAssertNoThrow(_ message: String? = nil, failureAction: (() -> ())? = nil, action: () throws -> ()) {
 	do {
 		try action()
 	} catch {
@@ -47,7 +47,7 @@ class WhiteLabelChatTests: XCTestCase {
 	func testUserSignUp() {
 		let username = "test\(arc4random())"
 		let password = "test\(arc4random())"
-		let expectation = expectationWithDescription("Register & Login successfully")
+		let expectation = self.expectation(description: "Register & Login successfully")
 		ChatController.registerWithUsername(username, password: password) { (user, error) -> () in
 			XCTAssertNotNil(user)
 			XCTAssertNil(error)
@@ -71,7 +71,7 @@ class WhiteLabelChatTests: XCTestCase {
 				XCTAssertTrue(user.isAuthenticated)
 			}
 		}
-		waitForExpectationsWithTimeout(APICallTimeout) { (error) -> Void in
+		waitForExpectations(timeout: APICallTimeout) { (error) -> Void in
 			if let error = error {
 				print(error)
 			}
@@ -79,20 +79,20 @@ class WhiteLabelChatTests: XCTestCase {
 	}
 	
 	func testUserInvalidRequestLogin() {
-		let expectation = expectationWithDescription("Login fails because of a validation error")
+		let expectation = self.expectation(description: "Login fails because of a validation error")
 		ChatController.loginWithUsername("*&$^#!", password: "fueled") { (user, error) -> () in
 			XCTAssertNil(user)
 			XCTAssertNotNil(error)
 			switch(error!) {
-			case ErrorCode.RequestFailed:
+			case ErrorCode.requestFailed:
 				break
 			default:
-				XCTFail("error is not \(ErrorCode.RequestFailed)")
+				XCTFail("error is not \(ErrorCode.requestFailed)")
 			}
 			
 			expectation.fulfill()
 		}
-		waitForExpectationsWithTimeout(APICallTimeout) { (error) -> Void in
+		waitForExpectations(timeout: APICallTimeout) { (error) -> Void in
 			if let error = error {
 				print(error)
 			}

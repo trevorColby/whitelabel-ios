@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class Configuration: NSObject {
-	public static var defaultBaseURL: NSURL?
-	public static var defaultTimeoutInterval: NSTimeInterval = 30.0
+open class Configuration: NSObject {
+	open static var defaultBaseURL: URL?
+	open static var defaultTimeoutInterval: TimeInterval = 30.0
 }

@@ -9,12 +9,12 @@
 import Foundation
 
 public protocol Message: class {
-	static func newInstance(messageID messageID: NSUUID, content: String, roomID: NSUUID, sender: User, dateSent: NSDate) -> Message
+	static func newInstance(messageID: UUID, content: String, roomID: UUID, sender: User, dateSent: Date) -> Message
 	
-	var messageID: NSUUID { get set }
+	var messageID: UUID { get set }
 	var content: String { get }
 	var sender: User { get }
-	var roomID: NSUUID { get }
-	var dateSent: NSDate { get set }
+	var roomID: UUID { get }
+	var dateSent: Date { get set }
 	var isBeingSent: Bool { get set }
 }

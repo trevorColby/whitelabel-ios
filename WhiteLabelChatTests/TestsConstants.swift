@@ -9,8 +9,8 @@
 import Foundation
 @testable import WhiteLabelChat
 
-let ServerURL = NSURL(string: "http://172.16.31.79:3000")!
-let APICallTimeout: NSTimeInterval = 30.0
+let ServerURL = URL(string: "http://172.16.31.79:3000")!
+let APICallTimeout: TimeInterval = 30.0
 
 var currentUser: User!
 var chatController = ChatController(chatServerURL: ServerURL)
