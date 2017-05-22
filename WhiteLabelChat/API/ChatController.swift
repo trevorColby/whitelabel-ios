@@ -172,7 +172,7 @@ extension ChatController {
 		}
 		
 		socket.onAny { event in
-			LogManager.sharedManager.log(.debug, message: "Received event \(event.event) with items \(event.items)")
+			LogManager.sharedManager.log(.debug, message: "Received event \(event.event) with items \(String(describing: event.items))")
 		}
 		
 		self.socketHandlerManager = socketHandlerManager

@@ -28,7 +28,7 @@ func mapMessageFromJSON(_ json: JSON, withExistingMessage existingMessage: Messa
 	
 	let message = MessageFactory.sharedFactory.instanciate(messageID: uuid, content: content, roomID: roomUUID, sender: sender, dateSent: dateSent)
 	if existingMessage != nil {
-		LogManager.sharedManager.log(.warning, message: "Was given existing message \(existingMessage) which didn't match with the received response \(json), so created new message \(message)")
+		LogManager.sharedManager.log(.warning, message: "Was given existing message \(String(describing: existingMessage)) which didn't match with the received response \(json), so created new message \(message)")
 	}
 	return message
 }
