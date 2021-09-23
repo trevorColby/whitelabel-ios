@@ -27,7 +27,7 @@ private class DefaultUser: User {
 
 open class UserFactory {
 	fileprivate var registeredClass: User.Type?
-	open static let sharedFactory = UserFactory()
+    public static let sharedFactory = UserFactory()
 	
 	fileprivate init() {
 		

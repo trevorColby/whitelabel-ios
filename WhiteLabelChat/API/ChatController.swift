@@ -57,7 +57,7 @@ open class ChatController {
 		return socketHandlerManager
 	}
 	
-	open let chatServerURL: URL
+    public let chatServerURL: URL
 	fileprivate(set) open var connectedUser: User?
 	
 	fileprivate func getConnectedUser() throws -> User {

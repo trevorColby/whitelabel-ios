@@ -29,7 +29,7 @@ private class DefaultMessage: Message {
 
 open class MessageFactory {
 	fileprivate var registeredClass: Message.Type?
-	open static let sharedFactory = MessageFactory()
+    public static let sharedFactory = MessageFactory()
 	
 	fileprivate init() {
 		
